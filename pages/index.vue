@@ -20,18 +20,33 @@
           GitHub
         </a>
       </div>
+      <div>Check: {{ health_check }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import Logo from '~/components/Logo.vue';
 
 export default {
   components: {
-    Logo
-  }
-}
+    Logo,
+  },
+  data() {
+    return {
+      health_check: 0,
+    };
+  },
+  created() {
+    this.get_health_check();
+  },
+  methods: {
+    async get_health_check() {
+      const res = await this.get('/health_check', []);
+      this.health_check = res.status;
+    },
+  },
+};
 </script>
 
 <style>

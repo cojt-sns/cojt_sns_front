@@ -1,22 +1,16 @@
 # cojt_sns_front
 
-> COJT SNS のフロント
+COJT SNS のフロント
 
-## Build Setup
+## 導入
 
-```bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+```
+yarn install
+cp .env.dev .env
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+## サーバ起動
+
+```
+yarn dev
+```
