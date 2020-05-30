@@ -42,8 +42,12 @@ export default {
   },
   methods: {
     async get_health_check() {
-      const res = await this.get('/health_check', []);
-      this.health_check = res.data;
+      try {
+        const res = await this.get('/health_check', []);
+        this.health_check = res.data;
+      } catch (error) {
+        this.health_check = error;
+      }
     },
   },
 };
