@@ -43,7 +43,7 @@ export default {
   methods: {
     async get_health_check() {
       const res = await this.get('/health_check', []);
-      this.health_check = res.status;
+      this.health_check = res.data;
     },
   },
 };
