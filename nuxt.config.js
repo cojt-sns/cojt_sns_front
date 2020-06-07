@@ -27,7 +27,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/common'],
+  plugins: [{ src: '~/plugins/common', ssr: false }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -67,5 +67,4 @@ export default {
      */
     extend(config, ctx) {},
   },
-  buildDir: 'dist',
 };
