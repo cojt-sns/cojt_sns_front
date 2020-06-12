@@ -21,6 +21,7 @@
         </a>
       </div>
       <div>Check: {{ health_check }}</div>
+      <div>Check: {{ $auth.loggedIn }}</div>
     </div>
   </div>
 </template>
@@ -43,8 +44,8 @@ export default {
   methods: {
     async get_health_check() {
       try {
-        const res = await this.get('/health_check', []);
-        this.health_check = res.data;
+        const res = await this.$axios.$get('/health_check');
+        this.health_check = res;
       } catch (error) {
         this.health_check = error;
       }
