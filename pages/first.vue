@@ -11,18 +11,17 @@
           </p>
         </div>
         <nav class="level">
-          <p class="level-item has-text-centered">
+          <p class="level-item">
             <a
               href="./make_new_account"
-              class="link is-info has-text-black is-size-3"
+              class="button is-link is-focused is-size-3"
+              >Join</a
             >
-              Join the service
-            </a>
           </p>
-          <p class="level-item has-text-centered">
-            <a href="./log_in" class="link is-info has-text-black is-size-3">
-              Login
-            </a>
+          <p class="level-item">
+            <a href="./log_in" class="button is-link is-focused is-size-3"
+              >Login</a
+            >
           </p>
         </nav>
       </div>
