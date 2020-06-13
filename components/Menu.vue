@@ -1,38 +1,37 @@
 <template>
-  <div class="menu-container column is-3">
+  <div
+    class="menu-container column is-2 is-narrow-mobile is-fullheight is-hidden-mobile"
+  >
     <aside class="menu">
       <ul class="menu-list ">
         <li>
-          <a
-            href="#"
-            :class="{ 'is-active': activeNum == 0 }"
-            @click="changeActiveLink(0)"
-            >ホーム</a
-          >
+          <nuxt-link to="/" :class="{ 'is-active': $route.name == 'index' }">
+            ホーム
+          </nuxt-link>
         </li>
         <li>
-          <a
-            href="#"
-            :class="{ 'is-active': activeNum == 1 }"
-            @click="changeActiveLink(1)"
-            >チャット</a
+          <nuxt-link
+            to="/groups"
+            :class="{ 'is-active': $route.name.includes('groups') }"
           >
+            チャット
+          </nuxt-link>
         </li>
         <li>
-          <a
-            href="#"
-            :class="{ 'is-active': activeNum == 2 }"
-            @click="changeActiveLink(2)"
-            >探索</a
+          <nuxt-link
+            to="/search"
+            :class="{ 'is-active': $route.name == 'search' }"
           >
+            探索
+          </nuxt-link>
         </li>
         <li>
-          <a
-            href="#"
-            :class="{ 'is-active': activeNum == 3 }"
-            @click="changeActiveLink(3)"
-            >プロフィール</a
+          <nuxt-link
+            :to="`/users/1`"
+            :class="{ 'is-active': $route.name.includes('users') }"
           >
+            プロフィール
+          </nuxt-link>
         </li>
       </ul>
     </aside>
@@ -54,14 +53,8 @@
 <script>
 export default {
   data() {
-    return {
-      activeNum: 0,
-    };
+    return {};
   },
-  methods: {
-    changeActiveLink(n) {
-      this.activeNum = n;
-    },
-  },
+  methods: {},
 };
 </script>
