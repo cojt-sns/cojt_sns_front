@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { axios } from '../index.js';
 
 export default {
@@ -5,11 +6,11 @@ export default {
     return axios.$get(`tags/${id}`);
   },
 
-  getTags(name, descendants) {
+  searchTag(name, descendants) {
     return axios.$get(`tags`, { params: { name, descendants } });
   },
 
-  postTag(name, parentId) {
-    return axios.$post(`tags`, { name, parentId });
+  postTag(name, parent_id) {
+    return axios.$post(`tags`, { name, parent_id });
   },
 };
