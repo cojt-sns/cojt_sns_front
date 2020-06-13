@@ -1,20 +1,12 @@
 <template>
   <div class="columns is-mobile">
+    <Menu />
+    <Group v-if="$route.name.includes('users')" />
+    <Posts v-if="$route.name.includes('groups')" />
+    <User v-if="$route.name.includes('users')" />
+    <Search v-if="$route.name == 'search'" />
     <div
-      class="column is-1 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-dark"
-    >
-      Menu
-    </div>
-    <div
-      class="column is-3 is-narrow-mobile is-fullheight section has-background-grey"
-    >
-      Group
-    </div>
-    <div class="column is-fullheight section has-background-info">
-      Main Content
-    </div>
-    <div
-      class="column is-3 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
+      class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
     >
       Notification
     </div>
@@ -22,13 +14,29 @@
 </template>
 
 <script>
-export default {};
+import Menu from '~/components/Menu';
+import Group from '~/components/Group';
+import Posts from '~/components/Posts';
+import Search from '~/components/Search';
+import User from '~/components/User';
+
+export default {
+  components: {
+    Menu,
+    Group,
+    Posts,
+    Search,
+    User,
+  },
+  props: {},
+};
 </script>
 
 <style lang="scss" scoped>
 .columns {
   height: 100vh;
   width: 100vw;
+  margin: 0;
   .column {
     // overflow-y: scroll;
   }
