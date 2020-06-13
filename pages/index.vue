@@ -20,14 +20,16 @@
           GitHub
         </a>
       </div>
-      <div>Check: {{ health_check }}</div>
+      <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
+      <div>tag: {{ tags }}</div>
     </div>
   </div>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue';
+import Tag from '@/plugins/axios/modules/tag';
 
 export default {
   components: {
@@ -35,14 +37,19 @@ export default {
   },
   data() {
     return {
-      health_check: 0,
+      healthCheck: 0,
+      tags: 0,
     };
   },
   created() {
-    this.get_health_check();
+    this.getHealthCheck();
+
+    Tag.getTags('スマブラ').then((res) => {
+      this.tags = res;
+    });
   },
   methods: {
-    async get_health_check() {
+    async getHealthCheck() {
       try {
         const res = await this.$axios.$get('/health_check');
         this.health_check = res;
