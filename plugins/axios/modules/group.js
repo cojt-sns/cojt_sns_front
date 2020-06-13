@@ -5,6 +5,7 @@ export default {
   searchGroup(tag_ids, or) {
     return axios.$get(`groups`, { params: { tag_ids, or } });
   },
+
   postGroup(
     twitter_traceability = false,
     questions,
@@ -18,9 +19,11 @@ export default {
       tags,
     });
   },
+
   getGroup(id) {
     return axios.$get(`groups/${id}`);
   },
+
   putGroup(
     id,
     twitter_traceability = false,
