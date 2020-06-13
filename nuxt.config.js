@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -78,8 +78,12 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-          user: false,
+          login: {
+            url: '/auth/login',
+            method: 'post',
+            propertyName: 'auth_token',
+          },
+          user: { url: '/users/1', method: 'get', propertyName: false },
           logout: { url: '/auth/logout', method: 'post', propertyName: false },
         },
       },
