@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { axios } from '../index.js';
 
 export default {

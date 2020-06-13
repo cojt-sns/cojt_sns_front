@@ -1,7 +1,8 @@
+/* eslint-disable camelcase */
 import { axios } from '../index.js';
 
 export default {
-  getPost(
+  searchPost(
     tag_id,
     content,
     from,
@@ -24,6 +25,7 @@ export default {
       },
     });
   },
+
   getPublicGroupPost(
     group_id,
     content,
@@ -46,6 +48,7 @@ export default {
       },
     });
   },
+
   getGroupPost(
     group_id,
     content,
@@ -68,15 +71,19 @@ export default {
       },
     });
   },
+
   postGroupPost(group_id, content) {
     return axios.$post(`groups/${group_id}/posts`, { content });
   },
+
   getPost(id) {
     return axios.$get(`posts/${id}`);
   },
+
   putPost(id, content) {
     return axios.$put(`posts/${id}`, { content });
   },
+
   deletePost(id) {
     return axios.$delete(`posts/${id}`);
   },

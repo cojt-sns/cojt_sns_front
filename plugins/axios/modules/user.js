@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { axios } from '../index.js';
 
 export default {
@@ -20,6 +21,7 @@ export default {
       tags,
     });
   },
+
   getUser(id) {
     return axios.$get(`users/${id}`);
   },
@@ -50,6 +52,7 @@ export default {
   deleteUser(id) {
     return axios.$delete(`users/${id}`);
   },
+
   getUserTag(id) {
     return axios.$get(`users/${id}/tags`);
   },
