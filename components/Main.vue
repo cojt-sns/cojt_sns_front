@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile">
     <Menu />
-    <Group v-if="$route.name.includes('users')" />
+    <Group v-if="$route.name.includes('group')" />
     <Posts v-if="$route.name.includes('groups')" />
     <User v-if="$route.name.includes('users')" />
     <Search v-if="$route.name == 'search'" />
