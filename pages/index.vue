@@ -42,7 +42,7 @@ export default {
   created() {
     this.getHealthCheck();
 
-    Tag.getTags('スマブラ').then((res) => {
+    Tag.getTag(1).then((res) => {
       this.tags = res;
     });
   },
