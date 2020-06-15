@@ -27,7 +27,7 @@
         </li>
         <li>
           <nuxt-link
-            :to="`/users/1`"
+            :to="`/users/${$auth.user.id}`"
             :class="{ 'is-active': $route.name.includes('users') }"
           >
             プロフィール

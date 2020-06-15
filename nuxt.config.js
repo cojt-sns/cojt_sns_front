@@ -68,6 +68,10 @@ export default {
     baseURL: process.env.SERVER_URL,
   },
 
+  router: {
+    middleware: ['auth'],
+  },
+
   auth: {
     redirect: {
       login: '/login',
@@ -83,7 +87,7 @@ export default {
             method: 'post',
             propertyName: 'auth_token',
           },
-          user: { url: '/users/1', method: 'get', propertyName: false },
+          user: { url: '/auth/user', method: 'get', propertyName: false },
           logout: { url: '/auth/logout', method: 'post', propertyName: false },
         },
       },
