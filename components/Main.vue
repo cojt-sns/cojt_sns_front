@@ -2,7 +2,7 @@
   <div class="columns is-mobile">
     <Menu />
     <Group v-if="$route.name.includes('groups')" />
-    <Posts v-if="$route.name.includes('groups')" />
+    <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
     <User
       v-if="$route.name.includes('users')"
       :user="user"
@@ -42,6 +42,16 @@ export default {
       type: Array,
       required: false,
       default: null,
+    },
+    posts: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    id: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
 };
