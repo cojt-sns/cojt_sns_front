@@ -1,48 +1,53 @@
 <template>
   <div class="container">
+    <Menu />
     <div>
       <logo />
-      <h1 class="title">
-        cojt_sns_front
-      </h1>
-      <h2 class="subtitle">
-        COJT SNS のフロント
-      </h2>
+      <h1 class="title">cojt_sns_front</h1>
+      <h2 class="subtitle">COJT SNS のフロント</h2>
       <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
+        <a href="https://nuxtjs.org/" target="_blank" class="button--green"
+          >Documentation</a
+        >
         <a
           href="https://github.com/nuxt/nuxt.js"
           target="_blank"
           class="button--grey"
+          >GitHub</a
         >
-          GitHub
-        </a>
       </div>
-      <div>Check: {{ health_check }}</div>
+      <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
+      <div>tag: {{ tags }}</div>
     </div>
   </div>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue';
+import Tag from '@/plugins/axios/modules/tag';
+import Menu from '~/components/Menu.vue';
 
 export default {
   components: {
     Logo,
+    Menu,
   },
   data() {
     return {
-      health_check: 0,
+      healthCheck: 0,
+      tags: 0,
     };
   },
   created() {
-    this.get_health_check();
+    this.getHealthCheck();
+
+    Tag.getTag(1).then((res) => {
+      this.tags = res;
+    });
   },
   methods: {
-    async get_health_check() {
+    async getHealthCheck() {
       try {
         const res = await this.$axios.$get('/health_check');
         this.health_check = res;
@@ -53,7 +58,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .container {
   margin: 0 auto;

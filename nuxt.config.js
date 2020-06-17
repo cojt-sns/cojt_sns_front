@@ -29,7 +29,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['@/plugins/axios/index'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -68,6 +68,10 @@ export default {
     baseURL: process.env.SERVER_URL,
   },
 
+  router: {
+    middleware: ['auth'],
+  },
+
   auth: {
     redirect: {
       login: '/login',
@@ -78,8 +82,12 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-          user: false,
+          login: {
+            url: '/auth/login',
+            method: 'post',
+            propertyName: 'auth_token',
+          },
+          user: { url: '/auth/user', method: 'get', propertyName: false },
           logout: { url: '/auth/logout', method: 'post', propertyName: false },
         },
       },

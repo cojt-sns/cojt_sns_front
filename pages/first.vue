@@ -15,8 +15,9 @@
             <a
               href="./make_new_account"
               class="button is-link is-focused is-size-3"
-              >Join</a
             >
+              Join
+            </a>
           </p>
           <p class="level-item">
             <a href="./login" class="button is-link is-focused is-size-3"
