@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import User from '@/plugins/axios/modules/user';
 export default {
   data() {
     return {
@@ -144,7 +145,7 @@ export default {
       if (text !== refill) this.error = 'not same input';
       else this.error = '';
     },
-    submit() {
+    async submit() {
       if (
         this.email === '' ||
         this.reemail === '' ||
@@ -163,6 +164,15 @@ export default {
       if (this.password !== this.repassword) {
         this.error = 'password is varying';
         return;
+      }
+      const res = await User.postUser(this.username, this.email, this.password);
+      console.log(res);
+      try {
+        await this.$auth.loginWith('local', {
+          data: { email: this.email, password: this.password },
+        });
+      } catch (error) {
+        this.error = error;
       }
       this.nextURL = './first';
     },
