@@ -27,16 +27,41 @@
         </li>
         <li>
           <nuxt-link
+            v-if="$auth.loggedIn"
             :to="`/users/${$auth.user.id}`"
             :class="{ 'is-active': $route.name.includes('users') }"
           >
             プロフィール
           </nuxt-link>
         </li>
+        <li>
+          <a v-if="$auth.loggedIn" @click="logout">
+            ログアウト
+          </a>
+        </li>
       </ul>
     </aside>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    async logout() {
+      try {
+        await this.$auth.logout();
+      } catch (error) {
+        this.error = error;
+      }
+      this.$router.push('/first');
+    },
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 .is-vertical-center {
   display: flex;
@@ -50,11 +75,3 @@
   }
 }
 </style>
-<script>
-export default {
-  data() {
-    return {};
-  },
-  methods: {},
-};
-</script>
