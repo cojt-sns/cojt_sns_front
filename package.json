@@ -20,8 +20,9 @@
     "@nuxtjs/bulma": "^1.2.1",
     "@nuxtjs/dotenv": "^1.4.0",
     "nuxt": "^2.0.0",
-    "sass-loader": "^8.0.2",
     "nuxt-fontawesome": "^0.4.0",
+    "sass-loader": "^8.0.2",
+    "vue-router": "^3.3.4",
     "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {

@@ -19,7 +19,7 @@
             >
           </p>
           <p class="level-item">
-            <a href="./log_in" class="button is-link is-focused is-size-3"
+            <a href="./login" class="button is-link is-focused is-size-3"
               >Login</a
             >
           </p>
