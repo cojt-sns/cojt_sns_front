@@ -31,14 +31,19 @@
           <label class="label">icon</label>
           <div class="file has-name">
             <label class="file-label">
-              <input class="file-input" type="file" name="resume" />
+              <input
+                class="file-input"
+                type="file"
+                name="resume"
+                @change="selectIcon"
+              />
               <span class="file-cta">
                 <span class="file-icon">
                   <font-awesome-icon :icon="['fas', 'upload']" />
                 </span>
                 <span class="file-label">Choose a file…</span>
               </span>
-              <span class="file-name"></span>
+              <span class="file-name">{{ icon ? icon.name : '' }}</span>
             </label>
           </div>
         </div>
@@ -65,7 +70,7 @@
         <button class="button is-success" @click="save">
           Save changes
         </button>
-        <button class="button" @click="this.$emit('close')">Cancel</button>
+        <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
   </div>
@@ -95,7 +100,7 @@ export default {
   data() {
     return {
       name: this.user.name,
-      icon: '',
+      icon: null,
       tags: this.user.tags,
       bio: this.user.bio,
       error: '',
@@ -113,6 +118,11 @@ export default {
     },
   },
   methods: {
+    selectIcon(e) {
+      e.preventDefault();
+      const files = e.target.files;
+      this.icon = files[0];
+    },
     async save() {
       this.error = '';
 
@@ -124,7 +134,7 @@ export default {
           undefined,
           undefined,
           this.bio,
-          this.image,
+          this.icon,
           undefined,
           undefined,
           this.tags.map((tag) => tag.id)
