@@ -1,5 +1,5 @@
 <template>
-  <Main :is-group="false" :user="user" :user-tags="userTags" />
+  <Main :is-group="false" :user="user" />
 </template>
 
 <script>
@@ -13,14 +13,13 @@ export default {
   async asyncData({ params, redirect }) {
     try {
       const resUser = await User.getUser(params.id);
-      const resUserTag = await User.getUserTag(params.id);
+      resUser.tags = await User.getUserTag(params.id);
       resUser.image = process.env.SERVER_URL + resUser.image;
       // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
       //   this.userTwitter=res;
       // });
       return {
         user: resUser,
-        userTags: resUserTag,
       };
     } catch (error) {
       return redirect(302, '/');

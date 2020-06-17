@@ -3,11 +3,7 @@
     <Menu />
     <Group v-if="$route.name.includes('groups')" />
     <Posts v-if="$route.name.includes('groups')" />
-    <User
-      v-if="$route.name.includes('users')"
-      :user="user"
-      :user-tags="userTags"
-    />
+    <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
     <div
       class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
@@ -35,11 +31,6 @@ export default {
   props: {
     user: {
       type: Object,
-      required: false,
-      default: null,
-    },
-    userTags: {
-      type: Array,
       required: false,
       default: null,
     },
