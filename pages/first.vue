@@ -20,9 +20,9 @@
             </a>
           </p>
           <p class="level-item">
-            <a href="./login" class="button is-link is-focused is-size-3">
-              Login
-            </a>
+            <a href="./login" class="button is-link is-focused is-size-3"
+              >Login</a
+            >
           </p>
         </nav>
       </div>

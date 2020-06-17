@@ -20,11 +20,13 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/bulma": "^1.2.1",
     "@nuxtjs/dotenv": "^1.4.0",
+    "actioncable-vue": "^2.2.2",
     "node-sass": "^4.14.1",
     "nuxt": "^2.0.0",
     "nuxt-fontawesome": "^0.4.0",
     "sass-loader": "^8.0.2",
     "vue-select": "^3.10.3",
+    "vue-router": "^3.3.4",
     "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {

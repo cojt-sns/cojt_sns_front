@@ -2,8 +2,17 @@
   <div class="columns is-mobile">
     <Menu />
     <Group v-if="$route.name.includes('groups')" />
+    <<<<<<< HEAD
     <Posts v-if="$route.name.includes('groups')" />
     <User v-if="$route.name.includes('users')" :user="user" />
+    =======
+    <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
+    <User
+      v-if="$route.name.includes('users')"
+      :user="user"
+      :user-tags="userTags"
+    />
+    >>>>>>> master
     <Search v-if="$route.name == 'search'" />
     <div
       class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
@@ -33,6 +42,16 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    posts: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    id: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
 };
