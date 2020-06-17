@@ -29,7 +29,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/axios/index'],
+  plugins: [
+    '@/plugins/axios/index',
+    { src: '@/plugins/actioncable', ssr: false },
+  ],
   /*
    ** Nuxt.js dev-modules
    */
