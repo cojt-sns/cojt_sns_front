@@ -67,11 +67,10 @@ export default {
   axios: {
     baseURL: process.env.SERVER_URL,
   },
-
+  /*
   router: {
     middleware: ['auth'],
-  },
-
+  },*/
   auth: {
     redirect: {
       login: false,

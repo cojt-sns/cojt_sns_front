@@ -174,7 +174,7 @@ export default {
       } catch (error) {
         this.error = error;
       }
-      this.nextURL = './first';
+      this.nextURL = '/first';
     },
   },
 };
