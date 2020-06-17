@@ -40,9 +40,9 @@ export default {
 
   putUser(
     id,
-    name,
-    email,
-    password,
+    name = null,
+    email = null,
+    password = null,
     bio = null,
     image = null,
     oauth_token = null,
@@ -50,12 +50,11 @@ export default {
     tags = null
   ) {
     const form = new FormData();
-
-    form.append('name', name);
+    if (name) form.append('name', name);
     if (bio) form.append('bio', bio);
-    form.append('email', email);
+    if (email) form.append('email', email);
     if (image) form.append('image', image);
-    form.append('password', password);
+    if (password) form.append('password', password);
     if (oauth_token) form.append('oauth_token', oauth_token);
     if (oauth_token_secret)
       form.append('oauth_token_secret', oauth_token_secret);
