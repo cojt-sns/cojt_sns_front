@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      current_id: 0,
+      selectedId: 0,
     };
   },
 
@@ -39,7 +39,11 @@ export default {
 
   methods: {
     OnGroupClicked(e) {
-      this.$emit('GroupClicked', e.target.getAttribute('value'));
+      const groupId = Number(e.target.getAttribute('value'));
+      if (this.selectedId !== groupId) {
+        this.$emit('GroupClicked', e.target.getAttribute('value'));
+      }
+      this.selectedId = groupId;
     },
   },
 };
