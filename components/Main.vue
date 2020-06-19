@@ -1,8 +1,8 @@
 <template>
   <div class="columns is-mobile">
     <Menu />
-    <Group v-if="$route.name.includes('groups')" />
-    <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
+    <Group v-if="$route.name.includes('groups')" :groups="groups" />
+    <Posts v-if="$route.name.includes('groups')" :posts="posts" />
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
     <slot />
@@ -40,10 +40,10 @@ export default {
       required: false,
       default: null,
     },
-    id: {
-      type: Number,
+    groups: {
+      type: Array,
       required: false,
-      default: 0,
+      default: null,
     },
   },
 };
