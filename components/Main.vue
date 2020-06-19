@@ -2,7 +2,11 @@
   <div class="columns is-mobile">
     <Menu />
     <Group v-if="$route.name.includes('groups')" :groups="groups" />
-    <Posts v-if="$route.name.includes('groups')" :posts="posts" />
+    <Posts
+      v-if="$route.name.includes('groups')"
+      :posts="posts"
+      :groups="groups"
+    />
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
     <slot />
