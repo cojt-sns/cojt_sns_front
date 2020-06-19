@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <nuxt />
   </div>
 </template>
@@ -51,5 +51,9 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+html {
+  overflow: hidden;
 }
 </style>

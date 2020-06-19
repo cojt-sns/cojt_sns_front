@@ -5,6 +5,7 @@
     <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
+    <slot />
     <div
       class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
     >

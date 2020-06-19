@@ -53,10 +53,10 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
+        window.location.href = '/first';
       } catch (error) {
         this.error = error;
       }
-      this.$router.push('/first');
     },
   },
 };
