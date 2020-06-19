@@ -39,10 +39,6 @@ export default {
       type: Array,
       required: true,
     },
-    id: {
-      type: Number,
-      required: true,
-    },
   },
   data() {
     return { content: '' };
@@ -51,19 +47,21 @@ export default {
     if (process.browser) {
       this.$cable.subscribe({
         channel: 'GroupChannel',
-        id: this.id,
+        id: this.$route.params.id ?? 1,
       });
     }
   },
   beforeDestroy() {
     this.$cable.unsubscribe({
       channel: 'GroupChannel',
-      id: this.id,
+      id: this.$route.params.id ?? 1,
     });
   },
   methods: {
     send() {
-      Post.postGroupPost(1, this.content).then((res) => console.log(res));
+      Post.postGroupPost(this.$route.params.id ?? 1, this.content).then((res) =>
+        console.log(res)
+      );
       this.content = '';
     },
     async arrangePost(src) {

@@ -1,12 +1,8 @@
 <template>
   <div class="columns is-mobile">
     <Menu />
-    <Group
-      v-if="$route.name.includes('groups')"
-      :groups="groups"
-      @GroupClicked="OnGroupClicked"
-    />
-    <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
+    <Group v-if="$route.name.includes('groups')" :groups="groups" />
+    <Posts v-if="$route.name.includes('groups')" :posts="posts" />
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
     <div
@@ -47,16 +43,6 @@ export default {
       type: Array,
       required: false,
       default: null,
-    },
-    id: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
-  },
-  methods: {
-    OnGroupClicked(groupId) {
-      this.$emit('GroupClicked', groupId);
     },
   },
 };

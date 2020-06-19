@@ -1,10 +1,5 @@
 <template>
-  <Main
-    :id="1"
-    :posts="posts"
-    :groups="groups"
-    @GroupClicked="OnGroupClicked"
-  />
+  <Main :posts="posts" :groups="groups" />
 </template>
 
 <script>
@@ -17,9 +12,9 @@ export default {
   components: {
     Main,
   },
-  async asyncData() {
+  async asyncData({ $auth }) {
     const groups = [];
-    const userGroups = await User.getUserGroup(1);
+    const userGroups = await User.getUserGroup($auth.user.id);
     for (const group of userGroups) {
       const tags = [];
       for (const id of group.tags) {
@@ -48,22 +43,7 @@ export default {
       groups,
     };
   },
-  methods: {
-    async GetPosts(id) {
-      const newPosts = [];
-      const res = await Post.getGroupPost(id);
-      for (const post of res) {
-        post.user = await User.getUser(post.user_id);
-        post.user.image = process.env.SERVER_URL + post.user.image;
-        newPosts.push(post);
-      }
-      this.posts = newPosts;
-    },
-
-    OnGroupClicked(id) {
-      this.GetPosts(id);
-    },
-  },
+  methods: {},
 };
 </script>
 

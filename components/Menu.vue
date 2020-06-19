@@ -1,6 +1,6 @@
 <template>
   <div
-    class="menu-container column is-2 is-narrow-mobile is-fullheight is-hidden-mobile"
+    class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile menu-container"
   >
     <aside class="menu">
       <ul class="menu-list ">
@@ -68,7 +68,7 @@ export default {
   align-items: center;
 }
 .menu-container {
-  border-right: 1px black solid;
+  width: 150px !important;
   height: 100vh;
   .menu {
     margin-top: 40vh;

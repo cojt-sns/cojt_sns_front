@@ -1,19 +1,18 @@
 <template>
   <div
     id="group"
-    class="column is-2 is-narrow-mobile is-fullheight section has-background-grey"
+    class="column is-2 is-narrow-mobile is-fullheight has-background-grey-lighter"
   >
     <aside class="menu">
       <p class="menu-label">Groups</p>
       <ul class="menu-list">
         <li v-for="group in groups" :key="group.id">
-          <a :value="group.id" @click="OnGroupClicked">{{
-            group.tags
-              .map((tag) => {
-                return tag.name;
-              })
-              .join('.')
-          }}</a>
+          <nuxt-link
+            :to="`/groups/${group.id}`"
+            :class="{ 'is-active': isActive(group.id) }"
+          >
+            #{{ group.tags.map((tag) => tag.fullname).join('#') }}
+          </nuxt-link>
         </li>
       </ul>
     </aside>
@@ -30,20 +29,14 @@ export default {
   },
 
   data() {
-    return {
-      selectedId: 0,
-    };
+    return {};
   },
 
   mounted() {},
 
   methods: {
-    OnGroupClicked(e) {
-      const groupId = Number(e.target.getAttribute('value'));
-      if (this.selectedId !== groupId) {
-        this.$emit('GroupClicked', e.target.getAttribute('value'));
-      }
-      this.selectedId = groupId;
+    isActive(id) {
+      return id === Number(this.$route.params.id ?? 1);
     },
   },
 };
