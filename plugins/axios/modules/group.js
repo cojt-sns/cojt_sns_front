@@ -38,4 +38,12 @@ export default {
       tags,
     });
   },
+  joinGroup(id, user_id) {
+    return axios.$post(`groups/${id}/join`, {
+      user_id,
+    });
+  },
+  leaveGroup(id) {
+    return axios.$post(`groups/${id}/leave`);
+  },
 };
