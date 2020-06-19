@@ -38,9 +38,12 @@ export default {
       tags,
     });
   },
-  joinGroup(id, user_id) {
+  joinGroup(id, user_id, answer, bio = null) {
+    const answerStr = answer.join('$');
     return axios.$post(`groups/${id}/join`, {
       user_id,
+      answerStr,
+      bio,
     });
   },
   leaveGroup(id) {
