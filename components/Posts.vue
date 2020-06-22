@@ -24,20 +24,17 @@
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
             <a href="#" class="dropdown-item">
-              Dropdown item
+              概要
             </a>
             <a class="dropdown-item">
-              Other dropdown item
-            </a>
-            <a href="#" class="dropdown-item is-active">
-              Active dropdown item
+              他の人を招待する
             </a>
             <a href="#" class="dropdown-item">
-              Other dropdown item
+              Twitterで共有
             </a>
             <hr class="dropdown-divider" />
-            <a href="#" class="dropdown-item">
-              With a divider
+            <a href="#" class="dropdown-item has-text-danger">
+              グループから退出する
             </a>
           </div>
         </div>
