@@ -1,10 +1,11 @@
 <template>
   <div class="columns is-mobile">
     <Menu />
-    <Group v-if="$route.name.includes('groups')" />
-    <Posts v-if="$route.name.includes('groups')" :id="id" :posts="posts" />
+    <Group v-if="$route.name.includes('groups')" :groups="groups" />
+    <Posts v-if="$route.name.includes('groups')" :posts="posts" />
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
+    <slot />
     <div
       class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
     >
@@ -39,10 +40,10 @@ export default {
       required: false,
       default: null,
     },
-    id: {
-      type: Number,
+    groups: {
+      type: Array,
       required: false,
-      default: 0,
+      default: null,
     },
   },
 };

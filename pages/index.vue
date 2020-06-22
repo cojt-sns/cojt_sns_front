@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Menu />
-    <div>
+  <Main>
+    <div class="column is-fullheight section">
       <logo />
       <h1 class="title">cojt_sns_front</h1>
       <h2 class="subtitle">COJT SNS のフロント</h2>
@@ -19,16 +18,17 @@
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
     </div>
-  </div>
+  </Main>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue';
-import Menu from '~/components/Menu.vue';
+import Main from '~/components/Main';
+
 export default {
   components: {
     Logo,
-    Menu,
+    Main,
   },
   data() {
     return {

@@ -78,6 +78,10 @@ export default {
     return axios.$get(`users/${id}/tags`);
   },
 
+  getUserGroup(id) {
+    return axios.$get(`users/${id}/groups`);
+  },
+
   getUserTwitterProfile(id) {
     return axios.$get(`users/${id}/twitter_profile`);
   },

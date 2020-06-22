@@ -12,7 +12,10 @@ export default ({ store, $axios, redirect }) => {
   });
 
   $axios.onError((error) => {
-    if (error.response.status === 401) redirect(301, '/login');
+    if (error.response.status === 401) {
+      redirect('/first');
+      return;
+    }
     return Promise.reject(error.response);
   });
 
