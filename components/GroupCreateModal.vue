@@ -153,14 +153,12 @@ export default {
 
       if (this.error) return;
       try {
-        const res = await Group.postGroup(
+        const createdGroup = await Group.postGroup(
           this.tracability,
           this.questions.map((question) => question.text),
           this.introduction,
           this.tags.map((tag) => tag.id)
         );
-        const createdGroup = await res;
-        await Group.joinGroup(createdGroup.id, this.$auth.user.id);
         this.$router.push('/groups/' + createdGroup.id);
       } catch (error) {
         this.error = error;
