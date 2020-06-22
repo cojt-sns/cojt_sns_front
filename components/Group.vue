@@ -3,8 +3,14 @@
     id="group"
     class="column is-2 is-narrow-mobile is-fullheight has-background-grey-lighter"
   >
+    <GroupCreateModal :create="create" @close="SwitchGroupCreateModal" />
     <aside class="menu">
-      <p class="menu-label">Groups</p>
+      <div class="menu-label">
+        Groups
+      </div>
+      <span class="icon is-small" @click="SwitchGroupCreateModal"
+        ><font-awesome-icon :icon="['fas', 'plus']" />
+      </span>
       <ul class="menu-list">
         <li v-for="group in groups" :key="group.id">
           <nuxt-link
@@ -20,7 +26,12 @@
 </template>
 
 <script>
+import GroupCreateModal from '~/components/GroupCreateModal';
 export default {
+  components: {
+    GroupCreateModal,
+  },
+
   props: {
     groups: {
       type: Array,
@@ -29,7 +40,9 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      create: false,
+    };
   },
 
   mounted() {},
@@ -38,15 +51,27 @@ export default {
     isActive(id) {
       return id === Number(this.$route.params.id ?? 1);
     },
+
+    SwitchGroupCreateModal() {
+      this.create = !this.create;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .menu {
+  position: relative;
   .menu-label {
     color: inherit;
     font-size: inherit;
+    display: inline-block;
+  }
+  .icon {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 1.5em;
   }
   .menu-list {
     li {
