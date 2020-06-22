@@ -1,5 +1,45 @@
 <template>
   <div class="column is-fullheight">
+    <nav class="level">
+      <div class="level-left">
+        <p class="level-item">
+          <strong>
+            #{{
+              groups
+                .find((group) => group.id == getGroupId())
+                .tags.map((tag) => tag.fullname)
+                .join('#')
+            }}
+          </strong>
+        </p>
+      </div>
+      <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
+        <div class="dropdown-trigger">
+          <div class="level-right">
+            <span class="icon" @click="dropDown = !dropDown">
+              <font-awesome-icon :icon="['fa', 'bars']" size="2x" />
+            </span>
+          </div>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a href="#" class="dropdown-item">
+              概要
+            </a>
+            <a class="dropdown-item">
+              他の人を招待する
+            </a>
+            <a href="#" class="dropdown-item">
+              Twitterで共有
+            </a>
+            <hr class="dropdown-divider" />
+            <a href="#" class="dropdown-item has-text-danger">
+              グループから退出する
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
     <div class="posts">
       <Post
         v-for="post in posts"
@@ -39,27 +79,31 @@ export default {
       type: Array,
       required: true,
     },
+    groups: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
-    return { content: '' };
+    return { content: '', dropDown: false };
   },
   mounted() {
     if (process.browser) {
       this.$cable.subscribe({
         channel: 'GroupChannel',
-        id: this.$route.params.id ?? 1,
+        id: this.getGroupId(),
       });
     }
   },
   beforeDestroy() {
     this.$cable.unsubscribe({
       channel: 'GroupChannel',
-      id: this.$route.params.id ?? 1,
+      id: this.getGroupId(),
     });
   },
   methods: {
     send() {
-      Post.postGroupPost(this.$route.params.id ?? 1, this.content).then((res) =>
+      Post.postGroupPost(this.getGroupId(), this.content).then((res) =>
         console.log(res)
       );
       this.content = '';
@@ -73,6 +117,9 @@ export default {
       Post.deletePost(id).then(
         (res) => (this.posts = this.posts.filter((post) => post.id !== res.id))
       );
+    },
+    getGroupId() {
+      return Number(this.$route.params.id ?? 1);
     },
   },
   channels: {
@@ -102,6 +149,9 @@ export default {
   padding: 0;
   display: flex;
   flex-direction: column;
+  .level {
+    margin: 10px;
+  }
   .posts {
     overflow-y: scroll;
     padding: 0;
