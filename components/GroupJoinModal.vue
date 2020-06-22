@@ -1,10 +1,13 @@
 <template>
-  <div :class="{ 'is-active': join }" class="modal">
+  <div :class="{ 'is-active': active }" class="modal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
-          #{{ tags.map((tag) => tag.fullname).join('#') }}
+          <strong
+            >#{{ group.tags.map((tag) => tag.fullname).join('#') }}</strong
+          >
+          に参加する
         </p>
         <button
           class="delete"
@@ -24,7 +27,7 @@
             <p class="control has-icons-right">
               <input v-model="answer[index]" class="input" type="text" />
               <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
+                <font-awesome-icon :icon="['fas', 'check']" />
               </span>
             </p>
           </div>
@@ -44,8 +47,8 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success">Join Group</button>
-        <button class="button" @click="$emit('close')">Clear</button>
+        <button class="button is-success">Join</button>
+        <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
   </div>
@@ -54,20 +57,12 @@
 import Group from '@/plugins/axios/modules/group';
 export default {
   props: {
-    join: {
-      type: Boolean,
-      required: true,
-    },
     group: {
       type: Object,
       required: true,
     },
-    user_id: {
-      type: Number,
-      required: true,
-    },
-    tags: {
-      type: Array,
+    active: {
+      type: Boolean,
       required: true,
     },
   },
@@ -82,17 +77,16 @@ export default {
     async joinGroup() {
       this.error = '';
 
-      if (this.error) return;
       try {
         if (this.group.introduction) {
           await Group.joinGroup(
             this.group.id,
-            this.user_id,
+            this.$auth.user.id,
             this.answer,
             this.bio
           );
         } else {
-          await Group.joinGroup(this.group.id, this.user_id, this.answer);
+          await Group.joinGroup(this.group.id, this.$auth.user.id, this.answer);
         }
         this.$emit('close');
       } catch (error) {
@@ -102,3 +96,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.modal-card-title {
+  flex: 1;
+}
+</style>

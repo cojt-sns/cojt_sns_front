@@ -1,12 +1,6 @@
 <template>
   <div class="container">
-    <Menu />//
-    <GroupJoinModal
-      :group="group"
-      :join="true"
-      :user_id="$auth.user.id"
-      :tags="tags"
-    />
+    <Menu />
     <div>
       <logo />
       <h1 class="title">cojt_sns_front</h1>
@@ -24,33 +18,25 @@
       </div>
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
-      <div>tag: {{ group.tags }}</div>
     </div>
   </div>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue';
-import Group from '@/plugins/axios/modules/group';
-import Tag from '@/plugins/axios/modules/tag';
 import Menu from '~/components/Menu.vue';
-import GroupJoinModal from '~/components/GroupJoinModal.vue';
 export default {
   components: {
     Logo,
     Menu,
-    GroupJoinModal,
   },
   data() {
     return {
       healthCheck: 0,
-      tags: [],
-      group: {},
     };
   },
   created() {
     this.getHealthCheck();
-    this.getData();
   },
   methods: {
     async getHealthCheck() {
@@ -60,16 +46,6 @@ export default {
       } catch (error) {
         this.health_check = error;
       }
-    },
-    async getData() {
-      await Group.getGroup(2).then((res) => {
-        this.group = res;
-      });
-      this.tags = await this.group.tags.map(
-        async (value) => await Tag.getTag(value)
-      );
-      console.log(this.tags);
-      console.log(this.group);
     },
   },
 };
