@@ -2,8 +2,11 @@
 import { axios } from '../index.js';
 
 export default {
-  searchGroup(tag_ids, or) {
-    return axios.$get(`groups`, { params: { tag_ids, or } });
+  searchGroup(tag_ids = null, or = null) {
+    const params = {};
+    if (tag_ids) params.tag_ids = tag_ids;
+    if (or) params.or = or;
+    return axios.$get(`groups`, { params });
   },
 
   postGroup(
@@ -38,9 +41,12 @@ export default {
       tags,
     });
   },
-  joinGroup(id, user_id) {
+  joinGroup(id, user_id, answer, bio = null) {
+    const answerStr = answer.join('$');
     return axios.$post(`groups/${id}/join`, {
       user_id,
+      answerStr,
+      bio,
     });
   },
   leaveGroup(id) {

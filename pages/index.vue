@@ -17,14 +17,12 @@
       </div>
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
-      <div>tag: {{ tags }}</div>
     </div>
   </Main>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue';
-import Tag from '@/plugins/axios/modules/tag';
 import Main from '~/components/Main';
 
 export default {
@@ -35,15 +33,10 @@ export default {
   data() {
     return {
       healthCheck: 0,
-      tags: 0,
     };
   },
   created() {
     this.getHealthCheck();
-
-    Tag.getTag(1).then((res) => {
-      this.tags = res;
-    });
   },
   methods: {
     async getHealthCheck() {

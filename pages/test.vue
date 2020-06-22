@@ -1,59 +1,55 @@
 <template>
-  <section class="section">
-    <div class="columns has-text-centered">
-      <div class="column is-four-fifths has-text-centered">is-four-fifths</div>
-      <div class="column has-text-centered">Auto</div>
-      <div class="column has-text-centered">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-three-quarters has-text-centered">
-        is-three-quarters
+  <Main>
+    <div class="column is-fullheight">
+      <div v-for="(group, index) in groups" :key="group.id">
+        <a @click="modalStates.splice(index, 1, true)"
+          >#{{ group.tags.map((tag) => tag.fullname).join('#') }}</a
+        >
+        <GroupJoinModal
+          :group="group"
+          :active="modalStates[index]"
+          @close="modalStates.splice(index, 1, false)"
+        />
       </div>
-      <div class="column has-text-centered">Auto</div>
-      <div class="column has-text-centered">Auto</div>
     </div>
-
-    <div class="columns">
-      <div class="column is-two-thirds has-text-centered">is-two-thirds</div>
-      <div class="column has-text-centered">Auto</div>
-      <div class="column has-text-centered">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-three-fifths">is-three-fifths</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-half">is-half</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-two-fifths">is-two-fifths</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-one-third">is-one-third</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-one-quarter">is-one-quarter</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-one-fifth">is-one-fifth</div>
-      <div class="column">Auto</div>
-      <div class="column">Auto</div>
-    </div>
-  </section>
+  </Main>
 </template>
+
+<script>
+import Main from '~/components/Main';
+import GroupJoinModal from '~/components/GroupJoinModal';
+import Group from '@/plugins/axios/modules/group';
+import Tag from '@/plugins/axios/modules/tag';
+
+export default {
+  components: {
+    Main,
+    GroupJoinModal,
+  },
+  async asyncData() {
+    const groups = [];
+    const modalStates = [];
+    const search = await Group.searchGroup();
+    for (const group of search) {
+      const tags = [];
+      for (const id of group.tags) {
+        tags.push(await Tag.getTag(id));
+      }
+      group.tags = tags;
+      groups.push(group);
+      modalStates.push(false);
+    }
+    return {
+      groups,
+      modalStates,
+    };
+  },
+  data() {
+    return {
+      modalStates: this.modalStates,
+    };
+  },
+};
+</script>
+
+<style></style>
