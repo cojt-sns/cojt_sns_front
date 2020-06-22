@@ -7,7 +7,7 @@
     </figure>
     <div class="media-content">
       <div class="content">
-        <nuxt-link :to="`users/${post.user.id}`">
+        <nuxt-link :to="`/users/${post.user.id}`">
           <strong>{{ post.user.name }}</strong>
           <small>@{{ post.user_id }}</small>
         </nuxt-link>
@@ -73,16 +73,31 @@
                   </span>
                 </button>
               </div>
-              <div class="dropdown-menu" role="menu">
+              <div
+                v-if="post.user_id == $auth.user.id"
+                class="dropdown-menu"
+                role="menu"
+              >
                 <div class="dropdown-content">
                   <a class="dropdown-item" @click="editPost()">
                     投稿を更新する
                   </a>
                   <a
-                    class="dropdown-item is-danger"
+                    class="dropdown-item has-text-danger"
                     @click="$emit('deletePost', post.id)"
                   >
                     投稿を削除する
+                  </a>
+                </div>
+              </div>
+              <div
+                v-if="post.user_id != $auth.user.id"
+                class="dropdown-menu"
+                role="menu"
+              >
+                <div class="dropdown-content">
+                  <a class="dropdown-item">
+                    投稿を報告
                   </a>
                 </div>
               </div>
