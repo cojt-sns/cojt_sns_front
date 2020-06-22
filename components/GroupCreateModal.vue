@@ -52,20 +52,38 @@
           </label>
         </div>
         <div class="field">
-          <label class="label"
-            >Questions
-            <button class="button questions-btn" @click="AddQuestion">
-              質問項目を追加
-            </button>
+          <label class="label">
+            <nav class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  Questions
+                </div>
+              </div>
+              <div class="level-item level-right">
+                <button class="button questions-btn" @click="AddQuestion">
+                  質問項目を追加
+                </button>
+              </div>
+            </nav>
           </label>
-          <textarea
-            v-for="question in questions"
-            :key="question.id"
-            v-model="question.text"
-            class="textarea questions"
-            placeholder="質問を入力"
-            rows="1"
-          ></textarea>
+        </div>
+        <div
+          v-for="question in questions"
+          :key="question.id"
+          class="field is-grouped"
+        >
+          <div class="control is-expanded">
+            <input
+              v-model="question.text"
+              class="input"
+              placeholder="質問を入力"
+            />
+          </div>
+          <div v-if="question.id != 1" class="control">
+            <button class="button" @click="removeQuestion(question.id)">
+              削除
+            </button>
+          </div>
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -91,8 +109,8 @@ export default {
   },
   data() {
     return {
-      tracability: false,
-      isPublic: false,
+      tracability: true,
+      isPublic: true,
       introduction: false,
       tags: [],
       questions: [
@@ -104,7 +122,23 @@ export default {
       error: '',
     };
   },
-  watch: {},
+  watch: {
+    create(newValue) {
+      if (newValue) {
+        this.tracability = true;
+        this.isPublic = true;
+        this.introduction = false;
+        this.tags = [];
+        this.questions = [
+          {
+            id: 1,
+            text: '',
+          },
+        ];
+        this.error = '';
+      }
+    },
+  },
   methods: {
     AddQuestion() {
       const newQuestion = {
@@ -132,6 +166,13 @@ export default {
         this.error = error;
       }
     },
+
+    removeQuestion(id) {
+      const index = this.questions.findIndex((q) => q.id === id);
+      if (index === -1) return;
+
+      this.questions.splice(index, 1);
+    },
   },
 };
 </script>
@@ -141,11 +182,6 @@ export default {
   overflow: visible;
   .modal-card-body {
     overflow: visible;
-    .field {
-      .questions {
-        margin-bottom: 10px;
-      }
-    }
   }
 }
 </style>
