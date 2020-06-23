@@ -1,16 +1,22 @@
 <template>
   <div class="column is-fullheight">
+    <GroupOverviewModal
+      :group="group_"
+      :whichmodal="WhichModal"
+      @close="closeModal(false)"
+      @edit="closeModal(true)"
+    />
+    <GroupEditModal
+      v-model="group_"
+      :whichmodal="WhichModal"
+      @close="openModal(false)"
+    />
     <nav class="level">
       <div class="level-left">
         <p class="level-item">
-          <strong>
-            #{{
-              groups
-                .find((group) => group.id == getGroupId())
-                .tags.map((tag) => tag.fullname)
-                .join('#')
-            }}
-          </strong>
+          <strong
+            >#{{ group_.tags.map((tag) => tag.fullname).join('#') }}</strong
+          >
         </p>
       </div>
       <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
@@ -21,21 +27,15 @@
             </span>
           </div>
         </div>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+        <div id="dropdown-menu" class="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            <a href="#" class="dropdown-item">
-              概要
-            </a>
-            <a class="dropdown-item">
-              他の人を招待する
-            </a>
-            <a href="#" class="dropdown-item">
-              Twitterで共有
-            </a>
+            <a href="#" class="dropdown-item" @click="openModal()">概要</a>
+            <a class="dropdown-item">他の人を招待する</a>
+            <a href="#" class="dropdown-item">Twitterで共有</a>
             <hr class="dropdown-divider" />
-            <a href="#" class="dropdown-item has-text-danger">
-              グループから退出する
-            </a>
+            <a href="#" class="dropdown-item has-text-danger"
+              >グループから退出する</a
+            >
           </div>
         </div>
       </div>
@@ -68,11 +68,15 @@
 
 <script>
 import PostComponent from '~/components/Post';
+import GroupOverviewModal from '~/components/GroupOverviewModal';
+import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
 import User from '@/plugins/axios/modules/user';
 export default {
   components: {
     Post: PostComponent,
+    GroupOverviewModal,
+    GroupEditModal,
   },
   props: {
     posts: {
@@ -85,7 +89,14 @@ export default {
     },
   },
   data() {
-    return { content: '', dropDown: false };
+    return {
+      content: '',
+      dropDown: false,
+      WhichModal: 0,
+      group_: this.groups.find(
+        (group) => Number(group.id) === this.getGroupId()
+      ),
+    }; // WhichModal,0:閉じる,1:概要,2:編集
   },
   mounted() {
     if (process.browser) {
@@ -120,6 +131,15 @@ export default {
     },
     getGroupId() {
       return Number(this.$route.params.id ?? 1);
+    },
+    closeModal(isEdit) {
+      if (isEdit) this.WhichModal = 2;
+      else this.WhichModal = 0;
+    },
+    openModal() {
+      // console.log(this.WhichModal);
+      this.WhichModal = 1;
+      // console.log(this.WhichModal);
     },
   },
   channels: {

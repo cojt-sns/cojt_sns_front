@@ -1,33 +1,21 @@
-﻿<template>
-  <div :class="{ 'is-active': create }" class="modal">
+<template>
+  <div :class="{ 'is-active': whichmodal == 2 }" class="modal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">グループを作成</p>
+        <p class="modal-card-title">
+          #{{ group.tags.map((tag) => tag.fullname).join('#') }}の編集
+        </p>
         <button
           class="delete"
           aria-label="close"
           @click="$emit('close')"
         ></button>
       </header>
+
       <section class="modal-card-body">
         <div v-if="error" class="notification is-danger is-light">
           {{ error }}
-        </div>
-        <div class="field">
-          <label class="label">タグ</label>
-          <TagInput v-model="tags" />
-        </div>
-        <div class="field">
-          <label class="label">
-            <input
-              v-model="tracability"
-              class="checkbox"
-              type="checkbox"
-              name="tracability"
-            />
-            Twitter Tracability
-          </label>
         </div>
         <div class="field">
           <label class="label">
@@ -43,12 +31,24 @@
         <div class="field">
           <label class="label">
             <input
+              v-model="traceability"
+              class="checkbox"
+              type="checkbox"
+              name="traceability"
+            />
+            Twitter Traceability
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="label">
+            <input
               v-model="introduction"
               class="introduction"
               type="checkbox"
               name="introduction"
             />
-            自己紹介欄の有無
+            Introduction
           </label>
         </div>
         <div class="field">
@@ -85,54 +85,49 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" @click="save">Create Group</button>
+        <button class="button is-success" @click="save">Save changes</button>
         <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
   </div>
 </template>
-
 <script>
 import Group from '@/plugins/axios/modules/group';
-import TagInput from '~/components/TagInput';
 export default {
-  components: {
-    TagInput,
+  model: {
+    prop: 'group',
+    event: 'change-group',
   },
   props: {
-    create: {
-      type: Boolean,
+    group: {
+      type: Object,
+      required: true,
+    },
+    whichmodal: {
+      type: Number,
       required: true,
     },
   },
   data() {
     return {
-      tracability: true,
-      isPublic: true,
-      introduction: false,
-      tags: [],
-      questions: [
-        {
-          id: 1,
-          text: '',
-        },
-      ],
+      traceability: this.group.twitter_traceability,
+      isPublic: this.group.public,
+      introduction: this.group.introduction,
+      questions: this.group.questions.map((text, i) => {
+        return { id: i + 1, text };
+      }),
       error: '',
     };
   },
   watch: {
-    create(newValue) {
-      if (newValue) {
-        this.tracability = true;
-        this.isPublic = true;
-        this.introduction = false;
-        this.tags = [];
-        this.questions = [
-          {
-            id: 1,
-            text: '',
-          },
-        ];
+    whichmodal(newValue) {
+      if (newValue === 2) {
+        this.traceability = this.group.twitter_traceability;
+        this.isPublic = this.group.public;
+        this.introduction = this.group.introduction;
+        this.questions = this.group.questions.map((text, i) => {
+          return { id: i + 1, text };
+        });
         this.error = '';
       }
     },
@@ -145,40 +140,39 @@ export default {
       };
       this.questions.push(newQuestion);
     },
-
-    async save() {
-      this.error = '';
-
-      if (this.error) return;
-      try {
-        const createdGroup = await Group.postGroup(
-          this.isPublic,
-          this.tracability,
-          this.questions.map((question) => question.text),
-          this.introduction,
-          this.tags.map((tag) => tag.id)
-        );
-        this.$router.push('/groups/' + createdGroup.id);
-      } catch (error) {
-        this.error = error;
-      }
-    },
-
     removeQuestion(id) {
       const index = this.questions.findIndex((q) => q.id === id);
       if (index === -1) return;
 
       this.questions.splice(index, 1);
     },
+    async save() {
+      this.error = '';
+
+      if (this.error) return;
+      try {
+        console.log(
+          this.introduction + 'in' + this.traceability + 'pu' + this.isPublic
+        );
+        const res = await Group.putGroup(
+          this.group.id,
+          this.traceability,
+          this.isPublic,
+          this.questions.map((res) => {
+            return res.text;
+          }),
+          this.introduction
+        );
+
+        const group = res;
+        group.tags = this.group.tags;
+        console.log(group);
+        this.$emit('change-group', group);
+        this.$emit('close');
+      } catch (error) {
+        this.error = error;
+      }
+    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.modal-card {
-  overflow: visible;
-  .modal-card-body {
-    overflow: visible;
-  }
-}
-</style>
