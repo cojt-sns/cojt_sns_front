@@ -36,7 +36,7 @@
               type="checkbox"
               name="traceability"
             />
-            Twitter Tracability
+            Twitter Traceability
           </label>
         </div>
 
@@ -48,7 +48,7 @@
               type="checkbox"
               name="introduction"
             />
-            自己紹介欄の有無
+            Introduction
           </label>
         </div>
         <div class="field">
@@ -118,6 +118,19 @@ export default {
       }),
       error: '',
     };
+  },
+  watch: {
+    whichmodal(newValue) {
+      if (newValue === 2) {
+        this.traceability = this.group.twitter_traceability;
+        this.isPublic = this.group.public;
+        this.introduction = this.group.introduction;
+        this.questions = this.group.questions.map((text, i) => {
+          return { id: i + 1, text };
+        });
+        this.error = '';
+      }
+    },
   },
   methods: {
     AddQuestion() {

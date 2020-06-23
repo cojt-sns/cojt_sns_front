@@ -14,27 +14,36 @@
       </header>
 
       <section class="modal-card-body">
-        <button class="button is-medium is-rounded" @click="$emit('edit')">
-          編集
-        </button>
-        <div class="field">
-          <label v-if="group.public" class="label">Publicグループ</label>
-          <label v-else class="label">Privateグループ</label>
+        <div class="field is-grouped is-grouped-multiline">
+          <div class="control">
+            <span v-if="group.public" class="tag is-success">Public</span>
+            <span v-else class="tag is-danger">Private</span>
+          </div>
+          <div class="control">
+            <div class="tags has-addons">
+              <span class="tag is-light">Twitter Traceability</span>
+              <span v-if="group.twitter_traceability" class="tag is-info">
+                Yes
+              </span>
+              <span v-else class="tag is-danger">
+                No
+              </span>
+            </div>
+          </div>
+          <div class="control">
+            <div class="tags has-addons">
+              <span class="tag is-light">Introduction</span>
+              <span v-if="group.introduction" class="tag is-info">
+                Required
+              </span>
+              <span v-else class="tag is-danger">
+                No
+              </span>
+            </div>
+          </div>
         </div>
         <div class="field">
-          <label class="label"
-            >Twitter tracability:{{ group.twitter_traceability }}</label
-          >
-        </div>
-        <div class="field">
-          <label class="label">
-            自己紹介欄:
-            <span v-if="group.introduction">有り</span>
-            <span v-else>無し</span>
-          </label>
-        </div>
-        <div class="field">
-          <label class="label">プロフィール質問</label>
+          <label class="label">Questions</label>
           <div class="content">
             <ol type="1">
               <li v-for="(question, index) in group.questions" :key="index">
@@ -44,6 +53,12 @@
           </div>
         </div>
       </section>
+
+      <footer class="modal-card-foot">
+        <button class="button" @click="$emit('edit')">
+          Edit
+        </button>
+      </footer>
     </div>
   </div>
 </template>
@@ -61,3 +76,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.modal-card-title {
+  flex: 1;
+}
+</style>

@@ -17,7 +17,7 @@ export default {
     tags
   ) {
     return axios.$post(`groups`, {
-      isPublic,
+      public: isPublic,
       twitter_traceability,
       questions,
       introduction,
@@ -36,21 +36,11 @@ export default {
     questions = null,
     introduction = null
   ) {
-    const form = new FormData();
-    if (twitter_traceability !== null)
-      form.append('twitter_traceability', twitter_traceability);
-    if (isPublic !== null) form.append('isPublic', isPublic);
-    if (questions !== null)
-      questions.forEach((v, i) => {
-        form.append('questions[]', v); // arrayデータを分割して入れ直す
-      });
-
-    // form.append('questions', questions);
-    if (introduction !== null) form.append('introduction', introduction);
-    return axios.$put(`groups/${id}`, form, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
+    return axios.$put(`groups/${id}`, {
+      twitter_traceability,
+      questions,
+      introduction,
+      public: isPublic,
     });
   },
   joinGroup(id, user_id, answer, bio = null) {
