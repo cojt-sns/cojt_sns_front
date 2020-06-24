@@ -36,7 +36,7 @@ export default {
     untile_timestamp,
     max
   ) {
-    return axios.$get(`groups/${group_id}/public/posts`, {
+    return axios.$get(`public/groups/${group_id}/posts`, {
       params: {
         content,
         from,
