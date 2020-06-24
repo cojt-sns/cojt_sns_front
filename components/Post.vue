@@ -9,7 +9,7 @@
       <div class="content">
         <nuxt-link :to="`/users/${post.user.id}`">
           <strong>{{ post.user.name }}</strong>
-          <small>@{{ post.user_id }}</small>
+          <small>@{{ post.user.id }}</small>
         </nuxt-link>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
