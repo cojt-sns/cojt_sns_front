@@ -21,8 +21,8 @@
           </div>
           <div class="control">
             <div class="tags has-addons">
-              <span class="tag is-light">Twitter Traceability</span>
-              <span v-if="group.twitter_traceability" class="tag is-info">
+              <span class="tag is-light">VisibleProfile</span>
+              <span v-if="group.visible_profile" class="tag is-info">
                 Yes
               </span>
               <span v-else class="tag is-danger">

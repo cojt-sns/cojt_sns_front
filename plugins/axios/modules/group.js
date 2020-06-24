@@ -11,14 +11,14 @@ export default {
 
   postGroup(
     isPublic = true,
-    twitter_traceability = false,
+    visible_profile = false,
     questions,
     introduction = false,
     tags
   ) {
     return axios.$post(`groups`, {
       public: isPublic,
-      twitter_traceability,
+      visible_profile,
       questions,
       introduction,
       tags,
@@ -31,13 +31,13 @@ export default {
 
   putGroup(
     id,
-    twitter_traceability = null,
+    visible_profile = null,
     isPublic = null,
     questions = null,
     introduction = null
   ) {
     return axios.$put(`groups/${id}`, {
-      twitter_traceability,
+      visible_profile,
       questions,
       introduction,
       public: isPublic,
