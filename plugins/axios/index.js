@@ -5,8 +5,8 @@ import lodash from 'lodash';
 // eslint-disable-next-line import/no-mutable-exports
 export let axios;
 
-export default ({ store, $axios, redirect }) => {
-  const defaultCache = new LRUCache({ maxAge: 0 });
+export default ({ store, $axios, redirect, env }) => {
+  const defaultCache = new LRUCache({ maxAge: Number(env.CACHE_TIME) });
   $axios.defaults.adapter = cacheAdapterEnhancer($axios.defaults.adapter, {
     defaultCache,
   });
