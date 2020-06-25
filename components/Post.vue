@@ -1,16 +1,21 @@
 <template>
   <article class="media">
+    <GroupUserModal
+      :user="post.user"
+      :is-show="isShow"
+      @close="switchUserModal()"
+    />
     <figure class="media-left">
       <p class="image is-64x64">
-        <img :src="post.user.image" />
+        <img :src="post.user.image" @click="switchUserModal()" />
       </p>
     </figure>
     <div class="media-content">
       <div class="content">
-        <nuxt-link :to="`/users/${post.user.id}`">
+        <div @click="switchUserModal()">
           <strong>{{ post.user.name }}</strong>
           <small>@{{ post.user_id }}</small>
-        </nuxt-link>
+        </div>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
         <div v-if="!edit" class="post-content">{{ post.content }}</div>
@@ -111,7 +116,11 @@
 
 <script>
 import Post from '@/plugins/axios/modules/post';
+import GroupUserModal from '~/components/GroupUserModal';
 export default {
+  components: {
+    GroupUserModal,
+  },
   props: {
     post: {
       type: Object,
@@ -124,6 +133,7 @@ export default {
       dropDown: false,
       edit: false,
       row: this.adjustHeight(),
+      isShow: false,
     };
   },
   watch: {
@@ -139,6 +149,9 @@ export default {
     },
     cancelEdit() {
       this.edit = false;
+    },
+    switchUserModal() {
+      this.isShow = !this.isShow;
     },
     saveEdit() {
       this.post.content = this.content;

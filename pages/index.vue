@@ -1,6 +1,7 @@
 <template>
   <Main>
     <div class="column is-fullheight section">
+      <GroupUserModal :groupuser="tags" :group="group" :isshow="true" />
       <logo />
       <h1 class="title">cojt_sns_front</h1>
       <h2 class="subtitle">COJT SNS のフロント</h2>
@@ -17,6 +18,8 @@
       </div>
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
+      <div>tag: {{ tags }}</div>
+      <div>tag: {{ group }}</div>
     </div>
   </Main>
 </template>
@@ -24,19 +27,42 @@
 <script>
 import Logo from '~/components/Logo.vue';
 import Main from '~/components/Main';
-
+import Group from '@/plugins/axios/modules/group';
+import GroupUserModal from '~/components/GroupUserModal';
 export default {
   components: {
     Logo,
     Main,
+    GroupUserModal,
   },
   data() {
     return {
       healthCheck: 0,
+      tags: {},
+      group: {},
     };
   },
   created() {
     this.getHealthCheck();
+    // Group.putGroupUser(
+    //   3,
+    //   'suzu',
+    //   ['100h', '2019'],
+    //   'スマブラ世界ランカー',
+    //   '/neko.png'
+    // ).then((res) => {
+    //   this.tags = res;
+    // });
+    // Group.getGroupMember(10).then((res) => {
+    //   this.tags = res;
+    // });
+    // Group.getGroup(1).then((res) => {
+    //   this.group = res;
+    // });
+    // Group.getPublicGroupUser(1).then((res) => {
+    //   this.tags = res;
+    // });
+    this.getData();
   },
   methods: {
     async getHealthCheck() {
@@ -46,6 +72,10 @@ export default {
       } catch (error) {
         this.health_check = error;
       }
+    },
+    async getData() {
+      this.tags = await Group.getGroupUser(1);
+      this.group = await Group.getGroup(1);
     },
   },
 };

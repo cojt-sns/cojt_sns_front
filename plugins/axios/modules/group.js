@@ -43,9 +43,10 @@ export default {
       public: isPublic,
     });
   },
-  joinGroup(id, user_id, answer, bio = null) {
+  joinGroup(id, user_id, name, answer, bio = null) {
     const answerStr = answer.join('$');
     return axios.$post(`groups/${id}/join`, {
+      name,
       user_id,
       answerStr,
       bio,
@@ -53,5 +54,25 @@ export default {
   },
   leaveGroup(id) {
     return axios.$post(`groups/${id}/leave`);
+  },
+  getGroupMember(id) {
+    return axios.$get(`groups/${id}/group_users`);
+  },
+  getPublicGroupMember(id) {
+    return axios.$get(`public/groups/${id}/group_users`);
+  },
+  getGroupUser(id) {
+    return axios.$get(`group_users/${id}`);
+  },
+  getPublicGroupUser(id) {
+    return axios.$get(`public/group_users/${id}`);
+  },
+  putGroupUser(id, name, answers, introduction, image) {
+    return axios.$put(`group_users/${id}`, {
+      name,
+      answers,
+      introduction,
+      image,
+    });
   },
 };
