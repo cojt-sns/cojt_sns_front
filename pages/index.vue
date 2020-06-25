@@ -17,8 +17,6 @@
       </div>
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
-      <div>tag: {{ tags }}</div>
-      <div>tag: {{ group }}</div>
     </div>
   </Main>
 </template>

@@ -158,7 +158,7 @@ export default {
           this.introduction,
           this.tags.map((tag) => tag.id)
         );
-        this.$router.push('/groups/' + createdGroup.id);
+        window.location.href = '/groups/' + createdGroup.id;
       } catch (error) {
         this.error = error;
       }
