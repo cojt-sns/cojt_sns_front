@@ -49,6 +49,7 @@
         v-for="post in posts"
         :key="post.id"
         :post="post"
+        :group="group_"
         @deletePost="deletePost"
       />
     </div>

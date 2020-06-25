@@ -1,9 +1,9 @@
 <template>
-  <div :class="{ 'is-active': isshow }" class="modal">
+  <div :class="{ 'is-active': isShow }" class="modal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">{{ groupuser.name }}</p>
+        <p class="modal-card-title">{{ groupUser.name }}</p>
         <button
           class="delete"
           aria-label="close"
@@ -17,14 +17,14 @@
             <ol type="1">
               <li v-for="(question, index) in group.questions" :key="index">
                 <p>Q:{{ question }}</p>
-                <p>A:{{ groupuser.answers[index] }}</p>
+                <p>A:{{ groupUser.answers[index] }}</p>
               </li>
             </ol>
           </div>
         </div>
         <div v-if="group.introduction" class="field">
           <label class="label">自己紹介</label>
-          <div class="content">{{ groupuser.introduction }}</div>
+          <div class="content">{{ groupUser.introduction }}</div>
         </div>
       </section>
 
@@ -37,7 +37,7 @@
 <script>
 export default {
   props: {
-    groupuser: {
+    groupUser: {
       type: Object,
       required: true,
     },
@@ -45,7 +45,7 @@ export default {
       type: Object,
       required: true,
     },
-    isshow: {
+    isShow: {
       type: Boolean,
       required: true,
     },

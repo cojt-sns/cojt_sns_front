@@ -1,7 +1,8 @@
 <template>
   <article class="media">
     <GroupUserModal
-      :user="post.user"
+      :group-user="post.user"
+      :group="group"
       :is-show="isShow"
       @close="switchUserModal()"
     />
@@ -12,10 +13,10 @@
     </figure>
     <div class="media-content">
       <div class="content">
-        <div @click="switchUserModal()">
+        <a @click="switchUserModal()">
           <strong>{{ post.user.name }}</strong>
-          <small>@{{ post.user_id }}</small>
-        </div>
+          <small>@{{ post.user.id }}</small>
+        </a>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
         <div v-if="!edit" class="post-content">{{ post.content }}</div>
@@ -119,6 +120,10 @@ export default {
   },
   props: {
     post: {
+      type: Object,
+      required: true,
+    },
+    group: {
       type: Object,
       required: true,
     },
