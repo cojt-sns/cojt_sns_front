@@ -22,7 +22,11 @@
       <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
         <div class="dropdown-trigger">
           <div class="level-right">
-            <span class="icon" @click="dropDown = !dropDown">
+            <span
+              class="icon"
+              @click="dropDown = !dropDown"
+              @blur="dropDown = !dropDown"
+            >
               <font-awesome-icon :icon="['fa', 'bars']" size="2x" />
             </span>
           </div>
@@ -71,7 +75,7 @@ import PostComponent from '~/components/Post';
 import GroupOverviewModal from '~/components/GroupOverviewModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
-import User from '@/plugins/axios/modules/user';
+import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   components: {
     Post: PostComponent,
@@ -120,7 +124,7 @@ export default {
       this.content = '';
     },
     async arrangePost(src) {
-      src.user = await User.getUser(src.user_id);
+      src.user = await GroupUser.getGroupUser(src.group_user_id);
       src.user.image = process.env.SERVER_URL + src.user.image;
       return src;
     },

@@ -29,8 +29,7 @@
                 placeholder="Input Text"
                 :rows="row"
                 @keydown="adjustHeight"
-              >
-              </textarea>
+              ></textarea>
             </div>
           </div>
           <div class="field is-grouped is-grouped-right">
@@ -48,19 +47,19 @@
       <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item">
-            <span class="icon is-small"
-              ><font-awesome-icon :icon="['fas', 'reply']" />
+            <span class="icon is-small">
+              <font-awesome-icon :icon="['fas', 'reply']" />
             </span>
           </a>
           <a class="level-item">
             <span class="icon is-small">
-              <font-awesome-icon :icon="['fas', 'retweet']"
-            /></span>
+              <font-awesome-icon :icon="['fas', 'retweet']" />
+            </span>
           </a>
           <a class="level-item">
-            <span class="icon is-small"
-              ><font-awesome-icon :icon="['fas', 'heart']"
-            /></span>
+            <span class="icon is-small">
+              <font-awesome-icon :icon="['fas', 'heart']" />
+            </span>
           </a>
         </div>
         <div class="level-right">
@@ -84,15 +83,14 @@
                 role="menu"
               >
                 <div class="dropdown-content">
-                  <a class="dropdown-item" @click="editPost()">
-                    投稿を更新する
-                  </a>
+                  <a class="dropdown-item" @click="editPost()"
+                    >投稿を更新する</a
+                  >
                   <a
                     class="dropdown-item has-text-danger"
                     @click="$emit('deletePost', post.id)"
+                    >投稿を削除する</a
                   >
-                    投稿を削除する
-                  </a>
                 </div>
               </div>
               <div
@@ -101,9 +99,7 @@
                 role="menu"
               >
                 <div class="dropdown-content">
-                  <a class="dropdown-item">
-                    投稿を報告
-                  </a>
+                  <a class="dropdown-item">投稿を報告</a>
                 </div>
               </div>
             </div>
