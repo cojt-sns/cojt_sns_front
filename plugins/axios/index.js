@@ -6,7 +6,7 @@ import lodash from 'lodash';
 export let axios;
 
 export default ({ store, $axios, redirect }) => {
-  const defaultCache = new LRUCache({ maxAge: 60000 });
+  const defaultCache = new LRUCache({ maxAge: 0 });
   $axios.defaults.adapter = cacheAdapterEnhancer($axios.defaults.adapter, {
     defaultCache,
   });

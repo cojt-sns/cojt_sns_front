@@ -31,12 +31,12 @@
         <div class="field">
           <label class="label">
             <input
-              v-model="traceability"
+              v-model="visible_profile"
               class="checkbox"
               type="checkbox"
-              name="traceability"
+              name="visible_profile"
             />
-            Twitter Traceability
+            VisibleProfile
           </label>
         </div>
 
@@ -110,7 +110,7 @@ export default {
   },
   data() {
     return {
-      traceability: this.group.twitter_traceability,
+      visible_profile: this.group.visible_profile,
       isPublic: this.group.public,
       introduction: this.group.introduction,
       questions: this.group.questions.map((text, i) => {
@@ -122,7 +122,7 @@ export default {
   watch: {
     whichmodal(newValue) {
       if (newValue === 2) {
-        this.traceability = this.group.twitter_traceability;
+        this.visible_profile = this.group.visible_profile;
         this.isPublic = this.group.public;
         this.introduction = this.group.introduction;
         this.questions = this.group.questions.map((text, i) => {
@@ -152,11 +152,11 @@ export default {
       if (this.error) return;
       try {
         console.log(
-          this.introduction + 'in' + this.traceability + 'pu' + this.isPublic
+          this.introduction + 'in' + this.visible_profile + 'pu' + this.isPublic
         );
         const res = await Group.putGroup(
           this.group.id,
-          this.traceability,
+          this.visible_profile,
           this.isPublic,
           this.questions.map((res) => {
             return res.text;

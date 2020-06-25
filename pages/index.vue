@@ -17,6 +17,8 @@
       </div>
       <div>Check: {{ healthCheck }}</div>
       <div>Check: {{ $auth.loggedIn }}</div>
+      <div>tag: {{ tags }}</div>
+      <div>tag: {{ group }}</div>
     </div>
   </Main>
 </template>
@@ -24,7 +26,6 @@
 <script>
 import Logo from '~/components/Logo.vue';
 import Main from '~/components/Main';
-
 export default {
   components: {
     Logo,
@@ -41,7 +42,7 @@ export default {
   methods: {
     async getHealthCheck() {
       try {
-        const res = await this.$axios.$get('/health_check');
+        const res = await this.$axios.$get('health_check');
         this.health_check = res;
       } catch (error) {
         this.health_check = error;

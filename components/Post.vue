@@ -1,16 +1,22 @@
 <template>
   <article class="media">
+    <GroupUserModal
+      :group-user="post.user"
+      :group="group"
+      :is-show="isShow"
+      @close="switchUserModal()"
+    />
     <figure class="media-left">
       <p class="image is-64x64">
-        <img :src="post.user.image" />
+        <img :src="post.user.image" @click="switchUserModal()" />
       </p>
     </figure>
     <div class="media-content">
       <div class="content">
-        <nuxt-link :to="`/users/${post.user.id}`">
+        <a @click="switchUserModal()">
           <strong>{{ post.user.name }}</strong>
-          <small>@{{ post.user_id }}</small>
-        </nuxt-link>
+          <small>@{{ post.user.id }}</small>
+        </a>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
         <div v-if="!edit" class="post-content">{{ post.content }}</div>
@@ -24,8 +30,7 @@
                 placeholder="Input Text"
                 :rows="row"
                 @keydown="adjustHeight"
-              >
-              </textarea>
+              ></textarea>
             </div>
           </div>
           <div class="field is-grouped is-grouped-right">
@@ -43,19 +48,19 @@
       <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item">
-            <span class="icon is-small"
-              ><font-awesome-icon :icon="['fas', 'reply']" />
+            <span class="icon is-small">
+              <font-awesome-icon :icon="['fas', 'reply']" />
             </span>
           </a>
           <a class="level-item">
             <span class="icon is-small">
-              <font-awesome-icon :icon="['fas', 'retweet']"
-            /></span>
+              <font-awesome-icon :icon="['fas', 'retweet']" />
+            </span>
           </a>
           <a class="level-item">
-            <span class="icon is-small"
-              ><font-awesome-icon :icon="['fas', 'heart']"
-            /></span>
+            <span class="icon is-small">
+              <font-awesome-icon :icon="['fas', 'heart']" />
+            </span>
           </a>
         </div>
         <div class="level-right">
@@ -79,15 +84,14 @@
                 role="menu"
               >
                 <div class="dropdown-content">
-                  <a class="dropdown-item" @click="editPost()">
-                    投稿を更新する
-                  </a>
+                  <a class="dropdown-item" @click="editPost()"
+                    >投稿を更新する</a
+                  >
                   <a
                     class="dropdown-item has-text-danger"
                     @click="$emit('deletePost', post.id)"
+                    >投稿を削除する</a
                   >
-                    投稿を削除する
-                  </a>
                 </div>
               </div>
               <div
@@ -96,9 +100,7 @@
                 role="menu"
               >
                 <div class="dropdown-content">
-                  <a class="dropdown-item">
-                    投稿を報告
-                  </a>
+                  <a class="dropdown-item">投稿を報告</a>
                 </div>
               </div>
             </div>
@@ -111,9 +113,17 @@
 
 <script>
 import Post from '@/plugins/axios/modules/post';
+import GroupUserModal from '~/components/GroupUserModal';
 export default {
+  components: {
+    GroupUserModal,
+  },
   props: {
     post: {
+      type: Object,
+      required: true,
+    },
+    group: {
       type: Object,
       required: true,
     },
@@ -124,6 +134,7 @@ export default {
       dropDown: false,
       edit: false,
       row: this.adjustHeight(),
+      isShow: false,
     };
   },
   watch: {
@@ -139,6 +150,9 @@ export default {
     },
     cancelEdit() {
       this.edit = false;
+    },
+    switchUserModal() {
+      this.isShow = !this.isShow;
     },
     saveEdit() {
       this.post.content = this.content;
