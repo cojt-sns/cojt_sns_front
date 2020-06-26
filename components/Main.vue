@@ -10,11 +10,7 @@
     <User v-if="$route.name.includes('users')" :user="user" />
     <Search v-if="$route.name == 'search'" />
     <slot />
-    <div
-      class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
-    >
-      Notification
-    </div>
+    <Notification />
   </div>
 </template>
 
@@ -24,6 +20,7 @@ import Group from '~/components/Group';
 import Posts from '~/components/Posts';
 import Search from '~/components/Search';
 import User from '~/components/User';
+import Notification from '~/components/Notification';
 
 export default {
   components: {
@@ -32,6 +29,7 @@ export default {
     Posts,
     Search,
     User,
+    Notification,
   },
   props: {
     user: {
