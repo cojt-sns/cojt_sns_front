@@ -36,15 +36,14 @@ export default {
     if (process.browser) {
       this.$cable.subscribe({
         channel: 'NotificationChannel',
-        id: this.$auth.user.id,
+        token: this.$auth.getToken('local').replace('Bearer ', ''),
       });
-      console.log('in mounted');
     }
   },
   beforeDestroy() {
     this.$cable.unsubscribe({
       channel: 'NotificationChannel',
-      id: this.$auth.user.id,
+      token: this.$auth.getToken('local').replace('Bearer ', ''),
     });
   },
   methods: {},
