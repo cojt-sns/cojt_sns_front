@@ -151,9 +151,9 @@ export default {
 
       if (this.error) return;
       try {
-        console.log(
-          this.introduction + 'in' + this.visible_profile + 'pu' + this.isPublic
-        );
+        // console.log(
+        //   this.introduction + 'in' + this.visible_profile + 'pu' + this.isPublic
+        // );
         const res = await Group.putGroup(
           this.group.id,
           this.visible_profile,
@@ -166,7 +166,7 @@ export default {
 
         const group = res;
         group.tags = this.group.tags;
-        console.log(group);
+        // console.log(group);
         this.$emit('change-group', group);
         this.$emit('close');
       } catch (error) {
