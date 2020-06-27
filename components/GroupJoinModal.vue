@@ -93,6 +93,7 @@ export default {
           await Group.joinGroup(
             this.group.id,
             this.$auth.user.id,
+            this.name,
             this.answer,
             this.bio
           );

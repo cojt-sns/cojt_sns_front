@@ -44,11 +44,10 @@ export default {
     });
   },
   joinGroup(id, user_id, name, answer, bio = null) {
-    const answerStr = answer.join('$');
     return axios.$post(`groups/${id}/join`, {
       name,
       user_id,
-      answerStr,
+      answer,
       bio,
     });
   },
