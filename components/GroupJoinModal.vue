@@ -20,6 +20,16 @@
           {{ error }}
         </div>
 
+        <div class="field">
+          <label class="label">名前</label>
+          <p class="control has-icons-right">
+            <input v-model="name" class="input" type="text" />
+            <span class="icon is-small is-right">
+              <font-awesome-icon :icon="['fas', 'check']" />
+            </span>
+          </p>
+        </div>
+
         <!-- 質問の答えの入力 -->
         <div v-for="(question, index) in group.questions" :key="index">
           <div class="field">
@@ -47,7 +57,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success">Join</button>
+        <button class="button is-success" @click="joinGroup">Join</button>
         <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
@@ -68,6 +78,7 @@ export default {
   },
   data() {
     return {
+      name: this.$auth.user.name,
       error: '',
       bio: '',
       answer: [],
@@ -86,7 +97,12 @@ export default {
             this.bio
           );
         } else {
-          await Group.joinGroup(this.group.id, this.$auth.user.id, this.answer);
+          await Group.joinGroup(
+            this.group.id,
+            this.$auth.user.id,
+            this.name,
+            this.answer
+          );
         }
         this.$emit('close');
       } catch (error) {
