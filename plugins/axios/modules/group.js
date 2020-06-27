@@ -43,11 +43,11 @@ export default {
       public: isPublic,
     });
   },
-  joinGroup(id, user_id, name, answer, bio = null) {
+  joinGroup(id, user_id, name, answers, bio = null) {
     return axios.$post(`groups/${id}/join`, {
       name,
       user_id,
-      answer,
+      answers,
       bio,
     });
   },
