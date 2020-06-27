@@ -1,19 +1,26 @@
 <template>
   <article class="media">
     <GroupUserModal
-      :group-user="post.user"
+      :groupuser="groupUser_"
       :group="group"
-      :is-show="isShow"
-      @close="switchUserModal()"
+      :whichmodal="WhichModal"
+      @close="closeModal(false)"
+      @edit="closeModal(true)"
+    />
+    <GroupUserEditModal
+      v-model="groupUser_"
+      :group="group"
+      :whichmodal="WhichModal"
+      @close="openModal(false)"
     />
     <figure class="media-left">
       <p class="image is-64x64">
-        <img :src="post.user.image" @click="switchUserModal()" />
+        <img :src="post.user.image" @click="openModal()" />
       </p>
     </figure>
     <div class="media-content">
       <div class="content">
-        <a @click="switchUserModal()">
+        <a @click="openModal()">
           <strong>{{ post.user.name }}</strong>
           <small>@{{ post.user.id }}</small>
         </a>
@@ -114,9 +121,11 @@
 <script>
 import Post from '@/plugins/axios/modules/post';
 import GroupUserModal from '~/components/GroupUserModal';
+import GroupUserEditModal from '~/components/GroupUserEditModal';
 export default {
   components: {
     GroupUserModal,
+    GroupUserEditModal,
   },
   props: {
     post: {
@@ -134,7 +143,8 @@ export default {
       dropDown: false,
       edit: false,
       row: this.adjustHeight(),
-      isShow: false,
+      WhichModal: 0,
+      groupUser_: this.post.user,
     };
   },
   watch: {
@@ -151,8 +161,14 @@ export default {
     cancelEdit() {
       this.edit = false;
     },
-    switchUserModal() {
-      this.isShow = !this.isShow;
+    closeModal(isEdit) {
+      // console.log(this.WhichModal);
+      if (isEdit) this.WhichModal = 2;
+      else this.WhichModal = 0;
+      // console.log(this.WhichModal);
+    },
+    openModal() {
+      this.WhichModal = 1;
     },
     saveEdit() {
       this.post.content = this.content;
