@@ -59,7 +59,10 @@ export default {
 
   methods: {
     isActive(id) {
-      return id === Number(this.$route.params.id ?? 1);
+      return (
+        this.$route.name.includes('groups') &&
+        id === Number(this.$route.params.id ?? 1)
+      );
     },
 
     SwitchGroupCreateModal() {

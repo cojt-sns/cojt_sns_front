@@ -14,28 +14,12 @@ export default {
     Main,
   },
   async asyncData({ $auth }) {
-    const groups = [];
-    const userGroups = await User.getUserGroup($auth.user.id);
-    for (const group of userGroups) {
-      const tags = [];
-      // for (const id of group.tags) {
-      //   tags.push(await Tag.getTag(id));
-      // }
-      group.tags = tags;
-      groups.push(group);
-    }
-
-    if (groups.length <= 0) {
-      return {
-        groups,
-      };
-    }
+    const groups = await User.getUserGroup($auth.user.id);
 
     const posts = [];
-    const res = await Post.getGroupPost(groups[0].id);
+    const res = await Post.getGroupPost(1);
     for (const post of res) {
       post.user = await GroupUser.getGroupUser(post.group_user_id);
-      post.user.image = process.env.SERVER_URL + post.user.image;
       posts.push(post);
     }
 
@@ -44,7 +28,6 @@ export default {
       groups,
     };
   },
-  methods: {},
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <Main :is-group="false" :user="user" />
+  <Main :user="user" :groups="groups" />
 </template>
 
 <script>
@@ -10,20 +10,16 @@ export default {
   components: {
     Main,
   },
-  async asyncData({ params, redirect }) {
-    try {
-      const resUser = await User.getUser(params.id);
-      resUser.tags = await User.getUserTag(params.id);
-      resUser.image = process.env.SERVER_URL + resUser.image;
-      // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
-      //   this.userTwitter=res;
-      // });
-      return {
-        user: resUser,
-      };
-    } catch (error) {
-      return redirect(302, '/');
-    }
+  async asyncData({ params, $auth }) {
+    const groups = await User.getUserGroup($auth.user.id);
+    const user = await User.getUser(params.id);
+    // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
+    //   this.userTwitter=res;
+    // });
+    return {
+      user,
+      groups,
+    };
   },
   validate({ params }) {
     // 数値でなければならない
