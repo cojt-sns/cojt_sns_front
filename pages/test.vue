@@ -24,7 +24,7 @@ import Main from '~/components/Main';
 import GroupJoinModal from '~/components/GroupJoinModal';
 import AddTagModal from '~/components/AddTagModal';
 import Group from '@/plugins/axios/modules/group';
-import Tag from '@/plugins/axios/modules/tag';
+// import Tag from '@/plugins/axios/modules/tag';
 
 export default {
   components: {
@@ -39,10 +39,10 @@ export default {
     const Tags = [];
     for (const group of search) {
       const tags = [];
-      for (const id of group.tags) {
-        tags.push(await Tag.getTag(id));
-        Tags.push(await Tag.getTag(id));
-      }
+      // for (const id of group.tags) {
+      //   tags.push(await Tag.getTag(id));
+      //   Tags.push(await Tag.getTag(id));
+      // }
       group.tags = tags;
       groups.push(group);
       modalStates.push(false);

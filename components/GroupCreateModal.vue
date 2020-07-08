@@ -94,10 +94,10 @@
 
 <script>
 import Group from '@/plugins/axios/modules/group';
-import TagInput from '~/components/TagInput';
+// import TagInput from '~/components/TagInput';
 export default {
   components: {
-    TagInput,
+    // TagInput,
   },
   props: {
     create: {

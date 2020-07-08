@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import Tag from '@/plugins/axios/modules/tag';
+// import Tag from '@/plugins/axios/modules/tag';
 export default {
   props: {
     active: {
@@ -69,13 +69,13 @@ export default {
     };
   },
   methods: {
-    async complete() {
+    complete() {
       this.error = '';
       if (this.childname === '') {
         this.error = 'empty';
         return;
       }
-      await Tag.postTag(this.childname, this.tags.id);
+      // await Tag.postTag(this.childname, this.tags.id);
       this.$emit('close');
     },
   },

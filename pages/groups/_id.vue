@@ -7,7 +7,7 @@ import Main from '~/components/Main';
 import User from '@/plugins/axios/modules/user';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 import Post from '@/plugins/axios/modules/post';
-import Tag from '@/plugins/axios/modules/tag';
+// import Tag from '@/plugins/axios/modules/tag';
 
 export default {
   components: {
@@ -18,9 +18,9 @@ export default {
     const userGroups = await User.getUserGroup($auth.user.id);
     for (const group of userGroups) {
       const tags = [];
-      for (const id of group.tags) {
-        tags.push(await Tag.getTag(id));
-      }
+      // for (const id of group.tags) {
+      //   tags.push(await Tag.getTag(id));
+      // }
       group.tags = tags;
       groups.push(group);
     }
