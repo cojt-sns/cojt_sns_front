@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile">
     <Menu />
-    <Group v-if="$route.name.includes('groups')" :groups="groups" />
+    <Group :groups="groups" />
     <Posts
       v-if="$route.name.includes('groups')"
       :posts="posts"

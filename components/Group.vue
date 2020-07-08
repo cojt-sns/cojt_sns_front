@@ -1,23 +1,33 @@
 <template>
-  <div
-    id="group"
-    class="column is-2 is-narrow-mobile is-fullheight has-background-grey-lighter"
-  >
+  <div class="column is-2 is-narrow-mobile is-fullheight">
     <GroupCreateModal :create="create" @close="SwitchGroupCreateModal" />
+    <div class="header">
+      <nav class="level">
+        <div class="level-left">
+          <div class="level-item title is-4 has-text-white">
+            Groups
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <span
+              class="icon is-large has-text-white"
+              @click="SwitchGroupCreateModal"
+              ><font-awesome-icon :icon="['fas', 'plus']" size="lg" />
+            </span>
+          </div>
+        </div>
+      </nav>
+    </div>
+
     <aside class="menu">
-      <div class="menu-label">
-        Groups
-      </div>
-      <span class="icon is-small" @click="SwitchGroupCreateModal"
-        ><font-awesome-icon :icon="['fas', 'plus']" />
-      </span>
       <ul class="menu-list">
         <li v-for="group in groups" :key="group.id">
           <nuxt-link
             :to="`/groups/${group.id}`"
             :class="{ 'is-active': isActive(group.id) }"
           >
-            #{{ group.tags.map((tag) => tag.fullname).join('#') }}
+            #{{ group.fullname }}
           </nuxt-link>
         </li>
       </ul>
@@ -60,23 +70,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu {
-  position: relative;
-  .menu-label {
-    color: inherit;
-    font-size: inherit;
-    display: inline-block;
+.column {
+  padding: 0;
+  width: 300px !important;
+  .header {
+    background-color: #fd5600;
+    .level .level-left .level-item {
+      margin-left: 10px;
+    }
   }
-  .icon {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 1.5em;
-  }
-  .menu-list {
-    li {
-      a {
-        transition: all 0.3s;
+  .menu {
+    margin: 5px;
+    position: relative;
+    .menu-label {
+      color: inherit;
+      font-size: inherit;
+      display: inline-block;
+    }
+    .icon {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      font-size: 1.5em;
+    }
+    .menu-list {
+      li {
+        a {
+          transition: all 0.3s;
+        }
+        a.is-active {
+          background-color: #fd5600;
+        }
       }
     }
   }

@@ -7,7 +7,7 @@
         <li>
           <nuxt-link
             to="/groups"
-            :class="{ 'is-active': $route.name == 'index' }"
+            :class="{ 'is-active': $route.name.includes('groups') }"
           >
             <span class="icon is-medium">
               <font-awesome-icon :icon="['fas', 'home']" size="2x" />
