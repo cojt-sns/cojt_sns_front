@@ -3,18 +3,15 @@
     class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile menu-container"
   >
     <aside class="menu">
-      <ul class="menu-list ">
-        <li>
-          <nuxt-link to="/" :class="{ 'is-active': $route.name == 'index' }">
-            ホーム
-          </nuxt-link>
-        </li>
+      <ul class="menu-list top">
         <li>
           <nuxt-link
             to="/groups"
-            :class="{ 'is-active': $route.name.includes('groups') }"
+            :class="{ 'is-active': $route.name == 'index' }"
           >
-            チャット
+            <span class="icon is-medium">
+              <font-awesome-icon :icon="['fas', 'home']" size="2x" />
+            </span>
           </nuxt-link>
         </li>
         <li>
@@ -22,22 +19,23 @@
             to="/search"
             :class="{ 'is-active': $route.name == 'search' }"
           >
-            探索
+            <span class="icon is-medium">
+              <font-awesome-icon :icon="['fas', 'search']" size="2x" />
+            </span>
           </nuxt-link>
         </li>
+      </ul>
+      <ul class="menu-list bottom">
         <li>
           <nuxt-link
             v-if="$auth.loggedIn"
             :to="`/users/${$auth.user.id}`"
             :class="{ 'is-active': $route.name.includes('users') }"
           >
-            プロフィール
+            <figure class="image is-48x48">
+              <img :src="serverUrl + $auth.user.image" />
+            </figure>
           </nuxt-link>
-        </li>
-        <li>
-          <a v-if="$auth.loggedIn" @click="logout">
-            ログアウト
-          </a>
         </li>
       </ul>
     </aside>
@@ -47,7 +45,7 @@
 <script>
 export default {
   data() {
-    return {};
+    return { serverUrl: process.env.SERVER_URL };
   },
   methods: {
     async logout() {
@@ -68,10 +66,45 @@ export default {
   align-items: center;
 }
 .menu-container {
-  width: 150px !important;
+  width: 4em !important;
   height: 100vh;
+  padding: 0;
   .menu {
-    margin-top: 40vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+
+      li {
+        margin-bottom: 5px;
+        a.is-active {
+          color: #fd5600;
+          background-color: transparent;
+        }
+      }
+    }
+
+    .menu-list.top {
+      margin-top: 15px;
+    }
+
+    .menu-list.bottom {
+      flex: 1;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+      li a {
+        padding: 0;
+        figure img {
+          border-radius: 50%;
+        }
+      }
+    }
   }
 }
 </style>
