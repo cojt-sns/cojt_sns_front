@@ -10,7 +10,8 @@ export default {
     image = null,
     oauth_token = null,
     oauth_token_secret = null,
-    tags = null
+    tags = null,
+    is_private = null
   ) {
     const form = new FormData();
 
@@ -26,6 +27,7 @@ export default {
       tags.forEach((v, i) => {
         form.append('tags[]', v);
       });
+    if (is_private !== null) form.append('private', is_private);
 
     return axios.$post(`users`, form, {
       headers: {
@@ -47,7 +49,8 @@ export default {
     image = null,
     oauth_token = null,
     oauth_token_secret = null,
-    tags = null
+    tags = null,
+    is_private = null
   ) {
     const form = new FormData();
     if (name) form.append('name', name);
@@ -62,6 +65,7 @@ export default {
       tags.forEach((v, i) => {
         form.append('tags[]', v);
       });
+    if (is_private !== null) form.append('private', is_private);
 
     return axios.$put(`users/${id}`, form, {
       headers: {
@@ -72,10 +76,6 @@ export default {
 
   deleteUser(id) {
     return axios.$delete(`users/${id}`);
-  },
-
-  getUserTag(id) {
-    return axios.$get(`users/${id}/tags`);
   },
 
   getUserGroup(id) {
