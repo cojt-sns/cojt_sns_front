@@ -4,7 +4,7 @@
     <div class="header">
       <nav class="level">
         <div class="level-left">
-          <div class="level-item title is-4 has-text-white">
+          <div class="level-item title is-5 has-text-white">
             Groups
           </div>
         </div>

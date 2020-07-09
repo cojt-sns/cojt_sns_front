@@ -14,7 +14,7 @@
     <div class="header">
       <nav class="level">
         <div class="level-left">
-          <div class="level-item title is-4 has-text-white">
+          <div class="level-item title is-5 has-text-white">
             #{{ group_.fullname }}
           </div>
         </div>
@@ -53,18 +53,43 @@
         @deletePost="deletePost"
       />
     </div>
-    <div class="has-background-info footer">
-      <div class="field has-addons">
-        <p class="control is-expanded">
-          <input
-            v-model="content"
-            class="input"
-            type="text"
-            placeholder="Text input"
-          />
+    <div class="media has-background-grey-lighter footer">
+      <figure class="media-left">
+        <p class="image is-64x64">
+          <img :src="serverUrl + $auth.user.image" />
         </p>
-        <div class="control">
-          <button class="button" @click="send()">Send</button>
+      </figure>
+      <div class="media-content">
+        <div class="field">
+          <p class="control">
+            <textarea
+              ref="adjustTextarea"
+              v-model="content"
+              class="textarea"
+              placeholder="Input Text"
+              :rows="row"
+              @keydown="adjustHeight"
+            ></textarea>
+          </p>
+        </div>
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <span class="icon">
+                <font-awesome-icon :icon="['fa', 'image']" size="lg" />
+              </span>
+            </div>
+            <div class="level-item">
+              <span class="icon">
+                <font-awesome-icon :icon="['fa', 'grin']" size="lg" />
+              </span>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <button class="button is-primary" @click="send()">Send</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -95,12 +120,14 @@ export default {
   },
   data() {
     return {
+      serverUrl: process.env.SERVER_URL,
       content: '',
       dropDown: false,
       WhichModal: 0,
       group_: this.groups.find(
         (group) => Number(group.id) === this.getGroupId()
       ),
+      row: 1,
     }; // WhichModal,0:閉じる,1:概要,2:編集
   },
   mounted() {
@@ -123,6 +150,8 @@ export default {
         console.log(res)
       );
       this.content = '';
+      this.row = 1;
+      this.adjustHeight();
     },
     async arrangePost(src) {
       src.user = await GroupUser.getGroupUser(src.group_user_id);
@@ -144,6 +173,17 @@ export default {
       // console.log(this.WhichModal);
       this.WhichModal = 1;
       // console.log(this.WhichModal);
+    },
+    adjustHeight() {
+      const textarea = this.$refs?.adjustTextarea;
+      if (textarea == null) return;
+
+      const resetHeight = new Promise(function(resolve) {
+        resolve((textarea.style.height = 'auto'));
+      });
+      resetHeight.then(function() {
+        textarea.style.height = textarea.scrollHeight + 'px';
+      });
     },
   },
   channels: {
@@ -189,6 +229,12 @@ export default {
   .footer {
     padding: 5px;
     margin-top: auto;
+    textarea {
+      overflow: hidden;
+    }
+    img {
+      border-radius: 50%;
+    }
   }
 }
 </style>
