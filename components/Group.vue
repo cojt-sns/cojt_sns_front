@@ -1,7 +1,7 @@
 <template>
   <div class="column is-2 is-narrow-mobile is-fullheight">
     <GroupCreateModal :create="create" @close="SwitchGroupCreateModal" />
-    <div class="header">
+    <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
           <div class="level-item title is-5 has-text-white">
@@ -77,7 +77,6 @@ export default {
   padding: 0;
   width: 300px !important;
   .header {
-    background-color: #fd5600;
     .level .level-left .level-item {
       margin-left: 10px;
     }
@@ -100,9 +99,6 @@ export default {
       li {
         a {
           transition: all 0.3s;
-        }
-        a.is-active {
-          background-color: #fd5600;
         }
       }
     }

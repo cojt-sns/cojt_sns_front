@@ -11,7 +11,7 @@
       :whichmodal="WhichModal"
       @close="openModal(false)"
     /> -->
-    <div class="header">
+    <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
           <div class="level-item title is-5 has-text-white">
@@ -214,7 +214,6 @@ export default {
   display: flex;
   flex-direction: column;
   .header .level {
-    background-color: #fd5600;
     .level-left .level-item {
       margin-left: 10px;
     }

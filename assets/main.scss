@@ -1,0 +1,13 @@
+@import 'variables';
+
+.button.is-primary {
+  background-color: $main-color;
+}
+
+.menu-list a.is-active {
+  background-color: $main-color;
+}
+
+.has-background-primary {
+  background-color: $main-color !important;
+}

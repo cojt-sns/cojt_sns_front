@@ -61,6 +61,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/_variables';
+
 .is-vertical-center {
   display: flex;
   align-items: center;
@@ -84,7 +86,7 @@ export default {
       li {
         margin-bottom: 5px;
         a.is-active {
-          color: #fd5600;
+          color: $main-color;
           background-color: transparent;
         }
       }

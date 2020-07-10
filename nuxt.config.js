@@ -25,7 +25,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/main.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -52,7 +52,12 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/auth',
+    '@nuxtjs/style-resources',
   ],
+
+  styleResources: {
+    sass: ['~/assets/_variables.scss'],
+  },
 
   fontawesome: {
     imports: [
@@ -112,6 +117,6 @@ export default {
 
   server: {
     port: 3000, // デフォルト: 3000
-    host: '0.0.0.0' // デフォルト: localhost
-  }
+    host: '0.0.0.0', // デフォルト: localhost
+  },
 };
