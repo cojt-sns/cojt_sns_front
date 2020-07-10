@@ -76,7 +76,7 @@
                 </span>
               </div>
               <div
-                v-if="post.user_id == $auth.user.id"
+                v-if="post.user_id == $auth.user.user_id"
                 class="dropdown-menu"
                 role="menu"
               >
@@ -91,11 +91,7 @@
                   >
                 </div>
               </div>
-              <div
-                v-if="post.user_id != $auth.user.id"
-                class="dropdown-menu"
-                role="menu"
-              >
+              <div v-else class="dropdown-menu" role="menu">
                 <div class="dropdown-content">
                   <a class="dropdown-item">投稿を報告</a>
                 </div>
