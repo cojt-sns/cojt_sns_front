@@ -4,8 +4,9 @@
       <div class="container">
         <div class="columns">
           <div class="column is-two-thirds is-offset-2">
+            <h2 class="title is-1 has-text-centered has-text-primary">NESTA</h2>
             <div class="box">
-              <h1 class="title has-text-centered">HELLO</h1>
+              <h1 class="title is-3 has-text-centered">アカウントを作成する</h1>
               <h1 class="has-text-centered">
                 <router-view></router-view>
               </h1>
@@ -13,14 +14,14 @@
                 {{ error }}
               </div>
               <div class="columns">
-                <div class="column is-half">
+                <div class="column is-full">
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
                       <input
                         v-model="username"
-                        class="input"
+                        class="input has-text-light"
                         type="text"
-                        placeholder="Username"
+                        placeholder="ユーザー名"
                       />
                       <span class="icon is-small is-left">
                         <font-awesome-icon :icon="['fas', 'user']" />
@@ -33,14 +34,14 @@
                 </div>
               </div>
               <div class="columns">
-                <div class="column">
+                <div class="column is-full">
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
                       <input
                         v-model="email"
                         class="input"
                         type="email"
-                        placeholder="Email"
+                        placeholder="メールアドレス"
                         @change="check(email, reemail)"
                       />
                       <span class="icon is-small is-left">
@@ -49,6 +50,8 @@
                     </p>
                   </div>
                 </div>
+              </div>
+              <div class="columns">
                 <div class="column">
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
@@ -56,7 +59,7 @@
                         v-model="reemail"
                         class="input"
                         type="email"
-                        placeholder="reEmail"
+                        placeholder="メールアドレスの確認"
                         @change="check(email, reemail)"
                       />
                       <span class="icon is-small is-left">
@@ -74,7 +77,7 @@
                         v-model="password"
                         class="input"
                         type="password"
-                        placeholder="Password"
+                        placeholder="パスワード"
                         @change="check(password, repassword)"
                       />
                       <span class="icon is-small is-left">
@@ -83,6 +86,8 @@
                     </p>
                   </div>
                 </div>
+              </div>
+              <div class="columns">
                 <div class="column">
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
@@ -90,7 +95,7 @@
                         v-model="repassword"
                         class="input"
                         type="password"
-                        placeholder="rePassword"
+                        placeholder="パスワードの確認"
                         @change="check(password, repassword)"
                       />
                       <span class="icon is-small is-left">
@@ -106,10 +111,31 @@
                     <div class="control">
                       <nuxt-link :to="nextURL" class="has-text-white">
                         <button
-                          class="button is-link is-size-4"
+                          class="button is-size-4 is-primary"
                           @click="submit"
                         >
-                          Complete
+                          新規作成
+                        </button>
+                      </nuxt-link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2
+                class="title is-6 has-text-centered has-text-grey-lighter add-line"
+              >
+                または
+              </h2>
+              <div class="level">
+                <div class="level-item has-centerd">
+                  <div class="field is-centered">
+                    <div class="control">
+                      <nuxt-link :to="nextURL" class="has-text-white">
+                        <button
+                          class="button is-size-6 is-outlined is-info"
+                          @click="submit"
+                        >
+                          Twitterでログイン
                         </button>
                       </nuxt-link>
                     </div>
@@ -180,4 +206,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.add-line:before {
+  color: #ccc;
+  content: '-------------------';
+}
+.add-line:after {
+  color: #ccc;
+  content: '-------------------';
+}
+</style>
