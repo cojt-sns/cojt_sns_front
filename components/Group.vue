@@ -1,6 +1,6 @@
 <template>
   <div class="column is-2 is-narrow-mobile is-fullheight">
-    <GroupCreateModal :create="create" @close="SwitchGroupCreateModal" />
+    <GroupCreateModal :open="create" @close="SwitchGroupCreateModal" />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
