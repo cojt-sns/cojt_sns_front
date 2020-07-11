@@ -11,3 +11,11 @@
 .has-background-primary {
   background-color: $main-color !important;
 }
+
+.button.is-primary:hover {
+  background-color: darken($main-color, 3%);
+}
+
+.button.is-primary:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba($main-color, 0.25);
+}
