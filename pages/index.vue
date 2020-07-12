@@ -1,83 +1,180 @@
 <template>
-  <Main>
-    <div class="column is-fullheight section">
-      <logo />
-      <h1 class="title">cojt_sns_front</h1>
-      <h2 class="subtitle">COJT SNS のフロント</h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green"
-          >Documentation</a
-        >
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-          >GitHub</a
-        >
+  <div>
+    <section class="hero is-primary is-fullheight bar2">
+      <div class="hero-body">
+        <div class="columns" style="width:100%">
+          <div class="column is-half">
+            <h1 class="title is-1 has-text-centered">NESTA</h1>
+            <div class="buttons is-centered">
+              <nuxt-link to="#description">
+                <button
+                  class="button is-primary is-inverted is-outlined center"
+                >
+                  NESTAとは?
+                </button>
+              </nuxt-link>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="columns ">
+              <div
+                class="column is-10
+is-offset-1 "
+              >
+                <div class="box is-boxColor">
+                  <div class="columns ">
+                    <div
+                      class="column is-10
+is-offset-1"
+                    >
+                      <div v-if="error" class="notification is-danger is-light">
+                        {{ error }}
+                      </div>
+                      <div class="field">
+                        <p class="control has-icons-right">
+                          <input
+                            v-model="email"
+                            class="input"
+                            type="email"
+                            placeholder="メールアドレス"
+                          />
+                        </p>
+                      </div>
+                      <div class="field">
+                        <p class="control ">
+                          <input
+                            v-model="password"
+                            class="input"
+                            type="password"
+                            placeholder="パスワード"
+                          />
+                        </p>
+                      </div>
+                      <div class="field">
+                        <p class="control has-text-centered">
+                          <button
+                            class="button box-button-color is-medium"
+                            @click="login"
+                          >
+                            ログイン
+                          </button>
+                        </p>
+                      </div>
+                      <h2
+                        class="title is-6 has-text-centered has-text-grey-lighter add-line"
+                      >
+                        または
+                      </h2>
+                      <div class="level">
+                        <div class="level-item has-centerd">
+                          <div class="field is-centered">
+                            <div class="control">
+                              <button
+                                class="button is-size-6 is-outlined is-boxColor"
+                                @click="submit"
+                              >
+                                Twitterでログイン
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="columns bar2">
+                    <div class="column is-full"></div>
+                  </div>
+                  <div class="columns ">
+                    <div
+                      class="column is-10
+is-offset-1"
+                    >
+                      <div class="field">
+                        <p class="control has-text-centered">
+                          <button class="button is-medium is-boxColor">
+                            アカウントを作成
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>Check: {{ healthCheck }}</div>
-      <div>Check: {{ $auth.loggedIn }}</div>
-    </div>
-  </Main>
+    </section>
+    <section id="description" class="hero is-primary">
+      <div class="hero-body">
+        <h1 class="title is-1">自由につながるSNSです。</h1>
+      </div>
+    </section>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container has-text-centered ">
+          <h1 class="title is-3">NESTAには様々なグループがあります。</h1>
+          <h1 class="title is-3">
+            気になるグループに入り、チャットを楽しみましょう！
+          </h1>
+          <div id="low-description" class="bar2"></div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
-
 <script>
-import Logo from '~/components/Logo.vue';
-import Main from '~/components/Main';
 export default {
-  components: {
-    Logo,
-    Main,
-  },
+  layout: 'top',
   data() {
     return {
-      healthCheck: 0,
+      email: '',
+      password: '',
+      error: '',
     };
   },
-  created() {
-    this.getHealthCheck();
-  },
   methods: {
-    async getHealthCheck() {
+    async login() {
       try {
-        const res = await this.$axios.$get('health_check');
-        this.health_check = res;
+        await this.$auth.loginWith('local', {
+          data: { email: this.email, password: this.password },
+        });
       } catch (error) {
-        this.health_check = error;
+        this.error = error;
       }
     },
   },
 };
 </script>
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.add-line::before {
+  color: #ccc;
+  content: '-------------------';
 }
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+.add-line::after {
+  color: #ccc;
+  content: '-------------------';
 }
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.bar2 {
+  border-bottom: 0.5px solid white;
+  margin-top: 0px; /* 上線の外側の余白はナシ */
+  padding-top: 0px; /* 上線の内側の余白はナシ */
+  margin-bottom: 0.3em; /* 下線の外側の余白量 */
+  padding-bottom: 0.3em; /* 下線の内側の余白量 */
 }
-
-.links {
-  padding-top: 15px;
+.box-button-color {
+  color: #fd671a;
+}
+.box-button-color:hover {
+  color: red;
+}
+.is-boxColor {
+  background-color: #fd671a;
+  color: white;
+}
+#low-description {
+  width: 100%;
+  border-color: #fd5600;
+  margin: 300px 0 200px 0;
 }
 </style>
