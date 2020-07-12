@@ -11,10 +11,10 @@
     <div class="field">
       <div class="control">
         <input
+          v-model="name"
           class="input"
           type="text"
           placeholder="名前を入力"
-          v-model="name"
         />
       </div>
     </div>
@@ -64,13 +64,6 @@ export default {
       } catch (error) {
         this.error = error.data.message.name[0];
       }
-    },
-
-    removeQuestion(id) {
-      const index = this.questions.findIndex((q) => q.id === id);
-      if (index === -1) return;
-
-      this.questions.splice(index, 1);
     },
   },
 };
