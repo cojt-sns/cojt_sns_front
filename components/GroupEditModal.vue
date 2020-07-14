@@ -18,9 +18,7 @@
         />
       </div>
     </div>
-    <div
-      class="field is-grouped is-grouped-cen tered has-addons has-addons-centered"
-    >
+    <div class="field is-grouped is-grouped-centered">
       <div class="control">
         <button class="button is-primary" @click="update()">変更</button>
       </div>
@@ -68,38 +66,15 @@ export default {
   methods: {
     async update() {
       try {
-        const editGroup = await Group.putGroup(this.group.id, this.name);
+        const editGroup = await Group.putGroup(
+          this.group.id,
+          this.name,
+          this.group.parent_id
+        );
         this.$emit('change-group', editGroup);
         this.$emit('close');
       } catch (error) {
         this.error = error.data.message.name[0];
-      }
-    },
-    async save() {
-      this.error = '';
-
-      if (this.error) return;
-      try {
-        // console.log(
-        //   this.introduction + 'in' + this.visible_profile + 'pu' + this.isPublic
-        // );
-        const res = await Group.putGroup(
-          this.group.id,
-          this.visible_profile,
-          this.isPublic,
-          this.questions.map((res) => {
-            return res.text;
-          }),
-          this.introduction
-        );
-
-        const group = res;
-        group.tags = this.group.tags;
-        // console.log(group);
-        this.$emit('change-group', group);
-        this.$emit('close');
-      } catch (error) {
-        this.error = error;
       }
     },
   },
