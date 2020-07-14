@@ -1,97 +1,40 @@
 <template>
-  <div :class="{ 'is-active': whichmodal == 2 }" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">#{{ group.fullname }}の編集</p>
-        <button
-          class="delete"
-          aria-label="close"
-          @click="$emit('close')"
-        ></button>
-      </header>
-
-      <section class="modal-card-body">
-        <div v-if="error" class="notification is-danger is-light">
-          {{ error }}
-        </div>
-        <div class="field">
-          <label class="label">
-            <input
-              v-model="isPublic"
-              class="checkbox"
-              type="checkbox"
-              name="public"
-            />
-            Public
-          </label>
-        </div>
-        <div class="field">
-          <label class="label">
-            <input
-              v-model="visible_profile"
-              class="checkbox"
-              type="checkbox"
-              name="visible_profile"
-            />
-            VisibleProfile
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="label">
-            <input
-              v-model="introduction"
-              class="introduction"
-              type="checkbox"
-              name="introduction"
-            />
-            Introduction
-          </label>
-        </div>
-        <div class="field">
-          <label class="label">
-            <nav class="level is-mobile">
-              <div class="level-left">
-                <div class="level-item">Questions</div>
-              </div>
-              <div class="level-item level-right">
-                <button class="button questions-btn" @click="AddQuestion">
-                  質問項目を追加
-                </button>
-              </div>
-            </nav>
-          </label>
-        </div>
-        <div
-          v-for="question in questions"
-          :key="question.id"
-          class="field is-grouped"
-        >
-          <div class="control is-expanded">
-            <input
-              v-model="question.text"
-              class="input"
-              placeholder="質問を入力"
-            />
-          </div>
-          <div v-if="question.id != 1" class="control">
-            <button class="button" @click="removeQuestion(question.id)">
-              削除
-            </button>
-          </div>
-        </div>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success" @click="save">Save changes</button>
-        <button class="button" @click="$emit('close')">Cancel</button>
-      </footer>
+  <Modal
+    :class="{ 'is-active': open }"
+    :title="'グループを変更'"
+    @close="$emit('close')"
+  >
+    <div v-if="error" class="notification is-danger is-light">
+      {{ error }}
     </div>
-  </div>
+    <div class="title is-4 has-text-centered">名前を変更</div>
+    <div class="field">
+      <div class="control">
+        <input
+          v-model="name"
+          class="input"
+          type="text"
+          placeholder="名前を入力"
+        />
+      </div>
+    </div>
+    <div class="field is-grouped is-grouped-centered">
+      <div class="control">
+        <button class="button is-primary" @click="update()">変更</button>
+      </div>
+      <div class="control">
+        <button class="button" @click="$emit('close')">戻る</button>
+      </div>
+    </div>
+  </Modal>
 </template>
 <script>
 import Group from '@/plugins/axios/modules/group';
+import Modal from '@/components/Modal';
 export default {
+  components: {
+    Modal,
+  },
   model: {
     prop: 'group',
     event: 'change-group',
@@ -101,74 +44,37 @@ export default {
       type: Object,
       required: true,
     },
-    whichmodal: {
-      type: Number,
+    open: {
+      type: Boolean,
       required: true,
     },
   },
   data() {
     return {
-      visible_profile: this.group.visible_profile,
-      isPublic: this.group.public,
-      introduction: this.group.introduction,
-      questions: this.group.questions.map((text, i) => {
-        return { id: i + 1, text };
-      }),
+      name: this.group.name,
       error: '',
     };
   },
   watch: {
-    whichmodal(newValue) {
-      if (newValue === 2) {
-        this.visible_profile = this.group.visible_profile;
-        this.isPublic = this.group.public;
-        this.introduction = this.group.introduction;
-        this.questions = this.group.questions.map((text, i) => {
-          return { id: i + 1, text };
-        });
+    open(newValue) {
+      if (newValue) {
+        this.name = this.group.name;
         this.error = '';
       }
     },
   },
   methods: {
-    AddQuestion() {
-      const newQuestion = {
-        id: this.questions[this.questions.length - 1].id + 1,
-        text: '',
-      };
-      this.questions.push(newQuestion);
-    },
-    removeQuestion(id) {
-      const index = this.questions.findIndex((q) => q.id === id);
-      if (index === -1) return;
-
-      this.questions.splice(index, 1);
-    },
-    async save() {
-      this.error = '';
-
-      if (this.error) return;
+    async update() {
       try {
-        // console.log(
-        //   this.introduction + 'in' + this.visible_profile + 'pu' + this.isPublic
-        // );
-        const res = await Group.putGroup(
+        const editGroup = await Group.putGroup(
           this.group.id,
-          this.visible_profile,
-          this.isPublic,
-          this.questions.map((res) => {
-            return res.text;
-          }),
-          this.introduction
+          this.name,
+          this.group.parent_id
         );
-
-        const group = res;
-        group.tags = this.group.tags;
-        // console.log(group);
-        this.$emit('change-group', group);
+        this.$emit('change-group', editGroup);
         this.$emit('close');
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message.name[0];
       }
     },
   },

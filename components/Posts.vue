@@ -5,12 +5,12 @@
       :whichmodal="WhichModal"
       @close="closeModal(false)"
       @edit="closeModal(true)"
-    />
+    />-->
     <GroupEditModal
       v-model="group_"
-      :whichmodal="WhichModal"
-      @close="openModal(false)"
-    /> -->
+      :open="edit"
+      @close="SwitchGroupEditModal"
+    />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
@@ -32,7 +32,9 @@
           </div>
           <div id="dropdown-menu" class="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a href="#" class="dropdown-item" @click="openModal()">概要</a>
+              <a href="#" class="dropdown-item" @click="SwitchGroupEditModal"
+                >編集</a
+              >
               <a class="dropdown-item">他の人を招待する</a>
               <a href="#" class="dropdown-item">Twitterで共有</a>
               <hr class="dropdown-divider" />
@@ -99,14 +101,14 @@
 <script>
 import PostComponent from '~/components/Post';
 // import GroupOverviewModal from '~/components/GroupOverviewModal';
-// import GroupEditModal from '~/components/GroupEditModal';
+import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   components: {
     Post: PostComponent,
     // GroupOverviewModal,
-    // GroupEditModal,
+    GroupEditModal,
   },
   props: {
     posts: {
@@ -120,10 +122,11 @@ export default {
   },
   data() {
     return {
+      edit: false,
       serverUrl: process.env.SERVER_URL,
       content: '',
       dropDown: false,
-      WhichModal: 0,
+      create: false,
       group_: this.groups.find(
         (group) => Number(group.id) === this.getGroupId()
       ),
@@ -165,14 +168,8 @@ export default {
     getGroupId() {
       return Number(this.$route.params.id ?? 1);
     },
-    closeModal(isEdit) {
-      if (isEdit) this.WhichModal = 2;
-      else this.WhichModal = 0;
-    },
-    openModal() {
-      // console.log(this.WhichModal);
-      this.WhichModal = 1;
-      // console.log(this.WhichModal);
+    SwitchGroupEditModal() {
+      this.edit = !this.edit;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
