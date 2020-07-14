@@ -158,16 +158,4 @@ export default {
     display: inline-block;
   }
 }
-
-.box-button-color {
-  color: #fd671a;
-}
-.box-button-color:hover {
-  color: red;
-}
-#low-description {
-  width: 100%;
-  border-color: #fd5600;
-  margin: 300px 0 200px 0;
-}
 </style>
