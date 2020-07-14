@@ -32,6 +32,7 @@ export default {
   plugins: [
     '@/plugins/axios/index',
     { src: '@/plugins/actioncable', ssr: false },
+    '@/plugins/vue-scrollto',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -65,6 +66,10 @@ export default {
         set: '@fortawesome/free-solid-svg-icons',
         icons: ['fas'],
       },
+      {
+        set: '@fortawesome/free-brands-svg-icons',
+        icons: ['fab'],
+      },
     ],
   },
 
@@ -80,7 +85,7 @@ export default {
       login: '/login',
       logout: false,
       callback: false,
-      home: '/',
+      home: '/groups',
     },
     strategies: {
       local: {
