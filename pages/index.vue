@@ -46,7 +46,10 @@
                 </div>
                 <div class="field">
                   <p class="control has-text-centered">
-                    <button class="button is-primary is-medium" @click="login">
+                    <button
+                      class="button is-primary is-medium"
+                      @click="login()"
+                    >
                       ログイン
                     </button>
                   </p>
@@ -60,7 +63,6 @@
                       <div class="control">
                         <button
                           class="button is-size-6 is-outlined is-boxColor is-info"
-                          @click="submit"
                         >
                           <span class="icon">
                             <font-awesome-icon
@@ -130,7 +132,7 @@ export default {
           data: { email: this.email, password: this.password },
         });
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message;
       }
     },
   },
