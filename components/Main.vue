@@ -8,7 +8,7 @@
       :groups="groups"
     />
     <User v-if="$route.name.includes('users')" :user="user" />
-    <Search v-if="$route.name == 'search'" />
+    <Search v-if="$route.name == 'search'" :search="search" />
     <slot />
     <Notification />
   </div>
@@ -43,6 +43,11 @@ export default {
       default: null,
     },
     groups: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    search: {
       type: Array,
       required: false,
       default: null,
