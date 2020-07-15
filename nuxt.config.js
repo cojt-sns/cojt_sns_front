@@ -32,6 +32,7 @@ export default {
   plugins: [
     '@/plugins/axios/index',
     { src: '@/plugins/actioncable', ssr: false },
+    { src: '~/plugins/croppie.js', ssr: false },
     '@/plugins/vue-scrollto',
   ],
   /*
