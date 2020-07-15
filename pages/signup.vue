@@ -26,9 +26,6 @@
                       <span class="icon is-small is-left">
                         <font-awesome-icon :icon="['fas', 'user']" />
                       </span>
-                      <span class="icon is-small is-right">
-                        <font-awesome-icon :icon="['fas', 'check']" />
-                      </span>
                     </p>
                   </div>
                 </div>
@@ -121,9 +118,7 @@
                   </div>
                 </div>
               </div>
-              <h2
-                class="title is-6 has-text-centered has-text-grey-lighter add-line"
-              >
+              <h2 class="title is-6 has-text-centered has-text-grey bar">
                 または
               </h2>
               <div class="level">
@@ -131,11 +126,14 @@
                   <div class="field is-centered">
                     <div class="control">
                       <nuxt-link :to="nextURL" class="has-text-white">
-                        <button
-                          class="button is-size-6 is-outlined is-info"
-                          @click="submit"
-                        >
-                          Twitterでログイン
+                        <button class="button is-size-6 is-outlined is-info">
+                          <span class="icon">
+                            <font-awesome-icon
+                              :icon="['fab', 'twitter']"
+                              size="lg"
+                            />
+                          </span>
+                          <span>Twitterでログイン</span>
                         </button>
                       </nuxt-link>
                     </div>
@@ -206,13 +204,19 @@ export default {
 };
 </script>
 
-<style>
-.add-line:before {
-  color: #ccc;
-  content: '-------------------';
-}
-.add-line:after {
-  color: #ccc;
-  content: '-------------------';
+<style lang="scss" scoped>
+.bar {
+  &::before,
+  &::after {
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: #dbdbdb;
+    height: 1px;
+    position: relative;
+    margin: 5px;
+    width: 35%;
+    content: '';
+    display: inline-block;
+  }
 }
 </style>
