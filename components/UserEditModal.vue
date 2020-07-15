@@ -107,7 +107,6 @@ export default {
   data() {
     return {
       name: this.user.name,
-      icon: null,
       tags: this.user.tags,
       bio: this.user.bio,
       error: '',
@@ -133,29 +132,41 @@ export default {
       this.filetype = e.target.files.type;
       this.croppie(e);
     },
-    async save() {
+    save() {
       this.error = '';
 
       if (this.error) return;
       try {
-        console.log(this.icon);
+        const options = {
+          type: 'blob',
+          format: 'png',
+          circle: true,
+        };
 
-        const res = await User.putUser(
-          this.user.id,
-          this.name,
-          undefined,
-          undefined,
-          this.bio,
-          this.icon,
-          undefined,
-          undefined,
-          undefined
-        );
+        // 保存時に合わせてクロップする
+        this.$refs.croppieRef.result(options, async (output) => {
+          const file = new File([output], this.filename, {
+            type: this.filetype,
+          });
+          this.save();
 
-        const user = res;
+          const res = await User.putUser(
+            this.user.id,
+            this.name,
+            undefined,
+            undefined,
+            this.bio,
+            file,
+            undefined,
+            undefined,
+            undefined
+          );
 
-        this.$emit('change-user', user);
-        this.$emit('close');
+          const user = res;
+
+          this.$emit('change-user', user);
+          this.$emit('close');
+        });
       } catch (error) {
         this.error = error;
       }
@@ -172,19 +183,6 @@ export default {
       };
 
       reader.readAsDataURL(files[0]);
-    },
-    crop() {
-      const options = {
-        type: 'blob',
-        format: 'png',
-        circle: true,
-      };
-      let file = null;
-      this.$refs.croppieRef.result(options, (output) => {
-        file = new File([output], this.filename, { type: this.filetype });
-        this.icon = file;
-        this.save();
-      });
     },
   },
 };
