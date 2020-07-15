@@ -1,15 +1,15 @@
 <template>
   <div class="column is-fullheight">
-    <!-- <GroupOverviewModal
-      :group="group_"
-      :whichmodal="WhichModal"
-      @close="closeModal(false)"
-      @edit="closeModal(true)"
-    />-->
     <GroupEditModal
       v-model="group_"
+      :whichmodal="WhichModal"
       :open="edit"
       @close="SwitchGroupEditModal"
+    />
+    <GroupExitModal
+      :group="group_"
+      :open="exit"
+      @close="SwitchGroupExitModal"
     />
     <div class="header has-background-primary">
       <nav class="level">
@@ -38,7 +38,10 @@
               <a class="dropdown-item">他の人を招待する</a>
               <a href="#" class="dropdown-item">Twitterで共有</a>
               <hr class="dropdown-divider" />
-              <a href="#" class="dropdown-item has-text-danger"
+              <a
+                href="#"
+                class="dropdown-item has-text-danger"
+                @click="SwitchGroupExitModal"
                 >グループから退出する</a
               >
             </div>
@@ -101,12 +104,14 @@
 <script>
 import PostComponent from '~/components/Post';
 // import GroupOverviewModal from '~/components/GroupOverviewModal';
+import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   components: {
     Post: PostComponent,
+    GroupExitModal,
     // GroupOverviewModal,
     GroupEditModal,
   },
@@ -126,12 +131,12 @@ export default {
       serverUrl: process.env.SERVER_URL,
       content: '',
       dropDown: false,
-      create: false,
       group_: this.groups.find(
         (group) => Number(group.id) === this.getGroupId()
       ),
       row: 1,
-    }; // WhichModal,0:閉じる,1:概要,2:編集
+      exit: false,
+    };
   },
   mounted() {
     if (process.browser) {
@@ -170,6 +175,9 @@ export default {
     },
     SwitchGroupEditModal() {
       this.edit = !this.edit;
+    },
+    SwitchGroupExitModal() {
+      this.exit = !this.exit;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
