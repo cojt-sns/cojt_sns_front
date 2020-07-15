@@ -76,7 +76,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" @click="crop">Save changes</button>
+        <button class="button is-success" @click="save">Save changes</button>
         <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
@@ -85,7 +85,6 @@
 
 <script>
 import User from '@/plugins/axios/modules/user';
-// import TagInput from '~/components/TagInput';
 export default {
   components: {
     // TagInput,
@@ -109,6 +108,7 @@ export default {
       name: this.user.name,
       tags: this.user.tags,
       bio: this.user.bio,
+      icon: null,
       error: '',
       filename: '',
       filetype: '',
@@ -148,7 +148,6 @@ export default {
           const file = new File([output], this.filename, {
             type: this.filetype,
           });
-          this.save();
 
           const res = await User.putUser(
             this.user.id,
