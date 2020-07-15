@@ -28,6 +28,7 @@
     "nuxt": "^2.0.0",
     "nuxt-fontawesome": "^0.4.0",
     "sass-loader": "^8.0.2",
+    "vue-croppie": "^2.0.2",
     "vue-router": "^3.3.4",
     "vue-select": "^3.10.3",
     "vuex-persistedstate": "^3.0.1"
