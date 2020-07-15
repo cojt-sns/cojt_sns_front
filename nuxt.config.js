@@ -83,7 +83,7 @@ export default {
   auth: {
     redirect: {
       login: '/login',
-      logout: false,
+      logout: '/',
       callback: false,
       home: '/groups',
     },
