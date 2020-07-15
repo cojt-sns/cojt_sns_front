@@ -46,6 +46,15 @@
               <span class="file-name">{{ icon ? icon.name : '' }}</span>
             </label>
           </div>
+          <vue-croppie
+            ref="croppieRef"
+            :enableOrientation="true"
+            :enableResize="true"
+            :boundary="{ width: 450, height: 300 }"
+            :viewport="{ width: 200, height: 200, type: 'circle' }"
+          ></vue-croppie>
+          <!-- <button class="button" @click="crop">決定</button>
+          <img v-if="croppieImage" :src="croppieImage" />-->
         </div>
 
         <!-- 自己紹介の編集 -->
@@ -67,9 +76,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" @click="save">
-          Save changes
-        </button>
+        <button class="button is-success" @click="crop">Save changes</button>
         <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
@@ -104,6 +111,8 @@ export default {
       tags: this.user.tags,
       bio: this.user.bio,
       error: '',
+      filename: '',
+      filetype: '',
     };
   },
   watch: {
@@ -120,14 +129,17 @@ export default {
   methods: {
     selectIcon(e) {
       e.preventDefault();
-      const files = e.target.files;
-      this.icon = files[0];
+      this.filename = e.target.files.name;
+      this.filetype = e.target.files.type;
+      this.croppie(e);
     },
     async save() {
       this.error = '';
 
       if (this.error) return;
       try {
+        console.log(this.icon);
+
         const res = await User.putUser(
           this.user.id,
           this.name,
@@ -137,18 +149,42 @@ export default {
           this.icon,
           undefined,
           undefined,
-          this.tags.map((tag) => tag.id)
+          undefined
         );
 
         const user = res;
-        user.image = process.env.SERVER_URL + user.image;
-        user.tags = await User.getUserTag(this.user.id);
 
         this.$emit('change-user', user);
         this.$emit('close');
       } catch (error) {
         this.error = error;
       }
+    },
+    croppie(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.$refs.croppieRef.bind({
+          url: e.target.result,
+        });
+      };
+
+      reader.readAsDataURL(files[0]);
+    },
+    crop() {
+      const options = {
+        type: 'blob',
+        format: 'png',
+        circle: true,
+      };
+      let file = null;
+      this.$refs.croppieRef.result(options, (output) => {
+        file = new File([output], this.filename, { type: this.filetype });
+        this.icon = file;
+        this.save();
+      });
     },
   },
 };
