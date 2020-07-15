@@ -48,8 +48,8 @@
           </div>
           <vue-croppie
             ref="croppieRef"
-            :enableOrientation="true"
-            :enableResize="true"
+            :enable-orientation="true"
+            :enable-resize="true"
             :boundary="{ width: 450, height: 300 }"
             :viewport="{ width: 200, height: 200, type: 'circle' }"
           ></vue-croppie>
