@@ -18,11 +18,10 @@ export default {
     return axios.$get(`groups/${id}`);
   },
 
-  putGroup(id, name = null, parent_id = null) {
-    return axios.$put(`groups/${id}`, {
-      name,
-      parent_id,
-    });
+  putGroup(id, name = null, parent_id) {
+    const body = { parent_id };
+    if (name != null) body.name = name;
+    return axios.$put(`groups/${id}`, body);
   },
   joinGroup(id, name, image = null) {
     const form = new FormData();
