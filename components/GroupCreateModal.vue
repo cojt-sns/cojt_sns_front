@@ -65,13 +65,6 @@ export default {
         this.error = error.data.message.name[0];
       }
     },
-
-    removeQuestion(id) {
-      const index = this.questions.findIndex((q) => q.id === id);
-      if (index === -1) return;
-
-      this.questions.splice(index, 1);
-    },
   },
 };
 </script>

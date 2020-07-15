@@ -1,16 +1,11 @@
 <template>
   <div class="column is-fullheight">
-    <!-- <GroupOverviewModal
-      :group="group_"
-      :whichmodal="WhichModal"
-      @close="closeModal(false)"
-      @edit="closeModal(true)"
-    />
     <GroupEditModal
       v-model="group_"
       :whichmodal="WhichModal"
-      @close="openModal(false)"
-    /> -->
+      :open="edit"
+      @close="SwitchGroupEditModal"
+    />
     <GroupExitModal
       :group="group_"
       :open="exit"
@@ -37,7 +32,9 @@
           </div>
           <div id="dropdown-menu" class="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a href="#" class="dropdown-item" @click="openModal()">概要</a>
+              <a href="#" class="dropdown-item" @click="SwitchGroupEditModal"
+                >編集</a
+              >
               <a class="dropdown-item">他の人を招待する</a>
               <a href="#" class="dropdown-item">Twitterで共有</a>
               <hr class="dropdown-divider" />
@@ -107,8 +104,8 @@
 <script>
 import PostComponent from '~/components/Post';
 // import GroupOverviewModal from '~/components/GroupOverviewModal';
-// import GroupEditModal from '~/components/GroupEditModal';
 import GroupExitModal from '~/components/GroupExitModal';
+import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
@@ -116,7 +113,7 @@ export default {
     Post: PostComponent,
     GroupExitModal,
     // GroupOverviewModal,
-    // GroupEditModal,
+    GroupEditModal,
   },
   props: {
     posts: {
@@ -130,6 +127,7 @@ export default {
   },
   data() {
     return {
+      edit: false,
       serverUrl: process.env.SERVER_URL,
       content: '',
       dropDown: false,
@@ -174,6 +172,9 @@ export default {
     },
     getGroupId() {
       return Number(this.$route.params.id ?? 1);
+    },
+    SwitchGroupEditModal() {
+      this.edit = !this.edit;
     },
     SwitchGroupExitModal() {
       this.exit = !this.exit;
