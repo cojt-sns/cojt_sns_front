@@ -11,6 +11,11 @@
       :whichmodal="WhichModal"
       @close="openModal(false)"
     /> -->
+    <GroupExitModal
+      :group="group_"
+      :open="exit"
+      @close="SwitchGroupExitModal"
+    />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
@@ -36,7 +41,10 @@
               <a class="dropdown-item">他の人を招待する</a>
               <a href="#" class="dropdown-item">Twitterで共有</a>
               <hr class="dropdown-divider" />
-              <a href="#" class="dropdown-item has-text-danger"
+              <a
+                href="#"
+                class="dropdown-item has-text-danger"
+                @click="SwitchGroupExitModal"
                 >グループから退出する</a
               >
             </div>
@@ -100,11 +108,13 @@
 import PostComponent from '~/components/Post';
 // import GroupOverviewModal from '~/components/GroupOverviewModal';
 // import GroupEditModal from '~/components/GroupEditModal';
+import GroupExitModal from '~/components/GroupExitModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   components: {
     Post: PostComponent,
+    GroupExitModal,
     // GroupOverviewModal,
     // GroupEditModal,
   },
@@ -123,12 +133,12 @@ export default {
       serverUrl: process.env.SERVER_URL,
       content: '',
       dropDown: false,
-      WhichModal: 0,
       group_: this.groups.find(
         (group) => Number(group.id) === this.getGroupId()
       ),
       row: 1,
-    }; // WhichModal,0:閉じる,1:概要,2:編集
+      exit: false,
+    };
   },
   mounted() {
     if (process.browser) {
@@ -165,14 +175,8 @@ export default {
     getGroupId() {
       return Number(this.$route.params.id ?? 1);
     },
-    closeModal(isEdit) {
-      if (isEdit) this.WhichModal = 2;
-      else this.WhichModal = 0;
-    },
-    openModal() {
-      // console.log(this.WhichModal);
-      this.WhichModal = 1;
-      // console.log(this.WhichModal);
+    SwitchGroupExitModal() {
+      this.exit = !this.exit;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;

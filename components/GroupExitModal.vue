@@ -1,26 +1,18 @@
-﻿<template>
+<template>
   <Modal
     :class="{ 'is-active': open }"
-    :title="'グループを作成'"
+    :title="'グループを脱退'"
     @close="$emit('close')"
   >
     <div v-if="error" class="notification is-danger is-light">
       {{ error }}
     </div>
-    <div class="title is-4 has-text-centered">名前を決める</div>
-    <div class="field">
-      <div class="control">
-        <input
-          v-model="name"
-          class="input"
-          type="text"
-          placeholder="名前を入力"
-        />
-      </div>
+    <div class="title is-4 has-text-centered">
+      #{{ group.fullname }}を抜けますか?
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
-        <button class="button is-primary" @click="create()">作成</button>
+        <button class="button is-primary" @click="exit()">脱退</button>
       </div>
       <div class="control">
         <button class="button" @click="$emit('close')">戻る</button>
@@ -37,6 +29,10 @@ export default {
     Modal,
   },
   props: {
+    group: {
+      type: Object,
+      required: true,
+    },
     open: {
       type: Boolean,
       required: true,
@@ -44,33 +40,26 @@ export default {
   },
   data() {
     return {
-      name: '',
       error: '',
     };
   },
   watch: {
     open(newValue) {
       if (newValue) {
-        this.name = '';
         this.error = '';
       }
     },
   },
   methods: {
-    async create() {
+    async exit() {
       try {
-        const createdGroup = await Group.postGroup(this.name);
-        window.location.href = '/groups/' + createdGroup.id;
+        await Group.leaveGroup(this.group.id);
+        this.$emit('close');
+        // window.location.href =
       } catch (error) {
-        this.error = error.data.message.name[0];
+        // this.error = error.data.message.name[0];
+        this.error = 'エラー';
       }
-    },
-
-    removeQuestion(id) {
-      const index = this.questions.findIndex((q) => q.id === id);
-      if (index === -1) return;
-
-      this.questions.splice(index, 1);
     },
   },
 };
