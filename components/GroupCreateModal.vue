@@ -16,7 +16,7 @@
         </div>
         <div class="field">
           <label class="label">タグ</label>
-          <TagInput v-model="tags" />
+          <!-- <TagInput v-model="tags" /> -->
         </div>
         <div class="field">
           <label class="label">
@@ -94,10 +94,10 @@
 
 <script>
 import Group from '@/plugins/axios/modules/group';
-import TagInput from '~/components/TagInput';
+// import TagInput from '~/components/TagInput';
 export default {
   components: {
-    TagInput,
+    // TagInput,
   },
   props: {
     create: {

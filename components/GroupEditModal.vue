@@ -3,9 +3,7 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">
-          #{{ group.tags.map((tag) => tag.fullname).join('#') }}の編集
-        </p>
+        <p class="modal-card-title">#{{ group.fullname }}の編集</p>
         <button
           class="delete"
           aria-label="close"

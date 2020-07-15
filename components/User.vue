@@ -5,31 +5,10 @@
     <div class="columns">
       <div class="column">
         <div class="box">
-          <!-- columnsで書いたやつ
-          <div class="columns">
-            <div class="column is-2">
-              <div class="image is-128x128 has-text-centered">
-                <img :src="user_.image" alt srcset />
-              </div>
-            </div>
-            <div class="column">
-              <div class="title has-text-centered username">
-                {{ user_.name }}
-              </div>
-            </div>
-            <div class="column is-2 is-offser-10">
-              <button class="button is-medium is-rounded" @click="openModal()">
-                編集
-              </button>
-            </div>
-          </div>
-          -->
-
-          <!-- levelでかいたやつ -->
           <div class="level">
             <div class="level-left is-2">
               <div class="image is-128x128 has-text-centered">
-                <img :src="user_.image" alt srcset />
+                <img :src="serverUrl + user_.image" alt srcset />
               </div>
             </div>
             <div class="level-item">
@@ -82,6 +61,7 @@ export default {
     return {
       edit: false,
       user_: this.user,
+      serverUrl: process.env.SERVER_URL,
     };
   },
   methods: {
@@ -96,6 +76,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+img {
+  border-radius: 50%;
+}
 .columns {
   align-items: center;
 }

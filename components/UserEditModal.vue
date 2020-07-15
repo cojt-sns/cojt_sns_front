@@ -63,7 +63,7 @@
 
         <div class="field">
           <label class="label">タグ</label>
-          <TagInput v-model="tags" />
+          <!-- <TagInput v-model="tags" /> -->
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -78,10 +78,10 @@
 
 <script>
 import User from '@/plugins/axios/modules/user';
-import TagInput from '~/components/TagInput';
+// import TagInput from '~/components/TagInput';
 export default {
   components: {
-    TagInput,
+    // TagInput,
   },
   model: {
     prop: 'user',

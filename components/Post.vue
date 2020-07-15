@@ -1,6 +1,6 @@
 <template>
   <article class="media">
-    <GroupUserModal
+    <!-- <GroupUserModal
       :groupuser="groupUser_"
       :group="group"
       :whichmodal="WhichModal"
@@ -12,18 +12,22 @@
       :group="group"
       :whichmodal="WhichModal"
       @close="openModal(false)"
-    />
+    /> -->
     <figure class="media-left">
-      <p class="image is-64x64">
-        <img :src="post.user.image" @click="openModal()" />
-      </p>
+      <nuxt-link v-if="post.user.user_id" :to="`/users/${post.user.user_id}`">
+        <figure class="image is-64x64">
+          <img :src="serverUrl + post.user.image" @click="openModal()" />
+        </figure>
+      </nuxt-link>
+      <figure v-else class="image is-64x64">
+        <img :src="serverUrl + post.user.image" @click="openModal()" />
+      </figure>
     </figure>
     <div class="media-content">
       <div class="content">
-        <a @click="openModal()">
+        <nuxt-link v-if="post.user.user_id" :to="`/users/${post.user.user_id}`">
           <strong>{{ post.user.name }}</strong>
-          <small>@{{ post.user.id }}</small>
-        </a>
+        </nuxt-link>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
         <div v-if="!edit" class="post-content">{{ post.content }}</div>
@@ -54,39 +58,25 @@
       </div>
       <nav class="level is-mobile">
         <div class="level-left">
-          <a class="level-item">
-            <span class="icon is-small">
-              <font-awesome-icon :icon="['fas', 'reply']" />
-            </span>
-          </a>
-          <a class="level-item">
-            <span class="icon is-small">
-              <font-awesome-icon :icon="['fas', 'retweet']" />
-            </span>
-          </a>
-          <a class="level-item">
-            <span class="icon is-small">
-              <font-awesome-icon :icon="['fas', 'heart']" />
-            </span>
-          </a>
-        </div>
-        <div class="level-right">
           <div class="level-item">
-            <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
+            <span class="icon is-small">
+              <font-awesome-icon :icon="['fas', 'comment']" />
+            </span>
+          </div>
+          <div class="level-item">
+            <div :class="{ 'is-active': dropDown }" class="dropdown">
               <div class="dropdown-trigger">
-                <button
-                  class="button"
+                <span
+                  class="icon is-small"
                   aria-haspopup="true"
                   aria-controls="dropdown-menu"
                   @click="dropDown = !dropDown"
                 >
-                  <span class="icon is-small">
-                    <font-awesome-icon :icon="['fas', 'angle-down']" />
-                  </span>
-                </button>
+                  <font-awesome-icon :icon="['fas', 'ellipsis-h']" />
+                </span>
               </div>
               <div
-                v-if="post.user_id == $auth.user.id"
+                v-if="post.user_id == $auth.user.user_id"
                 class="dropdown-menu"
                 role="menu"
               >
@@ -101,11 +91,7 @@
                   >
                 </div>
               </div>
-              <div
-                v-if="post.user_id != $auth.user.id"
-                class="dropdown-menu"
-                role="menu"
-              >
+              <div v-else class="dropdown-menu" role="menu">
                 <div class="dropdown-content">
                   <a class="dropdown-item">投稿を報告</a>
                 </div>
@@ -120,12 +106,12 @@
 
 <script>
 import Post from '@/plugins/axios/modules/post';
-import GroupUserModal from '~/components/GroupUserModal';
-import GroupUserEditModal from '~/components/GroupUserEditModal';
+// import GroupUserModal from '~/components/GroupUserModal';
+// import GroupUserEditModal from '~/components/GroupUserEditModal';
 export default {
   components: {
-    GroupUserModal,
-    GroupUserEditModal,
+    // GroupUserModal,
+    // GroupUserEditModal,
   },
   props: {
     post: {
@@ -139,6 +125,7 @@ export default {
   },
   data() {
     return {
+      serverUrl: process.env.SERVER_URL,
       content: this.post.content,
       dropDown: false,
       edit: false,
@@ -194,6 +181,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.media-left img {
+  border-radius: 50%;
+}
 .post-content {
   white-space: pre-line;
 }
