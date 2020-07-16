@@ -288,9 +288,11 @@ export default {
   flex-flow: column;
   padding: 0;
   .top {
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
     .search-type {
       width: 60%;
-      margin: 20px auto;
+      margin: 10px auto;
     }
     .field {
       width: 70%;
