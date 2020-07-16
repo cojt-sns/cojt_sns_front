@@ -73,7 +73,7 @@
               class="textarea"
               placeholder="Input Text"
               :rows="row"
-              @keydown="adjustHeight"
+              @keydown="keyDowntextarea"
             ></textarea>
           </p>
         </div>
@@ -212,6 +212,12 @@ export default {
         if (!posts) return;
         posts.scrollTop = posts.scrollHeight;
       });
+    },
+    keyDowntextarea(event) {
+      this.adjustHeight();
+      if (event.ctrlKey && event.keyCode === 13) {
+        this.send();
+      }
     },
   },
   channels: {
