@@ -1,27 +1,25 @@
 <template>
-  <Maintest :posts="posts" :groups="groups" :panels="panels" />
+  <Main :posts="posts" :groups="groups">
+    <GroupPanelList :groups="groups" />
+  </Main>
 </template>
 
 <script>
-import Maintest from '~/components/Maintest';
+import Main from '~/components/Main';
+import GroupPanelList from '~/components/GroupPanelList';
 import User from '@/plugins/axios/modules/user';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 import Post from '@/plugins/axios/modules/post';
-import Tag from '@/plugins/axios/modules/tag';
 
 export default {
   components: {
-    Maintest,
+    Main,
+    GroupPanelList,
   },
   async asyncData({ $auth }) {
     const groups = [];
     const userGroups = await User.getUserGroup($auth.user.id);
     for (const group of userGroups) {
-      const tags = [];
-      for (const id of group.tags) {
-        tags.push(await Tag.getTag(id));
-      }
-      group.tags = tags;
       groups.push(group);
     }
 
@@ -42,21 +40,6 @@ export default {
     return {
       posts,
       groups,
-    };
-  },
-  data() {
-    return {
-      panels: [
-        {
-          name: 'Hello1',
-          description: 'this is a test script',
-          number: 100,
-        },
-        { name: 'Hello2', description: 'this is a test script', number: 200 },
-        { name: 'Hello3', description: 'this is a test script', number: 300 },
-        { name: 'Hello4', description: 'this is a test script', number: 400 },
-        { name: 'Hello5', description: 'this is a test script', number: 500 },
-      ],
     };
   },
   methods: {},
