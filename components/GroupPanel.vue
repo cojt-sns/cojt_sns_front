@@ -1,8 +1,8 @@
 <template>
   <article class="tile is-4 is-child">
-    <div class="box">
+    <div class="box" @click="$router.push(`/groups/${group.id}`)">
       <p class="title has-text-weight-bold is-size-6 middle">
-        {{ group.fullname }}
+        #{{ group.fullname }}
       </p>
       <p class="content bot">TODO: description入れる</p>
       <article class="member">
@@ -33,6 +33,7 @@ export default {
   flex-direction: column;
   margin: 10px;
   height: 20rem;
+  cursor: pointer;
 }
 .member {
   margin-top: auto;

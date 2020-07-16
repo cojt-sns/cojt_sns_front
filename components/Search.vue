@@ -51,17 +51,19 @@
         </div>
       </div>
     </div>
-    <div v-if="$route.query.type != 'graph'" class="">
-      <div v-for="group in search" :key="group.id">
-        <nuxt-link :to="`/groups/${group.id}`">#{{ group.fullname }}</nuxt-link>
-      </div>
+    <div v-if="$route.query.type != 'graph'" class="list-result">
+      <GroupPanelList :groups="search" />
     </div>
     <div v-show="$route.query.type == 'graph'" ref="graph" class="graph"></div>
   </div>
 </template>
 
 <script>
+import GroupPanelList from '@/components/GroupPanelList';
 export default {
+  components: {
+    GroupPanelList,
+  },
   props: {
     search: {
       type: Array,
@@ -298,6 +300,10 @@ export default {
       width: 70%;
       margin: 0 auto;
     }
+  }
+  .list-result {
+    flex: 1;
+    overflow-y: scroll;
   }
   .graph {
     flex: 1;
