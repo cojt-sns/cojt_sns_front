@@ -58,10 +58,10 @@
         @deletePost="deletePost"
       />
     </div>
-    <div class="media has-background-grey-lighter footer">
+    <div v-if="groupUser" class="media has-background-grey-lighter footer">
       <figure class="media-left">
         <p class="image is-64x64">
-          <img :src="serverUrl + $auth.user.image" />
+          <img :src="serverUrl + groupUser.image" />
         </p>
       </figure>
       <div class="media-content">
@@ -98,6 +98,18 @@
         </div>
       </div>
     </div>
+    <div v-else class="has-background-grey-lighter footer join">
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-primary" @click="create()">
+            グループに参加する
+          </button>
+        </div>
+        <div class="control">
+          <button class="button" @click="$router.go(-1)">戻る</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -123,6 +135,11 @@ export default {
     groups: {
       type: Array,
       required: true,
+    },
+    groupUser: {
+      type: Object,
+      required: false,
+      default: null,
     },
   },
   data() {
@@ -238,6 +255,11 @@ export default {
     }
     img {
       border-radius: 50%;
+    }
+
+    &.join {
+      padding: 30px;
+      background-color: rgba(#dbdbdb, 0.6) !important;
     }
   }
 }
