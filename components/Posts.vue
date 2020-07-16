@@ -49,7 +49,7 @@
         </div>
       </nav>
     </div>
-    <div class="posts">
+    <div ref="posts" class="posts">
       <Post
         v-for="post in posts"
         :key="post.id"
@@ -115,7 +115,6 @@
 
 <script>
 import PostComponent from '~/components/Post';
-// import GroupOverviewModal from '~/components/GroupOverviewModal';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
@@ -124,7 +123,6 @@ export default {
   components: {
     Post: PostComponent,
     GroupExitModal,
-    // GroupOverviewModal,
     GroupEditModal,
   },
   props: {
@@ -157,6 +155,7 @@ export default {
   },
   mounted() {
     if (process.browser) {
+      this.scrollToEnd();
       this.$cable.subscribe({
         channel: 'GroupChannel',
         id: this.getGroupId(),
@@ -207,6 +206,13 @@ export default {
         textarea.style.height = textarea.scrollHeight + 'px';
       });
     },
+    scrollToEnd() {
+      this.$nextTick(() => {
+        const posts = this.$refs.posts;
+        if (!posts) return;
+        posts.scrollTop = posts.scrollHeight;
+      });
+    },
   },
   channels: {
     GroupChannel: {
@@ -217,13 +223,16 @@ export default {
         console.log('connect!!');
       },
       async received(data) {
-        console.log(data);
+        const posts = this.$refs.posts;
+        const isScrollEnd =
+          posts.scrollHeight - (posts.clientHeight + posts.scrollTop) === 0;
         if ('new' in data) this.posts.push(await this.arrangePost(data.new));
         if ('update' in data) {
           const i = this.posts.findIndex((p) => p.id === data.update.id);
           if (i === -1) return;
           this.posts.splice(i, 1, await this.arrangePost(data.update));
         }
+        if (isScrollEnd) this.scrollToEnd();
       },
     },
   },
