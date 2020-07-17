@@ -1,5 +1,5 @@
 <template>
-  <Main :posts="posts" :groups="groups" />
+  <Main :posts="posts" :groups="groups" :group-user="groupUser" />
 </template>
 
 <script>
@@ -32,7 +32,20 @@ export default {
       posts.push(post);
     }
 
+    try {
+      const groupUser = await Group.getGroupLoginMember(1);
+
+      return {
+        groupUser,
+        posts,
+        groups,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+
     return {
+      groupUser: null,
       posts,
       groups,
     };

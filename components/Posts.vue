@@ -49,7 +49,7 @@
         </div>
       </nav>
     </div>
-    <div class="posts">
+    <div ref="posts" class="posts">
       <Post
         v-for="post in posts"
         :key="post.id"
@@ -58,10 +58,10 @@
         @deletePost="deletePost"
       />
     </div>
-    <div class="media has-background-grey-lighter footer">
+    <div v-if="groupUser" class="media has-background-grey-lighter footer">
       <figure class="media-left">
         <p class="image is-64x64">
-          <img :src="serverUrl + $auth.user.image" />
+          <img :src="serverUrl + groupUser.image" />
         </p>
       </figure>
       <div class="media-content">
@@ -73,7 +73,7 @@
               class="textarea"
               placeholder="Input Text"
               :rows="row"
-              @keydown="adjustHeight"
+              @keydown="keyDowntextarea"
             ></textarea>
           </p>
         </div>
@@ -98,12 +98,23 @@
         </div>
       </div>
     </div>
+    <div v-else class="has-background-grey-lighter footer join">
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-primary" @click="create()">
+            グループに参加する
+          </button>
+        </div>
+        <div class="control">
+          <button class="button" @click="$router.go(-1)">戻る</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import PostComponent from '~/components/Post';
-// import GroupOverviewModal from '~/components/GroupOverviewModal';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import Post from '@/plugins/axios/modules/post';
@@ -112,7 +123,6 @@ export default {
   components: {
     Post: PostComponent,
     GroupExitModal,
-    // GroupOverviewModal,
     GroupEditModal,
   },
   props: {
@@ -123,6 +133,11 @@ export default {
     groups: {
       type: Array,
       required: true,
+    },
+    groupUser: {
+      type: Object,
+      required: false,
+      default: null,
     },
   },
   data() {
@@ -140,6 +155,7 @@ export default {
   },
   mounted() {
     if (process.browser) {
+      this.scrollToEnd();
       this.$cable.subscribe({
         channel: 'GroupChannel',
         id: this.getGroupId(),
@@ -190,6 +206,19 @@ export default {
         textarea.style.height = textarea.scrollHeight + 'px';
       });
     },
+    scrollToEnd() {
+      this.$nextTick(() => {
+        const posts = this.$refs.posts;
+        if (!posts) return;
+        posts.scrollTop = posts.scrollHeight;
+      });
+    },
+    keyDowntextarea(event) {
+      this.adjustHeight();
+      if (event.ctrlKey && event.keyCode === 13) {
+        this.send();
+      }
+    },
   },
   channels: {
     GroupChannel: {
@@ -200,13 +229,16 @@ export default {
         console.log('connect!!');
       },
       async received(data) {
-        console.log(data);
+        const posts = this.$refs.posts;
+        const isScrollEnd =
+          posts.scrollHeight - (posts.clientHeight + posts.scrollTop) === 0;
         if ('new' in data) this.posts.push(await this.arrangePost(data.new));
         if ('update' in data) {
           const i = this.posts.findIndex((p) => p.id === data.update.id);
           if (i === -1) return;
           this.posts.splice(i, 1, await this.arrangePost(data.update));
         }
+        if (isScrollEnd) this.scrollToEnd();
       },
     },
   },
@@ -238,6 +270,11 @@ export default {
     }
     img {
       border-radius: 50%;
+    }
+
+    &.join {
+      padding: 30px;
+      background-color: rgba(#dbdbdb, 0.6) !important;
     }
   }
 }

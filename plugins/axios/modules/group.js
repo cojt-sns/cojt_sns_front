@@ -42,4 +42,8 @@ export default {
   getGroupMember(id) {
     return axios.$get(`groups/${id}/group_users`);
   },
+
+  getGroupLoginMember(id) {
+    return axios.$get(`groups/${id}/group_user`);
+  },
 };

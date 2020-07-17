@@ -96,6 +96,7 @@ export default {
 <style lang="scss" scoped>
 .column {
   padding: 0;
+  width: 300px !important;
   display: flex;
   flex-direction: column;
   border-left: 1px solid #dbdbdb;
