@@ -1,8 +1,9 @@
 <template>
   <div class="column is-fullheight section has-background-white	">
     <UserEditModal v-model="user_" :edit="edit" @close="closeModal()" />
+    <!-- <LogoutModal /> -->
     <!-- show profile -->
-    <div class="level top_level">
+    <div class="level">
       <div class="level-item kkk has-text-centered">
         <div class="image img_size has-text-centered heading">
           <img :src="serverUrl + user_.image" alt srcset />
@@ -25,6 +26,7 @@
       </div>
     </div>
     <div class="level">
+      <div class="level-item"></div>
       <div class="level-right">
         <div class="level-item">
           <button
@@ -36,15 +38,27 @@
         </div>
       </div>
     </div>
-
-    <!-- eslint-disable-next-line -->
-    <div class="has-text-left is-size-4">
-      <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
-          <div class="post-content">{{ user_.bio }}</div>
+    <div class="columns">
+      <div class="column is-3 is-offset-4">
+        <div class="subtitle has-text-centered is-bold">
+          参加グループ
         </div>
       </div>
     </div>
+    <div class="is-divider" data-content="abcd"></div>
+
+    <!-- <div class="level">
+      <div class="level-right">
+        <div class="level-item">
+          <button
+            class="button is-medium is-primary is-outlined "
+            @click="openModal()"
+          >
+            ログアウト
+          </button>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
