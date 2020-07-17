@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-fullheight section has-background-white	">
+  <div class="column is-fullheight has-background-white	">
     <UserEditModal v-model="user_" :edit="edit" @close="closeEdit()" />
     <LogoutModal :open="open" @close="closeLogout()" />
     <!-- show profile -->
@@ -12,16 +12,14 @@
           {{ user_.name }}
         </div>
       </div>
-      <div class="level">
-        <div class="level-right">
-          <div class="level-item">
-            <button
-              class="button is-medium is-primary is-outlined "
-              @click="openEdit()"
-            >
-              編集
-            </button>
-          </div>
+      <div class="level-right">
+        <div class="level-item">
+          <button
+            class="button is-medium is-primary is-outlined "
+            @click="openEdit()"
+          >
+            編集
+          </button>
         </div>
       </div>
     </div>
@@ -38,28 +36,13 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-3 is-offset-4">
-        <div class="subtitle has-text-centered is-size-4">
-          参加グループ
-        </div>
-      </div>
+    <div class="subtitle has-text-centered is-size-4">
+      参加グループ
     </div>
     <hr />
-    <GroupPanelList :groups="groups" />
-
-    <!-- <div class="level">
-      <div class="level-right">
-        <div class="level-item">
-          <button
-            class="button is-medium is-primary is-outlined "
-            @click="openModal()"
-          >
-            ログアウト
-          </button>
-        </div>
-      </div>
-    </div> -->
+    <div class="groups">
+      <GroupPanelList :groups="groups" />
+    </div>
   </div>
 </template>
 
@@ -110,31 +93,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
-  border-radius: 50%;
-}
-hr {
-  margin: 12px;
-}
-.img_size {
-  height: 200px;
-  width: 200px;
-}
-.columns {
-  align-items: center;
-}
-.post-content {
-  white-space: pre-line;
-}
-.level-right {
-  align-self: flex-start;
-}
-.kkk {
+.column {
   display: flex;
   flex-direction: column;
-}
-.title {
-  margin-top: 0.75rem;
-  font-size: 3rem;
+
+  img {
+    border-radius: 50%;
+  }
+  hr {
+    margin: 12px;
+  }
+  .img_size {
+    height: 200px;
+    width: 200px;
+  }
+  .level-right {
+    align-self: flex-start;
+  }
+  .kkk {
+    display: flex;
+    margin-left: 82px;
+    flex-direction: column;
+    justify-self: center;
+  }
+  .title {
+    margin-top: 0.75rem;
+    font-size: 3rem;
+  }
+
+  .groups {
+    overflow-y: scroll;
+  }
 }
 </style>

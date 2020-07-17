@@ -1,5 +1,5 @@
 <template>
-  <div class="tile is-parent is-vertical POP">
+  <div class="tile is-parent is-vertical">
     <div v-for="array in groupChunks" :key="array.id" class="tile is-parent">
       <GroupPanel
         v-for="group in array"
