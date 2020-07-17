@@ -40,12 +40,22 @@
     </div>
     <div class="columns">
       <div class="column is-3 is-offset-4">
-        <div class="subtitle has-text-centered is-bold">
+        <div class="subtitle has-text-centered is-size-4">
           参加グループ
         </div>
       </div>
     </div>
-    <div class="is-divider" data-content="abcd"></div>
+
+    <div class="is-divider" data-content="abcd">hellooooo</div>
+
+    <div class="columns">
+      <div class="column">Column 1</div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column">
+        Column 2 <br />
+        Note: divider stretches to parent's height.
+      </div>
+    </div>
 
     <!-- <div class="level">
       <div class="level-right">
