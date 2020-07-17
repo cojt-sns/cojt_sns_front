@@ -45,6 +45,7 @@
         </div>
       </div>
     </div>
+    <hr />
 
     <div class="is-divider" data-content="abcd">hellooooo</div>
 
@@ -104,6 +105,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~bulma-divider';
+
 img {
   border-radius: 50%;
 }
