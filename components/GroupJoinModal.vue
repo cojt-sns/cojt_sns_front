@@ -4,74 +4,72 @@
     :title="'グループに参加'"
     @close="$emit('close')"
   >
+    <input
+      class="file-input"
+      type="file"
+      name="resume"
+      ref="icon"
+      @change="selectIcon"
+    />
     <div v-if="error" class="notification is-danger is-light">
       {{ error }}
     </div>
     <div class="title is-4 has-text-centered">#{{ group.fullname }}</div>
-    <!-- <div class="title is-4 has-text-left">ユーザー名</div>
-    <div class="field">
-      <div class="control">
-        <input
-          v-model="name"
-          class="input"
-          type="text"
-          placeholder="ユーザー名を入力"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">アイコン</label>
-      <div class="file has-name">
-        <label class="file-label">
-          <input
-            class="file-input"
-            type="file"
-            name="resume"
-            @change="selectIcon"
-          />
-          <span class="file-cta">
-            <span class="file-icon">
-              <font-awesome-icon :icon="['fas', 'upload']" />
+    <div>
+      <div class="columns">
+        <div class="column is-3">
+          <div class="image is-128x128 has-text-centered">
+            <img v-show="!imageEdit" :src="image" alt srcset />
+            <vue-croppie
+              v-show="imageEdit"
+              ref="croppieRef"
+              :enable-orientation="true"
+              :enable-resize="false"
+              :boundary="{ width: 128, height: 128 }"
+              :viewport="{ width: 128, height: 128, type: 'circle' }"
+            ></vue-croppie>
+            <span
+              class="icon edit"
+              :class="{ 'has-text-white': imageEdit }"
+              @click="!imageEdit ? $refs.icon.click() : crop()"
+            >
+              <font-awesome-icon
+                v-if="!imageEdit"
+                :icon="['fas', 'edit']"
+                size="lg"
+              />
+              <font-awesome-icon v-else :icon="['fas', 'check']" size="lg" />
             </span>
-            <span class="file-label">Choose a file…</span>
-          </span>
-          <span class="file-name">{{ image ? image.name : '' }}</span>
-        </label>
-      </div>
-      <vue-croppie
-        ref="croppieRef"
-        :enable-orientation="true"
-        :enable-resize="true"
-        :boundary="{ width: 450, height: 300 }"
-        :viewport="{ width: 200, height: 200, type: 'circle' }"
-      ></vue-croppie>
-    </div> -->
-    <div class="columns">
-      <div class="column is-3">
-        <div class="image is-128x128 has-text-centered">
-          <img :src="serverUrl + image" alt srcset />
+            <span
+              v-show="imageEdit"
+              class="icon back has-text-white"
+              @click="imageEdit = false"
+            >
+              <font-awesome-icon :icon="['fas', 'undo']" size="lg" />
+            </span>
+          </div>
         </div>
-      </div>
-      <div class="column">
-        <div class="title is-4 has-text-left">ユーザー名</div>
-        <div class="field">
-          <div class="control">
-            <input
-              v-model="name"
-              class="input"
-              type="text"
-              placeholder="名前を入力"
-            />
+        <div class="column">
+          <div class="field">
+            <div class="control">
+              <label class="label">Name</label>
+              <input
+                v-model="name"
+                class="input"
+                type="text"
+                placeholder="名前を入力"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="field is-grouped is-grouped-centered">
-      <div class="control">
-        <button class="button is-primary" @click="join()">参加</button>
-      </div>
-      <div class="control">
-        <button class="button" @click="$emit('close')">戻る</button>
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-primary" @click="join()">参加</button>
+        </div>
+        <div class="control">
+          <button class="button" @click="$emit('close')">戻る</button>
+        </div>
       </div>
     </div>
   </Modal>
@@ -89,10 +87,6 @@ export default {
       type: Object,
       required: true,
     },
-    user: {
-      type: Object,
-      required: true,
-    },
     open: {
       type: Boolean,
       required: true,
@@ -100,74 +94,87 @@ export default {
   },
   data() {
     return {
-      name: this.user.name,
-      image: this.user.image,
+      name: this.$auth.user.name,
+      image: process.env.SERVER_URL + '/default.png',
+      imageEdit: false,
       error: '',
       serverUrl: process.env.SERVER_URL,
-      // filename: '',
-      // filetype: '',
+      myIcon: false,
+      filename: '',
+      filetype: '',
     };
   },
   watch: {
     open(newValue) {
       if (newValue) {
-        this.name = this.user.name;
-        this.image = this.user.image;
+        this.name = this.$auth.user.name;
+        this.image = this.serverUrl + '/default.png';
         this.error = '';
+        this.imageEdit = false;
+        this.myIcon = false;
       }
     },
   },
   methods: {
     async join() {
+      if (this.imageEdit) {
+        this.error = 'アイコン画像を確定してください';
+        return;
+      }
       try {
-        await Group.joinGroup(this.group.id, this.name);
-        // location.href =
-        //   this.process.env.BASE_URL + 'groups/' + String(this.group.id);
-        this.$emit('close');
+        if (this.myIcon) {
+          await Group.joinGroup(this.group.id, this.name, this.file);
+        } else {
+          await Group.joinGroup(this.group.id, this.name);
+        }
+        location.href = '/groups/' + this.group.id;
       } catch (error) {
         this.error = error;
-        // this.error = 'エラー';
       }
     },
-    // join() {
-    //   const options = {
-    //     type: 'blob',
-    //     format: 'png',
-    //     circle: true,
-    //   };
+    crop() {
+      let options = {
+        format: 'png',
+        circle: true,
+      };
+      this.$refs.croppieRef.result(options, (output) => {
+        this.image = output;
+      });
 
-    //   // 保存時に合わせてクロップする
-    //   this.$refs.croppieRef.result(options, async (output) => {
-    //     const file = new File([output], this.filename, {
-    //       type: this.filetype,
-    //     });
+      options = {
+        type: 'blob',
+        format: 'png',
+        circle: true,
+      };
+      this.$refs.croppieRef.result(options, (output) => {
+        this.file = new File([output], this.filename, {
+          type: this.filetype,
+        });
+        this.myIcon = true;
+      });
 
-    //     await Group.joinGroup(this.group.id, this.name, file);
+      this.imageEdit = false;
+    },
+    selectIcon(e) {
+      e.preventDefault();
+      this.filename = e.target.files[0].name;
+      this.filetype = e.target.files[0].type;
+      this.croppie(e);
+    },
+    croppie(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
 
-    //     // location.href =
-    //     //   this.process.env.BASE_URL + 'groups/' + String(this.group.id);
-    //     this.$emit('close');
-    //   });
-    // },
-    // selectIcon(e) {
-    //   e.preventDefault();
-    //   this.filename = e.target.files.name;
-    //   this.filetype = e.target.files.type;
-    //   this.croppie(e);
-    // },
-    // croppie(e) {
-    //   const files = e.target.files || e.dataTransfer.files;
-    //   if (!files.length) return;
+      this.imageEdit = true;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.$refs.croppieRef.bind({
+          url: e.target.result,
+        });
+      };
 
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.$refs.croppieRef.bind({
-    //       url: e.target.result,
-    //     });
-    //   };
-
-    //   reader.readAsDataURL(files[0]);
-    // },
+      reader.readAsDataURL(files[0]);
+    },
   },
 };
 </script>
@@ -178,5 +185,46 @@ export default {
   .modal-card-body {
     overflow: visible;
   }
+}
+.image {
+  position: relative;
+  img {
+    border-radius: 50%;
+  }
+
+  & > * {
+    position: absolute;
+  }
+
+  .icon {
+    z-index: 1000;
+    &.edit {
+      right: 0px;
+      bottom: 0px;
+    }
+    &.back {
+      left: 0px;
+      bottom: 0px;
+    }
+    &:hover {
+      color: #818181;
+    }
+    &.has-text-white:hover {
+      color: #d8d8d8 !important;
+    }
+  }
+}
+
+.image-edit-enter-active,
+.image-edit-leave-active {
+  transition: opacity 0.5s ease;
+}
+.image-edit-enter,
+.image-edit-leave-to {
+  opacity: 0;
+}
+
+.file-input {
+  display: none;
 }
 </style>
