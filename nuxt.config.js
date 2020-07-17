@@ -25,13 +25,15 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/main.scss'],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '@/plugins/axios/index',
     { src: '@/plugins/actioncable', ssr: false },
+    { src: '~/plugins/croppie.js', ssr: false },
+    '@/plugins/vue-scrollto',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -52,13 +54,22 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/auth',
+    '@nuxtjs/style-resources',
   ],
+
+  styleResources: {
+    sass: ['~/assets/_variables.scss'],
+  },
 
   fontawesome: {
     imports: [
       {
         set: '@fortawesome/free-solid-svg-icons',
         icons: ['fas'],
+      },
+      {
+        set: '@fortawesome/free-brands-svg-icons',
+        icons: ['fab'],
       },
     ],
   },
@@ -73,9 +84,9 @@ export default {
   auth: {
     redirect: {
       login: '/login',
-      logout: false,
+      logout: '/',
       callback: false,
-      home: '/',
+      home: '/groups',
     },
     strategies: {
       local: {

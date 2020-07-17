@@ -1,0 +1,44 @@
+@import 'variables';
+
+.hero.is-primary {
+  background-color: $main-color;
+}
+
+.button.is-primary {
+  background-color: $main-color;
+}
+
+.menu-list a.is-active {
+  background-color: $main-color;
+}
+
+.has-background-primary {
+  background-color: $main-color !important;
+}
+
+.has-text-primary {
+  color: $main-color !important;
+}
+
+.button.is-primary:hover {
+  background-color: darken($main-color, 3%);
+}
+
+.button.is-primary:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba($main-color, 0.25);
+}
+
+.button.is-primary.is-outlined {
+  border-color: $main-color;
+  color: $main-color;
+}
+
+.button.is-primary.is-outlined:focus,
+.button.is-primary.is-outlined:hover {
+  border-color: $main-color;
+  background-color: $main-color;
+}
+
+a {
+  color: $main-color;
+}

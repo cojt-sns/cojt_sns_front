@@ -46,6 +46,15 @@
               <span class="file-name">{{ icon ? icon.name : '' }}</span>
             </label>
           </div>
+          <vue-croppie
+            ref="croppieRef"
+            :enable-orientation="true"
+            :enable-resize="true"
+            :boundary="{ width: 450, height: 300 }"
+            :viewport="{ width: 200, height: 200, type: 'circle' }"
+          ></vue-croppie>
+          <!-- <button class="button" @click="crop">決定</button>
+          <img v-if="croppieImage" :src="croppieImage" />-->
         </div>
 
         <!-- 自己紹介の編集 -->
@@ -67,9 +76,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" @click="save">
-          Save changes
-        </button>
+        <button class="button is-success" @click="save">Save changes</button>
         <button class="button" @click="$emit('close')">Cancel</button>
       </footer>
     </div>
@@ -78,7 +85,6 @@
 
 <script>
 import User from '@/plugins/axios/modules/user';
-// import TagInput from '~/components/TagInput';
 export default {
   components: {
     // TagInput,
@@ -100,10 +106,12 @@ export default {
   data() {
     return {
       name: this.user.name,
-      icon: null,
       tags: this.user.tags,
       bio: this.user.bio,
+      icon: null,
       error: '',
+      filename: '',
+      filetype: '',
     };
   },
   watch: {
@@ -120,35 +128,60 @@ export default {
   methods: {
     selectIcon(e) {
       e.preventDefault();
-      const files = e.target.files;
-      this.icon = files[0];
+      this.filename = e.target.files.name;
+      this.filetype = e.target.files.type;
+      this.croppie(e);
     },
-    async save() {
+    save() {
       this.error = '';
 
       if (this.error) return;
       try {
-        const res = await User.putUser(
-          this.user.id,
-          this.name,
-          undefined,
-          undefined,
-          this.bio,
-          this.icon,
-          undefined,
-          undefined,
-          this.tags.map((tag) => tag.id)
-        );
+        const options = {
+          type: 'blob',
+          format: 'png',
+          circle: true,
+        };
 
-        const user = res;
-        user.image = process.env.SERVER_URL + user.image;
-        user.tags = await User.getUserTag(this.user.id);
+        // 保存時に合わせてクロップする
+        this.$refs.croppieRef.result(options, async (output) => {
+          const file = new File([output], this.filename, {
+            type: this.filetype,
+          });
 
-        this.$emit('change-user', user);
-        this.$emit('close');
+          const res = await User.putUser(
+            this.user.id,
+            this.name,
+            undefined,
+            undefined,
+            this.bio,
+            file,
+            undefined,
+            undefined,
+            undefined
+          );
+
+          const user = res;
+
+          this.$emit('change-user', user);
+          this.$emit('close');
+        });
       } catch (error) {
         this.error = error;
       }
+    },
+    croppie(e) {
+      const files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.$refs.croppieRef.bind({
+          url: e.target.result,
+        });
+      };
+
+      reader.readAsDataURL(files[0]);
     },
   },
 };

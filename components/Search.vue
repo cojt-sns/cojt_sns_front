@@ -1,11 +1,313 @@
 <template>
-  <div class="column is-fullheight section has-background-info">
-    Search Content
+  <div class="column is-fullheight">
+    <div class="top">
+      <div class="level search-type">
+        <div class="level-item">
+          <h1
+            v-if="$route.query.type != 'graph'"
+            class="title is-5 has-text-primary"
+          >
+            List
+          </h1>
+          <a v-else class="title is-5 has-text-grey" @click="moveToList()">
+            List
+          </a>
+        </div>
+        <div class="level-item">
+          <h1
+            v-if="$route.query.type == 'graph'"
+            class="title is-5 has-text-primary"
+          >
+            Graph
+          </h1>
+          <nuxt-link
+            v-else
+            to="/search?type=graph"
+            class="title is-5 has-text-grey"
+          >
+            Graph
+          </nuxt-link>
+        </div>
+      </div>
+      <div v-if="$route.query.type != 'graph'" class="field has-addons">
+        <div class="control is-expanded">
+          <input
+            v-model="keyword"
+            type="text"
+            class="input"
+            @keydown.enter="searchGroups()"
+          />
+        </div>
+        <div class="control">
+          <!-- eslint-disable no-irregular-whitespace -->
+          <nuxt-link
+            class="button"
+            :to="
+              `/search?type=list&keywords=${keyword.split(/[ 　]/).join(' ')}`
+            "
+          >
+            Search
+          </nuxt-link>
+        </div>
+      </div>
+    </div>
+    <div v-if="$route.query.type != 'graph'" class="list-result">
+      <GroupPanelList :groups="search" />
+    </div>
+    <div v-show="$route.query.type == 'graph'" ref="graph" class="graph"></div>
   </div>
 </template>
 
 <script>
-export default {};
+import GroupPanelList from '@/components/GroupPanelList';
+export default {
+  components: {
+    GroupPanelList,
+  },
+  props: {
+    search: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      keyword: this.$route.query.keywords ?? '',
+      graph: null,
+    };
+  },
+  watch: {
+    search(newValue) {
+      if (this.$route.query.type === 'graph')
+        this.$refs.graph.appendChild(this.chart());
+    },
+  },
+  mounted() {
+    if (this.$route.query.type === 'graph')
+      this.$refs.graph.appendChild(this.chart());
+  },
+  methods: {
+    searchGroups() {
+      this.$router.push(
+        // eslint-disable-next-line no-irregular-whitespace
+        `/search?type=list&keywords=${this.keyword.split(/[ 　]/).join(' ')}`
+      );
+    },
+    moveToList() {
+      this.$refs.graph.removeChild(this.$refs.graph.firstChild);
+      this.$router.push('/search?type=list');
+    },
+    chart() {
+      const d3 = require('d3');
+      const pack = (data, w, h) =>
+        d3
+          .pack()
+          .size([w, h])
+          .padding(50)(
+          d3
+            .hierarchy(data)
+            .sum((d) => d.member + 1)
+            .sort((a, b) => b.member - a.member)
+        );
+      const data = {
+        id: -1,
+        children: this.search,
+      };
+
+      const graph = this.$refs.graph;
+      let root = pack(data, graph.offsetWidth, graph.offsetHeight);
+
+      console.log(root);
+      const color = d3
+        .scaleLinear()
+        .domain([0, root.height])
+        .range(['hsl(20,100%,99.9%)', 'hsl(20,100%,50%)'])
+        .interpolate(d3.interpolateHcl);
+
+      let focus = root;
+      let view;
+
+      const svg = d3
+        .create('svg')
+        .attr(
+          'viewBox',
+          `-${graph.offsetWidth / 2} -${graph.offsetHeight / 2} ${
+            graph.offsetWidth
+          } ${graph.offsetHeight}`
+        )
+        .style('background', color(0))
+        .style('cursor', 'pointer')
+        .style('margin', '0')
+        .on('click', () => zoom(root));
+
+      const node = svg
+        .append('g')
+        .attr('id', 'circle')
+        .selectAll('circle')
+        .data(root.descendants().slice(1), (d) => d.data.id)
+        .join('circle')
+        .attr('r', (d) => d.r)
+        .attr('fill', (d) => (!d.children ? '#fd5600' : color(d.depth)))
+        .attr('pointer-events', (d) => (!d.children ? 'none' : null))
+        .on('mouseover', function() {
+          d3.select(this).attr('stroke', '#000');
+        })
+        .on('mouseout', function() {
+          d3.select(this).attr('stroke', null);
+        })
+        .on(
+          'click',
+          (d) => focus !== d && (zoom(d), d3.event.stopPropagation())
+        );
+
+      const label = svg
+        .append('g')
+        .style('font', '30px sans-serif')
+        .attr('pointer-events', 'none')
+        .attr('text-anchor', 'middle')
+        .attr('id', 'label')
+        .selectAll('text')
+        .data(root.descendants(), (d) => d.data.id)
+        .join('text')
+        .style('fill-opacity', (d) =>
+          d.parent?.data.id === root.data.id ? 1 : 0
+        )
+        .style('display', (d) =>
+          d.parent?.data.id === root.data.id ? 'inline' : 'none'
+        )
+        .attr('fill', '#ffffff')
+        .text((d) => d.data.name)
+        .attr('pointer-events', (d) => 'auto')
+        .on('mouseover', function() {
+          d3.select(this).text((d) => `Go to ${d.data.name}!!`);
+        })
+        .on('mouseout', function() {
+          d3.select(this).text((d) => d.data.name);
+        })
+        .on('click', (d) => this.$router.push(`/groups/${d.data.id}`));
+
+      d3.select(window).on('resize', () => {
+        console.log(root);
+        svg.attr(
+          'viewBox',
+          `-${graph.offsetWidth / 2} -${graph.offsetHeight / 2} ${
+            graph.offsetWidth
+          } ${graph.offsetHeight}`
+        );
+
+        root = pack(data, graph.offsetWidth, graph.offsetHeight);
+        node
+          .data(root.descendants().slice(1), (d) => d.data.id)
+          .join((update) =>
+            update
+              .attr('transform', (d) => `translate(${d.x},${d.y})`)
+              .attr('r', (d) => d.r)
+              .attr('fill', (d) => (!d.children ? '#fd5600' : color(d.depth)))
+              .attr('pointer-events', (d) => (!d.children ? 'none' : null))
+              .on('mouseover', function() {
+                d3.select(this).attr('stroke', '#000');
+              })
+              .on('mouseout', function() {
+                d3.select(this).attr('stroke', null);
+              })
+              .on(
+                'click',
+                (d) => focus !== d && (zoom(d), d3.event.stopPropagation())
+              )
+          );
+
+        label
+          .data(root.descendants(), (d) => d.data.id)
+          .join((update) =>
+            update
+              .attr('transform', (d) => `translate(${d.x},${d.y})`)
+              .style('fill-opacity', (d) =>
+                d.parent?.data.id === root.data.id ? 1 : 0
+              )
+              .style('display', (d) =>
+                d.parent?.data.id === root.data.id ? 'inline' : 'none'
+              )
+              .attr('fill', '#ffffff')
+          );
+
+        focus = root;
+        zoomTo([root.x, root.y, root.r * 2]);
+      });
+
+      zoomTo([root.x, root.y, root.r * 2]);
+
+      function zoomTo(v) {
+        const w = graph.offsetWidth;
+        const k = w / v[2];
+
+        view = v;
+
+        label.attr(
+          'transform',
+          (d) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
+        );
+        node.attr(
+          'transform',
+          (d) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
+        );
+        node.attr('r', (d) => d.r * k);
+      }
+
+      function zoom(d) {
+        focus = d;
+
+        const transition = svg
+          .transition()
+          .duration(d3.event.altKey ? 7500 : 750)
+          .tween('zoom', (d) => {
+            const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+            return (t) => zoomTo(i(t));
+          });
+
+        label
+          .filter(function(d) {
+            return d.parent === focus || this.style.display === 'inline';
+          })
+          .transition(transition)
+          .style('fill-opacity', (d) => (d.parent === focus ? 1 : 0))
+          .on('start', function(d) {
+            if (d.parent === focus) this.style.display = 'inline';
+          })
+          .on('end', function(d) {
+            if (d.parent !== focus) this.style.display = 'none';
+          });
+      }
+
+      return svg.node();
+    },
+  },
+};
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.column {
+  display: flex;
+  flex-flow: column;
+  padding: 0;
+  .top {
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+    .search-type {
+      width: 60%;
+      margin: 10px auto;
+    }
+    .field {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+  .list-result {
+    flex: 1;
+    overflow-y: scroll;
+  }
+  .graph {
+    flex: 1;
+    overflow: hidden;
+  }
+}
+</style>

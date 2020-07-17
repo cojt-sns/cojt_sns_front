@@ -28,6 +28,7 @@
         <nuxt-link v-if="post.user.user_id" :to="`/users/${post.user.user_id}`">
           <strong>{{ post.user.name }}</strong>
         </nuxt-link>
+        <strong v-else>{{ post.user.name }}</strong>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
         <div v-if="!edit" class="post-content">{{ post.content }}</div>

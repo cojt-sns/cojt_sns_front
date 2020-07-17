@@ -1,21 +1,41 @@
 ﻿<template>
   <div
-    class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile has-background-black"
+    class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile"
   >
-    Notification
     <div
-      v-for="content in contents"
-      :key="content.id"
-      class="card notification"
+      class="header has-background-primary has-text-white has-text-centered title is-5"
     >
-      <header class="card-header">
-        <p class="card-header-title">
-          {{ content.title }}
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content">
-          {{ content.description }}
+      Notification
+    </div>
+    <div class="cards">
+      <div
+        v-for="content in contents"
+        :key="content.id"
+        class="card notification"
+      >
+        <div class="card-content">
+          <nav class="level">
+            <div class="level-left">
+              <figure v-if="content.image" class="image">
+                <img :src="serverUrl + content.image" />
+              </figure>
+              <div v-else class="level-item title is-5 has-text-black">
+                <font-awesome-icon :icon="['fas', 'users']" size="lg" />
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <button
+                  class="delete"
+                  aria-label="close"
+                  @click="CloseCard(content.id)"
+                ></button>
+              </div>
+            </div>
+          </nav>
+          <div class="content">
+            {{ content.description }}
+          </div>
         </div>
       </div>
     </div>
@@ -27,6 +47,7 @@ export default {
   components: {},
   data() {
     return {
+      serverUrl: process.env.SERVER_URL,
       contents: [],
       dropDown: false,
       WhichModal: 0,
@@ -46,7 +67,11 @@ export default {
       token: this.$auth.getToken('local').replace('Bearer ', ''),
     });
   },
-  methods: {},
+  methods: {
+    CloseCard(id) {
+      this.contents = this.contents.filter((content) => content.id !== id);
+    },
+  },
   channels: {
     NotificationChannel: {
       disconnected(data) {
@@ -60,7 +85,7 @@ export default {
         data.id =
           this.contents.length <= 0
             ? 1
-            : this.contents[this.contents.length - 1] + 1;
+            : this.contents[this.contents.length - 1].id + 1;
         this.contents.push(data);
       },
     },
@@ -71,21 +96,31 @@ export default {
 <style lang="scss" scoped>
 .column {
   padding: 0;
+  width: 300px !important;
   display: flex;
   flex-direction: column;
-  .level {
-    margin: 10px;
+  border-left: 1px solid #dbdbdb;
+
+  .header {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    padding-left: 1rem;
   }
-  .posts {
-    overflow-y: scroll;
-    padding: 0;
-    article {
-      margin: 10px;
+
+  .cards {
+    .card-content {
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      padding-bottom: 1.3rem;
+      background-color: #f5f5f5;
+
+      .level-left img {
+        width: 50px;
+        border-radius: 50%;
+      }
     }
-  }
-  .footer {
-    padding: 5px;
-    margin-top: auto;
   }
 
   .notification {
