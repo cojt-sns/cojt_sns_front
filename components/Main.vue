@@ -8,7 +8,7 @@
       :groups="groups"
       :group-user="groupUser"
     />
-    <User v-if="$route.name.includes('users')" :user="user" />
+    <User v-if="$route.name.includes('users')" :user="user" :groups="groups" />
     <Search v-if="$route.name == 'search'" :search="search" />
     <slot />
     <Notification />

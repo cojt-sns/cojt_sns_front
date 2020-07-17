@@ -11,6 +11,11 @@
       :open="exit"
       @close="SwitchGroupExitModal"
     />
+    <GroupJoinModal
+      :open="join"
+      :group="group_"
+      @close="SwitchGroupJoinModal"
+    />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
@@ -101,7 +106,7 @@
     <div v-else class="has-background-grey-lighter footer join">
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-primary" @click="create()">
+          <button class="button is-primary" @click="SwitchGroupJoinModal()">
             グループに参加する
           </button>
         </div>
@@ -117,6 +122,7 @@
 import PostComponent from '~/components/Post';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
+import GroupJoinModal from '~/components/GroupJoinModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
@@ -124,6 +130,7 @@ export default {
     Post: PostComponent,
     GroupExitModal,
     GroupEditModal,
+    GroupJoinModal,
   },
   props: {
     posts: {
@@ -151,6 +158,7 @@ export default {
       ),
       row: 1,
       exit: false,
+      join: false,
     };
   },
   mounted() {
@@ -194,6 +202,9 @@ export default {
     },
     SwitchGroupExitModal() {
       this.exit = !this.exit;
+    },
+    SwitchGroupJoinModal() {
+      this.join = !this.join;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
