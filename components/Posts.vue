@@ -15,6 +15,11 @@
       :open="parentSelect"
       @close="SwitchParentSelectModal"
     />
+    <GroupJoinModal
+      :open="join"
+      :group="group_"
+      @close="SwitchGroupJoinModal"
+    />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
@@ -80,7 +85,7 @@
               class="textarea"
               placeholder="Input Text"
               :rows="row"
-              @keydown="adjustHeight"
+              @keydown="keyDowntextarea"
             ></textarea>
           </p>
         </div>
@@ -108,7 +113,7 @@
     <div v-else class="has-background-grey-lighter footer join">
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-primary" @click="create()">
+          <button class="button is-primary" @click="SwitchGroupJoinModal()">
             グループに参加する
           </button>
         </div>
@@ -125,6 +130,7 @@ import PostComponent from '~/components/Post';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import ParentSelectModal from '~/components/ParentSelectModal';
+import GroupJoinModal from '~/components/GroupJoinModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
@@ -133,6 +139,7 @@ export default {
     GroupExitModal,
     GroupEditModal,
     ParentSelectModal,
+    GroupJoinModal,
   },
   props: {
     posts: {
@@ -161,6 +168,7 @@ export default {
       row: 1,
       exit: false,
       parentSelect: false,
+      join: false,
     };
   },
   mounted() {
@@ -208,6 +216,9 @@ export default {
     SwitchParentSelectModal() {
       this.parentSelect = !this.parentSelect;
     },
+    SwitchGroupJoinModal() {
+      this.join = !this.join;
+    },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
       if (textarea == null) return;
@@ -225,6 +236,12 @@ export default {
         if (!posts) return;
         posts.scrollTop = posts.scrollHeight;
       });
+    },
+    keyDowntextarea(event) {
+      this.adjustHeight();
+      if (event.ctrlKey && event.keyCode === 13) {
+        this.send();
+      }
     },
   },
   channels: {

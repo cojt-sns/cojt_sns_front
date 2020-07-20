@@ -1,54 +1,60 @@
 <template>
-  <div class="column is-fullheight section has-background-info">
-    <UserEditModal v-model="user_" :edit="edit" @close="closeModal()" />
+  <div class="column is-fullheight has-background-white	">
+    <UserEditModal v-model="user_" :edit="edit" @close="closeEdit()" />
+    <LogoutModal :open="open" @close="closeLogout()" />
     <!-- show profile -->
-    <div class="columns">
-      <div class="column">
-        <div class="box">
-          <div class="level">
-            <div class="level-left is-2">
-              <div class="image is-128x128 has-text-centered">
-                <img :src="serverUrl + user_.image" alt srcset />
-              </div>
-            </div>
-            <div class="level-item">
-              <div class="title has-text-centered username">
-                {{ user_.name }}
-              </div>
-            </div>
-            <div class="level-right is-2 is-offser-10">
-              <button class="button is-medium is-rounded" @click="openModal()">
-                編集
-              </button>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <!-- eslint-disable-next-line -->
-              <div class="has-text-left is-size-4">
-                <div class="columns">
-                  <div class="column is-half is-offset-one-quarter">
-                    <div class="post-content">{{ user_.bio }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <ul class="has-text-centered">
-            <li v-for="tag in user_.tags" :key="tag.id">#{{ tag.fullname }}</li>
-          </ul>
-          <!-- userのtwitter情報 -->
+    <div class="level">
+      <div class="level-item kkk has-text-centered">
+        <div class="image img_size has-text-centered heading">
+          <img :src="serverUrl + user_.image" alt srcset />
+        </div>
+        <div class="title has-text-centered is-bold username">
+          {{ user_.name }}
         </div>
       </div>
+      <div class="level-right">
+        <div class="level-item">
+          <button
+            class="button is-medium is-primary is-outlined "
+            @click="openEdit()"
+          >
+            編集
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="level">
+      <div class="level-item"></div>
+      <div class="level-right">
+        <div class="level-item">
+          <button
+            class="button is-medium is-primary is-outlined "
+            @click="openLogout()"
+          >
+            ログアウト
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="subtitle has-text-centered is-size-4">
+      参加グループ
+    </div>
+    <hr />
+    <div class="groups">
+      <GroupPanelList :groups="groups" />
     </div>
   </div>
 </template>
 
 <script>
+import GroupPanelList from '@/components/GroupPanelList';
 import UserEditModal from '~/components/UserEditModal';
+import LogoutModal from '~/components/LogoutModal';
 export default {
   components: {
     UserEditModal,
+    GroupPanelList,
+    LogoutModal,
   },
   props: {
     user: {
@@ -56,39 +62,67 @@ export default {
       required: false,
       default: null,
     },
+    groups: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
       edit: false,
+      open: false,
       user_: this.user,
       serverUrl: process.env.SERVER_URL,
     };
   },
   methods: {
-    openModal() {
+    openEdit() {
       this.edit = true;
     },
-    closeModal() {
+    closeEdit() {
       this.edit = false;
+    },
+    openLogout() {
+      this.open = true;
+    },
+    closeLogout() {
+      this.open = false;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-img {
-  border-radius: 50%;
-}
-.columns {
-  align-items: center;
-}
-.post-content {
-  white-space: pre-line;
-}
-.username {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
+.column {
+  display: flex;
+  flex-direction: column;
+
+  img {
+    border-radius: 50%;
+  }
+  hr {
+    margin: 12px;
+  }
+  .img_size {
+    height: 200px;
+    width: 200px;
+  }
+  .level-right {
+    align-self: flex-start;
+  }
+  .kkk {
+    display: flex;
+    margin-left: 82px;
+    flex-direction: column;
+    justify-self: center;
+  }
+  .title {
+    margin-top: 0.75rem;
+    font-size: 3rem;
+  }
+
+  .groups {
+    overflow-y: scroll;
+  }
 }
 </style>
