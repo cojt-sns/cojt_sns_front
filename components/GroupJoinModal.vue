@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       name: this.$auth.user.name,
-      image: process.env.SERVER_URL + '/default.png',
+      image: process.env.SERVER_URL + this.$auth.user.image,
       imageEdit: false,
       error: '',
       serverUrl: process.env.SERVER_URL,
@@ -108,7 +108,7 @@ export default {
     open(newValue) {
       if (newValue) {
         this.name = this.$auth.user.name;
-        this.image = this.serverUrl + '/default.png';
+        this.image = this.serverUrl + this.$auth.user.image;
         this.error = '';
         this.imageEdit = false;
         this.myIcon = false;
