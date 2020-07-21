@@ -102,7 +102,7 @@ export default {
 }
 .wr {
   max-height: 60vh;
-  overflow: scroll;
+  overflow: auto;
   .menu-list {
     .level {
       border: 1px solid #dddddd;

@@ -79,7 +79,6 @@ export default {
   methods: {
     async UpdateParent(id) {
       const res = await Group.putGroup(this.target_group_id, null, id);
-      console.log(res);
       window.location.href = '/groups/' + this.target_group_id;
     },
 
