@@ -2,7 +2,6 @@
   <div class="column is-fullheight">
     <GroupEditModal
       v-model="group_"
-      :whichmodal="WhichModal"
       :open="edit"
       @close="SwitchGroupEditModal"
     />
@@ -10,6 +9,11 @@
       :group="group_"
       :open="exit"
       @close="SwitchGroupExitModal"
+    />
+    <ParentSelectModal
+      :group_id="group_.id"
+      :open="parentSelect"
+      @close="SwitchParentSelectModal"
     />
     <GroupJoinModal
       :open="join"
@@ -39,6 +43,9 @@
             <div class="dropdown-content">
               <a href="#" class="dropdown-item" @click="SwitchGroupEditModal"
                 >編集</a
+              >
+              <a href="#" class="dropdown-item" @click="SwitchParentSelectModal"
+                >親グループを選択</a
               >
               <a class="dropdown-item">他の人を招待する</a>
               <a href="#" class="dropdown-item">Twitterで共有</a>
@@ -122,6 +129,7 @@
 import PostComponent from '~/components/Post';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
+import ParentSelectModal from '~/components/ParentSelectModal';
 import GroupJoinModal from '~/components/GroupJoinModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
@@ -130,6 +138,7 @@ export default {
     Post: PostComponent,
     GroupExitModal,
     GroupEditModal,
+    ParentSelectModal,
     GroupJoinModal,
   },
   props: {
@@ -158,6 +167,7 @@ export default {
       ),
       row: 1,
       exit: false,
+      parentSelect: false,
       join: false,
     };
   },
@@ -202,6 +212,9 @@ export default {
     },
     SwitchGroupExitModal() {
       this.exit = !this.exit;
+    },
+    SwitchParentSelectModal() {
+      this.parentSelect = !this.parentSelect;
     },
     SwitchGroupJoinModal() {
       this.join = !this.join;
