@@ -26,7 +26,7 @@
           v-for="group in groups"
           :key="group.id"
           :group="group"
-          :target_group_id="group_id"
+          :target-group-id="group_id"
           :available="true"
         />
       </aside>

@@ -11,7 +11,7 @@ export default {
 
     if (name) form.append('name', name);
     if (image) form.append('image', image);
-    return axios.$post(`groups/${id}/join`, form, {
+    return axios.$put(`group_users/${id}`, form, {
       headers: {
         'content-type': 'multipart/form-data',
       },

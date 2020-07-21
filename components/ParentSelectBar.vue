@@ -58,7 +58,7 @@ export default {
       type: Object,
       required: true,
     },
-    target_group_id: {
+    targetGroupid: {
       type: Number,
       required: true,
     },
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     async UpdateParent(id) {
-      const res = await Group.putGroup(this.target_group_id, null, id);
+      await Group.putGroup(this.target_group_id, null, id);
       window.location.href = '/groups/' + this.target_group_id;
     },
 

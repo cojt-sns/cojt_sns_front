@@ -20,6 +20,12 @@
       :group="group_"
       @close="SwitchGroupJoinModal"
     />
+    <GroupUserModal
+      :open="userModal"
+      :group-user="groupUser"
+      :group="group_"
+      @close="SwitchGroupUserModal"
+    />
     <div class="header has-background-primary">
       <nav class="level">
         <div class="level-left">
@@ -41,17 +47,19 @@
           </div>
           <div id="dropdown-menu" class="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a href="#" class="dropdown-item" @click="SwitchGroupEditModal"
-                >編集</a
+              <a class="dropdown-item" @click="SwitchGroupUserModal"
+                >{{ groupUser.name }}を編集</a
               >
-              <a href="#" class="dropdown-item" @click="SwitchParentSelectModal"
+              <a class="dropdown-item" @click="SwitchGroupEditModal"
+                >グループを編集</a
+              >
+              <a class="dropdown-item" @click="SwitchParentSelectModal"
                 >親グループを選択</a
               >
               <a class="dropdown-item">他の人を招待する</a>
-              <a href="#" class="dropdown-item">Twitterで共有</a>
+              <a class="dropdown-item">Twitterで共有</a>
               <hr class="dropdown-divider" />
               <a
-                href="#"
                 class="dropdown-item has-text-danger"
                 @click="SwitchGroupExitModal"
                 >グループから退出する</a
@@ -131,6 +139,7 @@ import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
 import ParentSelectModal from '~/components/ParentSelectModal';
 import GroupJoinModal from '~/components/GroupJoinModal';
+import GroupUserModal from '~/components/GroupUserModal';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
@@ -140,6 +149,7 @@ export default {
     GroupEditModal,
     ParentSelectModal,
     GroupJoinModal,
+    GroupUserModal,
   },
   props: {
     posts: {
@@ -169,6 +179,7 @@ export default {
       exit: false,
       parentSelect: false,
       join: false,
+      userModal: false,
     };
   },
   mounted() {
@@ -218,6 +229,9 @@ export default {
     },
     SwitchGroupJoinModal() {
       this.join = !this.join;
+    },
+    SwitchGroupUserModal() {
+      this.userModal = !this.userModal;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
