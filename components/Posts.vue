@@ -47,7 +47,10 @@
           </div>
           <div id="dropdown-menu" class="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a class="dropdown-item" @click="SwitchGroupUserModal"
+              <a
+                v-if="groupUser"
+                class="dropdown-item"
+                @click="SwitchGroupUserModal"
                 >{{ groupUser.name }}を編集</a
               >
               <a class="dropdown-item" @click="SwitchGroupEditModal"

@@ -62,15 +62,15 @@ export default {
       query: '',
     };
   },
-  mounted() {
-    // this.getGroups();
-  },
   watch: {
     open(newValue) {
       if (newValue && this.groups.length <= 0) {
         this.getGroups();
       }
     },
+  },
+  mounted() {
+    // this.getGroups();
   },
   methods: {
     async searchGroups() {

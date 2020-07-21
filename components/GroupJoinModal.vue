@@ -5,10 +5,10 @@
     @close="$emit('close')"
   >
     <input
+      ref="icon"
       class="file-input"
       type="file"
       name="resume"
-      ref="icon"
       @change="selectIcon"
     />
     <div v-if="error" class="notification is-danger is-light">
