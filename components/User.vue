@@ -16,7 +16,7 @@
             ref="icon"
             @change="selectIcon"
           />
-          <div class="image-edit has-text-centered heading">
+          <div class="image has-text-centered heading">
             <img v-show="!imageEdit" :src="image" alt srcset />
             <vue-croppie
               v-show="imageEdit"
@@ -31,8 +31,27 @@
               :class="{ 'has-text-white': imageEdit }"
               @click="!imageEdit ? $refs.icon.click() : crop()"
             >
-              <font-awesome-icon :icon="['fas', 'edit']" size="lg" />
+              <font-awesome-icon
+                v-if="!imageEdit"
+                :icon="['fas', 'edit']"
+                size="lg"
+              />
+              <font-awesome-icon v-else :icon="['fas', 'check']" size="lg" />
             </span>
+            <span
+              v-show="imageEdit"
+              class="icon back has-text-white"
+              @click="imageEdit = false"
+            >
+              <font-awesome-icon :icon="['fas', 'undo']" size="lg" />
+            </span>
+            <!-- <span
+              class="icon edit"
+              :class="{ 'has-text-white': imageEdit }"
+              @click="!imageEdit ? $refs.icon.click() : crop()"
+            >
+              <font-awesome-icon :icon="['fas', 'edit']" size="lg" />
+            </span> -->
           </div>
           <div class="title has-text-centered is-bold username">
             <div class="control">
@@ -147,7 +166,7 @@ export default {
       try {
         const options = {
           type: 'blob',
-          format: 'png',
+          format: this.filetype.split('/')[1],
           circle: true,
         };
 
@@ -170,7 +189,9 @@ export default {
           );
 
           this.user_ = res;
-          this.image = res.image;
+          this.image = process.env.SERVER_URL + res.image;
+          console.log(this.user_);
+          this.switchEditMode();
         });
       } catch (error) {
         this.error = error;
@@ -178,7 +199,7 @@ export default {
     },
     crop() {
       const options = {
-        format: 'png',
+        format: this.filetype.split('/')[1],
         circle: true,
       };
       this.$refs.croppieRef.result(options, (output) => {
@@ -254,37 +275,6 @@ export default {
     overflow-y: scroll;
   }
 
-  .image-edit {
-    position: relative;
-    margin: 0;
-    img {
-      border-radius: 50%;
-    }
-
-    & > *:not(img) {
-      position: absolute;
-    }
-
-    .icon {
-      z-index: 1000;
-      &.edit {
-        font-size: 4em;
-        right: 0;
-        bottom: 0;
-      }
-      &.back {
-        left: 0px;
-        bottom: 0px;
-      }
-      &:hover {
-        color: #818181;
-      }
-      &.has-text-white:hover {
-        color: #d8d8d8 !important;
-      }
-    }
-  }
-
   .edit-ctlr button {
     margin: 1rem 3rem;
   }
@@ -306,5 +296,50 @@ export default {
   .translucent {
     opacity: 0.5;
   }
+}
+
+.image {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  img {
+    border-radius: 50%;
+  }
+
+  & > *:not(img):not(.croppie-container) {
+    position: absolute;
+  }
+
+  .icon {
+    z-index: 1000;
+    &.edit {
+      /* font-size: 4em; */
+      right: 0;
+      bottom: 0;
+    }
+    &.back {
+      left: 0px;
+      bottom: 0px;
+    }
+    &:hover {
+      color: #818181;
+    }
+    &.has-text-white:hover {
+      color: #d8d8d8 !important;
+    }
+  }
+}
+
+.image-edit-enter-active,
+.image-edit-leave-active {
+  transition: opacity 0.5s ease;
+}
+.image-edit-enter,
+.image-edit-leave-to {
+  opacity: 0;
+}
+
+.file-input {
+  display: none;
 }
 </style>
