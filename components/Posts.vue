@@ -21,6 +21,7 @@
       @close="SwitchGroupJoinModal"
     />
     <GroupUserModal
+      v-if="groupUser"
       :open="userModal"
       :group-user="groupUser"
       :group="group_"
