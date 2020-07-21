@@ -21,7 +21,7 @@
           <div class="image is-128x128 has-text-centered">
             <img v-show="!imageEdit" :src="image" alt srcset />
             <vue-croppie
-              v-show="imageEdit"
+              v-if="imageEdit"
               ref="croppieRef"
               :enable-orientation="true"
               :enable-resize="false"
@@ -157,8 +157,8 @@ export default {
     },
     selectIcon(e) {
       e.preventDefault();
-      this.filename = e.target.files[0].name;
-      this.filetype = e.target.files[0].type;
+      this.filename = e.target.files[0]?.name;
+      this.filetype = e.target.files[0]?.type;
       this.croppie(e);
     },
     croppie(e) {

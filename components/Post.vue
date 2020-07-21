@@ -18,6 +18,9 @@
         <strong v-else>{{ post.user.name }}</strong>
         <small>{{ new Date(post.created_at) }}</small>
         <br />
+        <div v-if="post.image" class="image post-image">
+          <img :src="serverUrl + post.image" />
+        </div>
         <div v-if="!edit" class="post-content">{{ post.content }}</div>
         <div v-if="edit">
           <div class="field">
@@ -28,7 +31,7 @@
                 class="textarea"
                 placeholder="Input Text"
                 :rows="row"
-                @keydown="adjustHeight"
+                @keydown="adjustHeight($refs.adjustTextarea)"
               ></textarea>
             </div>
           </div>
@@ -46,7 +49,14 @@
       </div>
       <nav class="level is-mobile">
         <div class="level-left">
-          <div class="level-item">
+          <div
+            v-if="post.thread"
+            class="level-item re"
+            @click="thread = !thread"
+          >
+            <a v-if="post.thread.length > 0">
+              {{ post.thread.length }}件の返信
+            </a>
             <span class="icon is-small">
               <font-awesome-icon :icon="['fas', 'comment']" />
             </span>
@@ -88,19 +98,49 @@
           </div>
         </div>
       </nav>
+      <transition
+        name="thread"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @before-leave="beforeLeave"
+        @leave="leave"
+      >
+        <div v-if="thread" class="thread">
+          <Post
+            v-for="child in post.thread"
+            :key="child.id"
+            :post="child"
+            :group="group"
+            :group-user="groupUser"
+            @deletePost="(id) => $emit('deletePost', id)"
+          />
+          <CreatePost :group-user="groupUser" :thread="post" />
+        </div>
+      </transition>
     </div>
   </article>
 </template>
 
 <script>
+import CreatePost from '~/components/CreatePost';
+import PostComponent from '~/components/Post';
 import Post from '@/plugins/axios/modules/post';
 export default {
+  name: 'Post',
+  components: {
+    Post: PostComponent,
+    CreatePost,
+  },
   props: {
     post: {
       type: Object,
       required: true,
     },
     group: {
+      type: Object,
+      required: true,
+    },
+    groupUser: {
       type: Object,
       required: true,
     },
@@ -111,16 +151,28 @@ export default {
       content: this.post.content,
       dropDown: false,
       edit: false,
-      row: this.adjustHeight(),
+      row: this.adjustHeight(this.$refs?.adjustTextarea),
       groupUser_: this.post.user,
+      thread: false,
+      threadRow: this.adjustHeight(this.$refs?.adjustTextarea),
+      image: null,
+      file: null,
     };
   },
   watch: {
     row() {
-      this.adjustHeight();
+      this.adjustHeight(this.$refs?.adjustTextarea);
     },
   },
   methods: {
+    async send() {
+      await Post.postGroupPost(this.getGroupId(), this.content, this.file);
+      this.content = '';
+      this.threadRow = 1;
+      this.adjustHeight();
+      this.file = null;
+      this.image = null;
+    },
     editPost() {
       this.edit = true;
       this.dropDown = false;
@@ -137,8 +189,7 @@ export default {
     async updatePost(id, content) {
       await Post.putPost(id, content);
     },
-    adjustHeight() {
-      const textarea = this.$refs?.adjustTextarea;
+    adjustHeight(textarea) {
       if (textarea == null) return;
 
       const resetHeight = new Promise(function(resolve) {
@@ -147,6 +198,24 @@ export default {
       resetHeight.then(function() {
         textarea.style.height = textarea.scrollHeight + 'px';
       });
+    },
+    keyDowntextarea(event) {
+      this.adjustHeight(this.$refs?.threadTextArea);
+      if (event.ctrlKey && event.keyCode === 13) {
+        this.send();
+      }
+    },
+    beforeEnter(el) {
+      el.style.height = '0';
+    },
+    enter(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    beforeLeave(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    leave(el) {
+      el.style.height = '0';
     },
   },
 };
@@ -159,7 +228,43 @@ export default {
 .post-content {
   white-space: pre-line;
 }
+.post-image {
+  text-align: start;
+  margin: 10px;
+  img {
+    background-color: #d8d8d8;
+    max-height: 50vh;
+    width: auto;
+    border-radius: 10px;
+  }
+}
 textarea {
   overflow: hidden;
+}
+.re {
+  a {
+    margin-right: 0.5rem;
+  }
+}
+
+.level {
+  transition: margin-bottom 0.3s;
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.thread {
+  overflow: hidden;
+}
+
+.thread-enter-active,
+.thread-leave-active {
+  transition: height 0.5s;
+}
+
+.thread-enter,
+.thread-leave-to {
+  height: -10px;
 }
 </style>

@@ -30,6 +30,17 @@ export default {
       } else {
         post.user = await GroupUser.getGroupUser(post.group_user_id);
       }
+      for (const child of post.thread) {
+        if (child.group_user_id == null) {
+          child.user = {
+            name: '削除されたユーザー',
+            image: '/default.png',
+            user_id: null,
+          };
+        } else {
+          child.user = await GroupUser.getGroupUser(child.group_user_id);
+        }
+      }
       posts.push(post);
     }
 

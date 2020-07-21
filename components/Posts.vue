@@ -79,49 +79,15 @@
         :key="post.id"
         :post="post"
         :group="group_"
+        :group-user="groupUser"
         @deletePost="deletePost"
       />
     </div>
-    <div v-if="groupUser" class="media has-background-grey-lighter footer">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img :src="serverUrl + groupUser.image" />
-        </p>
-      </figure>
-      <div class="media-content">
-        <div class="field">
-          <p class="control">
-            <textarea
-              ref="adjustTextarea"
-              v-model="content"
-              class="textarea"
-              placeholder="Input Text"
-              :rows="row"
-              @keydown="keyDowntextarea"
-            ></textarea>
-          </p>
-        </div>
-        <div class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="icon">
-                <font-awesome-icon :icon="['fa', 'image']" size="lg" />
-              </span>
-            </div>
-            <div class="level-item">
-              <span class="icon">
-                <font-awesome-icon :icon="['fa', 'grin']" size="lg" />
-              </span>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <button class="button is-primary" @click="send()">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <CreatePost
+      v-if="groupUser"
+      :group-user="groupUser"
+      class="has-background-grey-lighter"
+    />
     <div v-else class="has-background-grey-lighter footer join">
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
@@ -144,6 +110,7 @@ import GroupEditModal from '~/components/GroupEditModal';
 import ParentSelectModal from '~/components/ParentSelectModal';
 import GroupJoinModal from '~/components/GroupJoinModal';
 import GroupUserModal from '~/components/GroupUserModal';
+import CreatePost from '~/components/CreatePost';
 import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
@@ -154,6 +121,7 @@ export default {
     ParentSelectModal,
     GroupJoinModal,
     GroupUserModal,
+    CreatePost,
   },
   props: {
     posts: {
@@ -174,12 +142,10 @@ export default {
     return {
       edit: false,
       serverUrl: process.env.SERVER_URL,
-      content: '',
       dropDown: false,
       group_: this.groups.find(
         (group) => Number(group.id) === this.getGroupId()
       ),
-      row: 1,
       exit: false,
       parentSelect: false,
       join: false,
@@ -202,14 +168,6 @@ export default {
     });
   },
   methods: {
-    send() {
-      Post.postGroupPost(this.getGroupId(), this.content).then((res) =>
-        console.log(res)
-      );
-      this.content = '';
-      this.row = 1;
-      this.adjustHeight();
-    },
     async arrangePost(src) {
       src.user = await GroupUser.getGroupUser(src.group_user_id);
       return src;
@@ -237,29 +195,12 @@ export default {
     SwitchGroupUserModal() {
       this.userModal = !this.userModal;
     },
-    adjustHeight() {
-      const textarea = this.$refs?.adjustTextarea;
-      if (textarea == null) return;
-
-      const resetHeight = new Promise(function(resolve) {
-        resolve((textarea.style.height = 'auto'));
-      });
-      resetHeight.then(function() {
-        textarea.style.height = textarea.scrollHeight + 'px';
-      });
-    },
     scrollToEnd() {
       this.$nextTick(() => {
         const posts = this.$refs.posts;
         if (!posts) return;
         posts.scrollTop = posts.scrollHeight;
       });
-    },
-    keyDowntextarea(event) {
-      this.adjustHeight();
-      if (event.ctrlKey && event.keyCode === 13) {
-        this.send();
-      }
     },
   },
   channels: {
@@ -274,11 +215,29 @@ export default {
         const posts = this.$refs.posts;
         const isScrollEnd =
           posts.scrollHeight - (posts.clientHeight + posts.scrollTop) === 0;
-        if ('new' in data) this.posts.push(await this.arrangePost(data.new));
+        if ('new' in data) {
+          if (data.new.thread_id) {
+            const thread = this.posts.find((p) => p.id === data.new.thread_id);
+            if (!thread) return;
+            thread.thread.push(await this.arrangePost(data.new));
+          } else {
+            this.posts.push(await this.arrangePost(data.new));
+          }
+        }
         if ('update' in data) {
-          const i = this.posts.findIndex((p) => p.id === data.update.id);
-          if (i === -1) return;
-          this.posts.splice(i, 1, await this.arrangePost(data.update));
+          if (data.update.thread_id) {
+            const thread = this.posts.find(
+              (p) => p.id === data.update.thread_id
+            );
+            if (!thread) return;
+            const i = thread.thread.findIndex((p) => p.id === data.update.id);
+            if (i === -1) return;
+            thread.thread.splice(i, 1, await this.arrangePost(data.update));
+          } else {
+            const i = this.posts.findIndex((p) => p.id === data.update.id);
+            if (i === -1) return;
+            this.posts.splice(i, 1, await this.arrangePost(data.update));
+          }
         }
         if (isScrollEnd) this.scrollToEnd();
       },
@@ -304,20 +263,11 @@ export default {
       margin: 10px;
     }
   }
-  .footer {
-    padding: 5px;
+  .join {
+    padding: 10px;
     margin-top: auto;
-    textarea {
-      overflow: hidden;
-    }
-    img {
-      border-radius: 50%;
-    }
-
-    &.join {
-      padding: 30px;
-      background-color: rgba(#dbdbdb, 0.6) !important;
-    }
+    padding: 30px;
+    background-color: rgba(#dbdbdb, 0.6) !important;
   }
 }
 </style>
