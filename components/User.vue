@@ -6,9 +6,6 @@
     <div v-if="edit">
       <div class="level">
         <div class="level-item kkk has-text-centered">
-          <!-- <div class="image img_size has-text-centered heading">
-            <img :src="serverUrl + user_.image" alt srcset />
-          </div> -->
           <input
             class="file-input"
             type="file"
@@ -45,13 +42,6 @@
             >
               <font-awesome-icon :icon="['fas', 'undo']" size="lg" />
             </span>
-            <!-- <span
-              class="icon edit"
-              :class="{ 'has-text-white': imageEdit }"
-              @click="!imageEdit ? $refs.icon.click() : crop()"
-            >
-              <font-awesome-icon :icon="['fas', 'edit']" size="lg" />
-            </span> -->
           </div>
           <div class="title has-text-centered is-bold username">
             <div class="control">
@@ -112,14 +102,12 @@
       </div>
     </div>
 
-    <div :class="{ translucent: edit }">
-      <div class="subtitle has-text-centered is-size-4">
-        参加グループ
-      </div>
-      <hr />
-      <div class="groups">
-        <GroupPanelList :groups="groups" />
-      </div>
+    <div class="subtitle has-text-centered is-size-4">
+      参加グループ
+    </div>
+    <hr />
+    <div class="groups">
+      <GroupPanelList :groups="groups" />
     </div>
   </div>
 </template>
@@ -246,10 +234,53 @@ export default {
 .column {
   display: flex;
   flex-direction: column;
+  /* max-height: 100vh; */
 
-  img {
-    border-radius: 50%;
+  .image {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    img {
+      border-radius: 50%;
+    }
+
+    & > *:not(img):not(.croppie-container) {
+      position: absolute;
+    }
+
+    .icon {
+      z-index: 1000;
+      &.edit {
+        /* font-size: 4em; */
+        right: 0;
+        bottom: 0;
+      }
+      &.back {
+        left: 0px;
+        bottom: 0px;
+      }
+      &:hover {
+        color: #818181;
+      }
+      &.has-text-white:hover {
+        color: #d8d8d8 !important;
+      }
+    }
   }
+
+  .image-edit-enter-active,
+  .image-edit-leave-active {
+    transition: opacity 0.5s ease;
+  }
+  .image-edit-enter,
+  .image-edit-leave-to {
+    opacity: 0;
+  }
+
+  .file-input {
+    display: none;
+  }
+
   hr {
     margin: 12px;
   }
@@ -296,50 +327,5 @@ export default {
   .translucent {
     opacity: 0.5;
   }
-}
-
-.image {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  img {
-    border-radius: 50%;
-  }
-
-  & > *:not(img):not(.croppie-container) {
-    position: absolute;
-  }
-
-  .icon {
-    z-index: 1000;
-    &.edit {
-      /* font-size: 4em; */
-      right: 0;
-      bottom: 0;
-    }
-    &.back {
-      left: 0px;
-      bottom: 0px;
-    }
-    &:hover {
-      color: #818181;
-    }
-    &.has-text-white:hover {
-      color: #d8d8d8 !important;
-    }
-  }
-}
-
-.image-edit-enter-active,
-.image-edit-leave-active {
-  transition: opacity 0.5s ease;
-}
-.image-edit-enter,
-.image-edit-leave-to {
-  opacity: 0;
-}
-
-.file-input {
-  display: none;
 }
 </style>
