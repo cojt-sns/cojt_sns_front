@@ -4,6 +4,9 @@
     <LogoutModal :open="open" @close="closeLogout()" />
     <!-- show profile -->
     <div v-if="edit">
+      <div v-if="error" class="notification is-danger is-light">
+        {{ error }}
+      </div>
       <div class="level">
         <div class="level-item kkk has-text-centered">
           <input
@@ -14,7 +17,13 @@
             @change="selectIcon"
           />
           <div class="image has-text-centered heading">
-            <img v-show="!imageEdit" :src="image" alt srcset />
+            <img
+              v-show="!imageEdit"
+              :src="image"
+              alt
+              srcset
+              @click="!imageEdit ? $refs.icon.click() : crop()"
+            />
             <vue-croppie
               v-show="imageEdit"
               ref="croppieRef"
@@ -144,54 +153,98 @@ export default {
       imageEdit: false,
       filename: '',
       filetype: '',
+      error: '',
     };
   },
   methods: {
-    save() {
+    async save() {
       this.error = '';
 
       if (this.error) return;
       try {
-        const options = {
-          type: 'blob',
-          format: this.filetype.split('/')[1],
-          circle: true,
-        };
-
-        // 保存時に合わせてクロップする
-        this.$refs.croppieRef.result(options, async (output) => {
-          const file = new File([output], this.filename, {
-            type: this.filetype,
-          });
-
-          const res = await User.putUser(
+        if (this.imageEdit) {
+          this.error = 'アイコン画像を確定してください';
+          return;
+        }
+        let res;
+        if (this.myIcon) {
+          res = await User.putUser(
             this.user.id,
             this.username,
             undefined,
             undefined,
             this.bio,
-            file,
+            this.file,
             undefined,
             undefined,
             undefined
           );
+        } else {
+          res = await User.putUser(
+            this.user.id,
+            this.username,
+            undefined,
+            undefined,
+            this.bio,
+            undefined,
+            undefined,
+            undefined,
+            undefined
+          );
+        }
 
-          this.user_ = res;
-          this.image = process.env.SERVER_URL + res.image;
-          console.log(this.user_);
-          this.switchEditMode();
-        });
+        // const options = {
+        //   type: 'blob',
+        //   format: this.filetype.split('/')[1],
+        //   circle: true,
+        // };
+
+        // // 保存時に合わせてクロップする
+        // this.$refs.croppieRef.result(options, async (output) => {
+        //   const file = new File([output], this.filename, {
+        //     type: this.filetype,
+        //   });
+
+        //   const res = await User.putUser(
+        //     this.user.id,
+        //     this.username,
+        //     undefined,
+        //     undefined,
+        //     this.bio,
+        //     file,
+        //     undefined,
+        //     undefined,
+        //     undefined
+        //   );
+
+        // });
+        this.user_ = res;
+        this.image = process.env.SERVER_URL + res.image;
+        console.log(this.user_);
+        this.switchEditMode();
       } catch (error) {
         this.error = error;
       }
     },
     crop() {
-      const options = {
+      let options = {
         format: this.filetype.split('/')[1],
         circle: true,
       };
       this.$refs.croppieRef.result(options, (output) => {
         this.image = output;
+      });
+
+      options = {
+        type: 'blob',
+        format: this.filetype.split('/')[1],
+        circle: true,
+      };
+      this.$refs.croppieRef.result(options, (output) => {
+        this.file = new File([output], this.filename, {
+          type: this.filetype,
+        });
+        this.myIcon = true;
       });
 
       this.imageEdit = false;
