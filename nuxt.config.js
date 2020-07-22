@@ -86,7 +86,7 @@ export default {
       login: '/login',
       logout: '/',
       callback: false,
-      home: '/groups',
+      home: '/search',
     },
     strategies: {
       local: {

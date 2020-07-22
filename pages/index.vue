@@ -78,7 +78,7 @@
                 </div>
                 <div class="field">
                   <p class="control has-text-centered">
-                    <nuxt-link to="sinup">
+                    <nuxt-link to="signup">
                       アカウントを作成
                     </nuxt-link>
                   </p>
