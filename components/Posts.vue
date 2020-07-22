@@ -54,11 +54,23 @@
                 @click="SwitchGroupUserModal"
                 >{{ groupUser.name }}を編集</a
               >
-              <a class="dropdown-item" @click="SwitchGroupEditModal"
+              <a
+                v-if="groupUser && groupUser.admin"
+                class="dropdown-item"
+                @click="SwitchGroupEditModal"
                 >グループを編集</a
               >
-              <a class="dropdown-item" @click="SwitchParentSelectModal"
+              <a
+                v-if="groupUser && groupUser.admin"
+                class="dropdown-item"
+                @click="SwitchParentSelectModal"
                 >親グループを選択</a
+              >
+              <a
+                v-if="groupUser && groupUser.admin"
+                class="dropdown-item"
+                @click="unauthorization"
+                >管理者権限を破棄する</a
               >
               <a class="dropdown-item">他の人を招待する</a>
               <a class="dropdown-item">Twitterで共有</a>
@@ -201,6 +213,14 @@ export default {
         if (!posts) return;
         posts.scrollTop = posts.scrollHeight;
       });
+    },
+    async unauthorization() {
+      try {
+        await GroupUser.unauthorization(this.groupUser.id);
+        location.href = `/groups/${this.group_.id}`;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   channels: {
