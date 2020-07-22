@@ -193,31 +193,6 @@ export default {
           );
         }
 
-        // const options = {
-        //   type: 'blob',
-        //   format: this.filetype.split('/')[1],
-        //   circle: true,
-        // };
-
-        // // 保存時に合わせてクロップする
-        // this.$refs.croppieRef.result(options, async (output) => {
-        //   const file = new File([output], this.filename, {
-        //     type: this.filetype,
-        //   });
-
-        //   const res = await User.putUser(
-        //     this.user.id,
-        //     this.username,
-        //     undefined,
-        //     undefined,
-        //     this.bio,
-        //     file,
-        //     undefined,
-        //     undefined,
-        //     undefined
-        //   );
-
-        // });
         this.user_ = res;
         this.image = process.env.SERVER_URL + res.image;
         console.log(this.user_);
