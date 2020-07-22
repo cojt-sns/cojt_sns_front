@@ -2,7 +2,7 @@
   <ul class="menu-list">
     <div
       :class="[
-        target_group_id !== group.id && available
+        targetGroupId !== group.id && available
           ? 'level'
           : 'level un-available',
       ]"
@@ -37,8 +37,8 @@
         v-for="child in group.children"
         :key="child.id"
         :group="child"
-        :target_group_id="target_group_id"
-        :available="target_group_id !== group.id && available"
+        :target-group-id="targetGroupId"
+        :available="targetGroupId !== group.id && available"
       />
     </div>
   </ul>
@@ -58,7 +58,7 @@ export default {
       type: Object,
       required: true,
     },
-    targetGroupid: {
+    targetGroupId: {
       type: Number,
       required: true,
     },
@@ -78,8 +78,8 @@ export default {
   },
   methods: {
     async UpdateParent(id) {
-      await Group.putGroup(this.target_group_id, null, id);
-      window.location.href = '/groups/' + this.target_group_id;
+      await Group.putGroup(this.targetGroupId, null, id);
+      window.location.href = '/groups/' + this.targetGroupId;
     },
 
     GroupClicked() {
