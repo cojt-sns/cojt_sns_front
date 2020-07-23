@@ -74,6 +74,8 @@ export default {
     return {
       keyword: this.$route.query.keywords ?? '',
       graph: null,
+      graphInfo: { depth: 0 },
+      zoom: null,
     };
   },
   watch: {
@@ -117,7 +119,6 @@ export default {
       const graph = this.$refs.graph;
       let root = pack(data, graph.offsetWidth, graph.offsetHeight);
 
-      console.log(root);
       const color = d3
         .scaleLinear()
         .domain([0, root.height])
@@ -150,7 +151,7 @@ export default {
         .attr('fill', (d) => (!d.children ? '#fd5600' : color(d.depth)))
         .attr('pointer-events', (d) => (!d.children ? 'none' : null))
         .on('mouseover', function() {
-          d3.select(this).attr('stroke', '#000');
+          d3.select(this).attr('stroke', '#333');
         })
         .on('mouseout', function() {
           d3.select(this).attr('stroke', null);
@@ -164,20 +165,52 @@ export default {
         .append('g')
         .style('font', '30px sans-serif')
         .attr('pointer-events', 'none')
-        .attr('text-anchor', 'middle')
         .attr('id', 'label')
         .selectAll('text')
         .data(root.descendants(), (d) => d.data.id)
         .join('text')
-        .style('fill-opacity', (d) =>
-          d.parent?.data.id === root.data.id ? 1 : 0
-        )
+        .attr('text-anchor', 'middle')
+        .attr('y', (d, i, nodes) => {
+          if (!d.children || d.parent?.parent === focus) {
+            return `${0}`;
+          } else if (d.depth === focus.depth) {
+            return -d.r;
+          } else if (d.parent.depth === focus.depth) {
+            return -((d.r / 100) * (70 + (d.depth - 1) * 15));
+          } else {
+            return 0;
+          }
+        })
+        .style('fill-opacity', (d) => {
+          if (d.parent?.data.id === root.data.id) {
+            return 1;
+          } else if (d.parent?.parent?.data.id === root.data.id) {
+            return 0.4;
+          } else {
+            return 0;
+          }
+        })
         .style('display', (d) =>
-          d.parent?.data.id === root.data.id ? 'inline' : 'none'
+          d.parent?.data.id === root.data.id ||
+          d.parent?.parent?.data.id === root.data.id
+            ? 'inline'
+            : 'none'
         )
-        .attr('fill', '#ffffff')
+        .style('font-size', (d, i, texts) => {
+          if (d === focus) {
+            return `180%`;
+          } else if (
+            d.parent.parent?.depth === focus.depth ||
+            d.parent.parent?.parent?.depth === focus.depth
+          ) {
+            return '60%';
+          } else {
+            return '100%';
+          }
+        })
         .text((d) => d.data.name)
         .attr('pointer-events', (d) => 'auto')
+        .attr('dominant-baseline', 'middle')
         .on('mouseover', function() {
           d3.select(this).text((d) => `Go to ${d.data.name}!!`);
         })
@@ -187,7 +220,6 @@ export default {
         .on('click', (d) => this.$router.push(`/groups/${d.data.id}`));
 
       d3.select(window).on('resize', () => {
-        console.log(root);
         svg.attr(
           'viewBox',
           `-${graph.offsetWidth / 2} -${graph.offsetHeight / 2} ${
@@ -227,8 +259,19 @@ export default {
               .style('display', (d) =>
                 d.parent?.data.id === root.data.id ? 'inline' : 'none'
               )
-              .attr('fill', '#ffffff')
-          );
+              .attr('fill', '#4a4a4a')
+          )
+          .attr('y', (d, i, nodes) => {
+            if (!d.children || d.parent?.parent === root) {
+              return `${0}`;
+            } else if (d.depth === root.depth) {
+              return -d.r;
+            } else if (d.parent.depth === root.depth) {
+              return -((d.r / 100) * (70 + (d.depth - 1) * 15));
+            } else {
+              return 0;
+            }
+          });
 
         focus = root;
         zoomTo([root.x, root.y, root.r * 2]);
@@ -266,15 +309,57 @@ export default {
 
         label
           .filter(function(d) {
-            return d.parent === focus || this.style.display === 'inline';
+            return (
+              d.parent === focus ||
+              d.parent?.parent === focus ||
+              this.style.display === 'inline'
+            );
           })
           .transition(transition)
-          .style('fill-opacity', (d) => (d.parent === focus ? 1 : 0))
+          .style('fill-opacity', (d) => {
+            if (d.parent === focus) {
+              return 1;
+            } else if (d.parent.parent === focus) {
+              return 0.6;
+            } else {
+              return 0;
+            }
+          })
+          .style('font-size', (d) => {
+            if (d === focus) {
+              return '180%';
+            } else if (
+              d.parent.parent?.depth === focus.depth ||
+              d.parent.parent?.parent?.depth === focus.depth
+            ) {
+              return '50%';
+            } else {
+              return '100%';
+            }
+          })
+          .attr('y', (d, i, nodes) => {
+            if (!d.children || d.parent?.parent === focus) {
+              return `${0}`;
+            } else if (d.depth === focus.depth) {
+              return -d.r;
+            } else if (d.parent.depth === focus.depth) {
+              return -((d.r / 100) * (70 + (d.depth - 1) * 15));
+            } else {
+              return 0;
+            }
+          })
           .on('start', function(d) {
             if (d.parent === focus) this.style.display = 'inline';
+            if (d.parent.parent === focus) {
+              this.style.display = 'inline';
+            }
           })
           .on('end', function(d) {
-            if (d.parent !== focus) this.style.display = 'none';
+            if (d.parent === focus || d.parent.parent === focus) {
+              this.style.display = 'inline';
+            } else {
+              this.style.display = 'none';
+            }
           });
       }
 
