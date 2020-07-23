@@ -125,17 +125,20 @@
                 <div class="level-item has-centerd">
                   <div class="field is-centered">
                     <div class="control">
-                      <nuxt-link :to="nextURL" class="has-text-white">
-                        <button class="button is-size-6 is-outlined is-info">
-                          <span class="icon">
-                            <font-awesome-icon
-                              :icon="['fab', 'twitter']"
-                              size="lg"
-                            />
-                          </span>
-                          <span>Twitterでログイン</span>
-                        </button>
-                      </nuxt-link>
+                      <a
+                        class="button is-size-6 is-outlined is-info"
+                        :href="serverUrl + '/auth/twitter'"
+                      >
+                        <span class="icon">
+                          <font-awesome-icon
+                            :icon="['fab', 'twitter']"
+                            size="lg"
+                          />
+                        </span>
+                        <span>
+                          Twitterでログイン
+                        </span>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -160,11 +163,11 @@ export default {
       repassword: '',
       htmlerror: '',
       error: '',
-      nextURL: '',
       flag1: true,
       flag2: true,
       emailValid: false,
       buttonPushed: false,
+      serverUrl: process.env.SERVER_URL,
     };
   },
   methods: {
@@ -242,16 +245,18 @@ export default {
 
         return;
       }
-      const res = await User.postUser(this.username, this.email, this.password);
-      console.log(res);
       try {
+        const res = await User.postUser(
+          this.username,
+          this.email,
+          this.password
+        );
         await this.$auth.loginWith('local', {
           data: { email: this.email, password: this.password },
         });
       } catch (error) {
         this.error = error;
       }
-      this.nextURL = '/search';
     },
   },
 };

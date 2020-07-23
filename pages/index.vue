@@ -61,8 +61,9 @@
                   <div class="level-item has-centerd">
                     <div class="field is-centered">
                       <div class="control">
-                        <button
+                        <a
                           class="button is-size-6 is-outlined is-boxColor is-info"
+                          :href="serverUrl + '/auth/twitter'"
                         >
                           <span class="icon">
                             <font-awesome-icon
@@ -71,7 +72,7 @@
                             />
                           </span>
                           <span>Twitterでログイン</span>
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -123,6 +124,7 @@ export default {
       email: '',
       password: '',
       error: '',
+      serverUrl: process.env.SERVER_URL,
     };
   },
   methods: {

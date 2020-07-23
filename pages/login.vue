@@ -57,6 +57,14 @@ export default {
       error: '',
     };
   },
+  async fetch({ query, $auth, redirect }) {
+    try {
+      if (query.token) {
+        await $auth.setUserToken(query.token);
+        redirect('/search');
+      }
+    } catch (error) {}
+  },
   methods: {
     async login() {
       try {
