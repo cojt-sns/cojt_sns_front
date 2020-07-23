@@ -259,7 +259,7 @@ export default {
               .style('display', (d) =>
                 d.parent?.data.id === root.data.id ? 'inline' : 'none'
               )
-              .attr('fill', '#ffffff')
+              .attr('fill', '#4a4a4a')
           )
           .attr('y', (d, i, nodes) => {
             if (!d.children || d.parent?.parent === root) {
@@ -320,7 +320,7 @@ export default {
             if (d.parent === focus) {
               return 1;
             } else if (d.parent.parent === focus) {
-              return 0.4;
+              return 0.6;
             } else {
               return 0;
             }
