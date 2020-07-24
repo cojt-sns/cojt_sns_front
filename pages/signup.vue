@@ -19,7 +19,7 @@
                     <p class="control has-icons-left has-icons-right">
                       <input
                         v-model="username"
-                        class="input has-text-light"
+                        class="input"
                         type="text"
                         placeholder="ユーザー名"
                       />
@@ -39,7 +39,7 @@
                         class="input"
                         type="email"
                         placeholder="メールアドレス"
-                        @change="check(email, reemail)"
+                        @change="check(email, reemail), validateMail(email)"
                       />
                       <span class="icon is-small is-left">
                         <font-awesome-icon :icon="['fas', 'envelope']" />
@@ -57,7 +57,7 @@
                         class="input"
                         type="email"
                         placeholder="メールアドレスの確認"
-                        @change="check(email, reemail)"
+                        @change="check(email, reemail), validateMail(email)"
                       />
                       <span class="icon is-small is-left">
                         <font-awesome-icon :icon="['fas', 'envelope']" />
@@ -125,17 +125,20 @@
                 <div class="level-item has-centerd">
                   <div class="field is-centered">
                     <div class="control">
-                      <nuxt-link :to="nextURL" class="has-text-white">
-                        <button class="button is-size-6 is-outlined is-info">
-                          <span class="icon">
-                            <font-awesome-icon
-                              :icon="['fab', 'twitter']"
-                              size="lg"
-                            />
-                          </span>
-                          <span>Twitterでログイン</span>
-                        </button>
-                      </nuxt-link>
+                      <a
+                        class="button is-size-6 is-outlined is-info"
+                        :href="serverUrl + '/auth/twitter'"
+                      >
+                        <span class="icon">
+                          <font-awesome-icon
+                            :icon="['fab', 'twitter']"
+                            size="lg"
+                          />
+                        </span>
+                        <span>
+                          Twitterでログイン
+                        </span>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -160,16 +163,59 @@ export default {
       repassword: '',
       htmlerror: '',
       error: '',
-      nextURL: '',
+      flag1: true,
+      flag2: true,
+      emailValid: false,
+      buttonPushed: false,
+      serverUrl: process.env.SERVER_URL,
     };
   },
   methods: {
+    validateMail(email) {
+      if (email) {
+        if (
+          !email.match(
+            /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
+          )
+        ) {
+          this.flag1 = false;
+          this.emailValid = false;
+          this.error = 'メールアドレスの形式が正しくありません';
+        } else {
+          this.flag1 = true;
+          this.emailValid = true;
+          if (this.flag2) {
+            this.error = '';
+          }
+        }
+      } else {
+        this.flag1 = false;
+        this.error = 'メールアドレスを入力してください';
+      }
+    },
     check(text, refill) {
-      if (!refill) return;
-      if (text !== refill) this.error = 'not same input';
-      else this.error = '';
+      if (!refill) {
+        this.flag2 = true;
+        if (this.flag1) {
+          this.error = '';
+        }
+        return;
+      }
+      if (text !== refill) {
+        this.flag2 = false;
+        this.error = 'メールアドレスが一致しません';
+      } else {
+        this.flag2 = true;
+        if (this.flag1) {
+          this.error = '';
+        }
+      }
     },
     async submit() {
+      if (this.buttonPushed) {
+        return;
+      }
+      this.buttonPushed = true;
       if (
         this.email === '' ||
         this.reemail === '' ||
@@ -177,28 +223,36 @@ export default {
         this.repassword === '' ||
         this.username === ''
       ) {
-        this.error = 'empty form exists';
+        this.error = '空欄が存在します';
+        this.buttonPushed = false;
+        return;
+      }
+      if (!this.emailValid) {
+        this.error = 'メールアドレスの形式が正しくありません 修正してください';
+        this.buttonPushed = false;
         return;
       }
       if (this.email !== this.reemail) {
-        this.error = 'email is varying';
+        this.error = 'メールアドレスが一致しません';
+        this.buttonPushed = false;
+
         return;
       }
 
       if (this.password !== this.repassword) {
-        this.error = 'password is varying';
+        this.error = 'パスワードが一致しません';
+        this.buttonPushed = false;
+
         return;
       }
-      const res = await User.postUser(this.username, this.email, this.password);
-      console.log(res);
       try {
+        await User.postUser(this.username, this.email, this.password);
         await this.$auth.loginWith('local', {
           data: { email: this.email, password: this.password },
         });
       } catch (error) {
         this.error = error;
       }
-      this.nextURL = '/first';
     },
   },
 };

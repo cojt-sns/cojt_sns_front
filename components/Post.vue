@@ -61,7 +61,7 @@
               <font-awesome-icon :icon="['fas', 'comment']" />
             </span>
           </div>
-          <div class="level-item">
+          <div v-if="post.user.id && groupUser" class="level-item">
             <div :class="{ 'is-active': dropDown }" class="dropdown">
               <div class="dropdown-trigger">
                 <span
@@ -74,7 +74,7 @@
                 </span>
               </div>
               <div
-                v-if="post.user_id == $auth.user.user_id"
+                v-if="post.user.id === groupUser.id"
                 class="dropdown-menu"
                 role="menu"
               >
@@ -89,9 +89,21 @@
                   >
                 </div>
               </div>
-              <div v-else class="dropdown-menu" role="menu">
+              <div
+                v-else-if="groupUser.admin && post.user.id"
+                class="dropdown-menu"
+                role="menu"
+              >
                 <div class="dropdown-content">
-                  <a class="dropdown-item">投稿を報告</a>
+                  <a
+                    v-if="!post.user.admin"
+                    class="dropdown-item"
+                    @click="authorization"
+                    >{{ post.user.name }}に管理者権限を与える</a
+                  >
+                  <a v-else class="dropdown-item" @click="unauthorization"
+                    >{{ post.user.name }}から管理者権限を削除する</a
+                  >
                 </div>
               </div>
             </div>
@@ -125,6 +137,7 @@
 import CreatePost from '~/components/CreatePost';
 import PostComponent from '~/components/Post';
 import Post from '@/plugins/axios/modules/post';
+import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   name: 'Post',
   components: {
@@ -216,6 +229,22 @@ export default {
     },
     leave(el) {
       el.style.height = '0';
+    },
+    async authorization() {
+      try {
+        await GroupUser.authorization(this.post.user.id);
+        location.href = `/groups/${this.group.id}`;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async unauthorization() {
+      try {
+        await GroupUser.unauthorization(this.post.user.id);
+        location.href = `/groups/${this.group.id}`;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

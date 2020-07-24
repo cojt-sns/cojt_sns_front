@@ -43,8 +43,11 @@ export default {
     },
   },
   methods: {
-    logout() {
-      this.$auth.logout();
+    async logout() {
+      try {
+        await this.$auth.logout();
+        location.href = '/';
+      } catch {}
     },
   },
 };

@@ -17,4 +17,12 @@ export default {
       },
     });
   },
+
+  authorization(id) {
+    return axios.$post(`group_users/${id}/authorization`);
+  },
+
+  unauthorization(id) {
+    return axios.$post(`group_users/${id}/unauthorization`);
+  },
 };
