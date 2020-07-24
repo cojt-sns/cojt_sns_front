@@ -90,6 +90,9 @@
           <div class="title has-text-centered is-bold username">
             {{ user_.name }}
           </div>
+          <div class="has-text-centered is-size-5 user-bio">
+            {{ user_.bio }}
+          </div>
         </div>
         <div class="level-right">
           <div class="level-item">
@@ -279,6 +282,10 @@ export default {
     width: 100vw;
   }
 
+  .user-bio {
+    white-space: pre-line;
+  }
+
   .image {
     position: relative;
     width: 200px;
@@ -372,7 +379,6 @@ export default {
       top: 0;
     }
   }
-
   .translucent {
     opacity: 0.5;
   }

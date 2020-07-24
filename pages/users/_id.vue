@@ -21,7 +21,16 @@ export default {
     const groups = await User.getUserGroup($auth.user.id);
     const notifications = (await Notification.getNotifications()).reverse();
 
-    const assignedGroup = await User.getUserGroup(params.id);
+    try {
+      const groups = await User.getUserGroup($auth.user.id);
+      const assignedGroup = await User.getUserGroup(params.id);
+      return {
+        user,
+        groups,
+        assignedGroup,
+        notifications,
+      };
+    } catch (e) {}
     // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
     //   this.userTwitter=res;
     // });
@@ -29,7 +38,6 @@ export default {
       user,
       groups,
       notifications,
-      assignedGroup,
     };
   },
   validate({ params }) {
