@@ -22,7 +22,6 @@ export default {
     const notifications = (await Notification.getNotifications()).reverse();
 
     try {
-      const groups = await User.getUserGroup($auth.user.id);
       const assignedGroup = await User.getUserGroup(params.id);
       return {
         user,
@@ -38,6 +37,7 @@ export default {
       user,
       groups,
       notifications,
+      assignedGroup: null,
     };
   },
   validate({ params }) {

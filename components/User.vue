@@ -87,8 +87,17 @@
           <div class="image img_size has-text-centered heading">
             <img :src="serverUrl + user_.image" alt srcset />
           </div>
-          <div class="title has-text-centered is-bold username">
-            {{ user_.name }}
+          <div>
+            <span class="icon is-large">
+              <font-awesome-icon
+                v-if="$route.params.id != $auth.user.id"
+                :icon="['fas', 'lock']"
+                size="2x"
+              />
+            </span>
+            <span class="title has-text-centered is-bold username">{{
+              user_.name
+            }}</span>
           </div>
           <div class="has-text-centered is-size-5 user-bio">
             {{ user_.bio }}
@@ -97,6 +106,7 @@
         <div class="level-right">
           <div class="level-item">
             <button
+              v-if="$route.params.id == $auth.user.id"
               class="button is-medium is-primary is-outlined"
               @click="switchEditMode()"
             >
@@ -109,7 +119,11 @@
         <div class="level-item"></div>
         <div class="level-right">
           <div class="level-item">
-            <button class="button is-primary is-outlined" @click="openLogout()">
+            <button
+              v-if="$route.params.id == $auth.user.id"
+              class="button is-primary is-outlined"
+              @click="openLogout()"
+            >
               ログアウト
             </button>
           </div>
@@ -146,7 +160,8 @@ export default {
     },
     assignedGroup: {
       type: Array,
-      required: true,
+      required: false,
+      defaulut: null,
     },
   },
   data() {
