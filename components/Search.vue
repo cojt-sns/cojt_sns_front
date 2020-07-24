@@ -217,7 +217,6 @@ export default {
         })
         .attr('pointer-events', (d) => 'auto')
         .attr('dominant-baseline', 'middle')
-        .attr('class', 'graph-text')
         .on('mouseover', function() {
           d3.select(this).text((d) => `Go to ${d.data.name}!!`);
         })
@@ -444,11 +443,6 @@ export default {
   .graph {
     flex: 1;
     overflow: hidden;
-  }
-}
-@media (max-width: 709px) {
-  .graph-text {
-    font-size: 16px;
   }
 }
 </style>
