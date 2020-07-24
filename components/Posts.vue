@@ -31,7 +31,7 @@
       <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
         <div class="dropdown-trigger">
           <span
-            class="icon is-large has-text-white"
+            class="icon is-large has-text-primary"
             @click="dropDown = !dropDown"
           >
             <font-awesome-icon :icon="['fa', 'info-circle']" size="lg" />
@@ -102,6 +102,7 @@
       <CreatePost
         v-if="$device.isMobile && groupUser"
         :group-user="groupUser"
+        :group="group_"
         class="has-background-grey-lighter"
       />
     </div>
@@ -109,6 +110,7 @@
       <CreatePost
         v-if="groupUser"
         :group-user="groupUser"
+        :group="group_"
         class="has-background-grey-lighter"
       />
       <div v-else class="has-background-grey-lighter footer join">
@@ -310,6 +312,12 @@ export default {
     margin-top: auto;
     padding: 30px;
     background-color: rgba(#dbdbdb, 0.6) !important;
+  }
+  .icon {
+    transition: all 0.3s;
+    &:hover {
+      background-color: #dbdbdb;
+    }
   }
 }
 </style>

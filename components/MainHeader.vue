@@ -16,18 +16,18 @@
         <Group :groups="groups" />
       </div>
     </transition>
-    <div class="header has-background-primary">
+    <div class="header">
       <nav class="level is-mobile">
         <div class="level-left">
           <div v-if="$device.isMobile" class="level-item">
             <span
-              class="icon is-large has-text-white"
+              class="icon is-large has-text-primary"
               @click="sideMenu = !sideMenu"
             >
               <font-awesome-icon :icon="['fa', 'bars']" size="lg" />
             </span>
           </div>
-          <div class="level-item title is-5 has-text-white">
+          <div class="level-item title is-5">
             {{ title }}
           </div>
         </div>
@@ -76,12 +76,16 @@ export default {
       &.title {
         display: block;
       }
+      &:first-child.title {
+        margin-left: 10px;
+      }
       max-width: calc(100% - 48px);
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
     }
   }
+  border-bottom: 1px solid #dbdbdb;
 }
 
 .side-background {

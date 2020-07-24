@@ -106,14 +106,12 @@
                 <div class="level-item has-centerd">
                   <div class="field is-centered">
                     <div class="control">
-                      <nuxt-link :to="nextURL" class="has-text-white">
-                        <button
-                          class="button is-size-4 is-primary"
-                          @click="submit"
-                        >
-                          新規作成
-                        </button>
-                      </nuxt-link>
+                      <button
+                        class="button is-size-4 is-primary"
+                        @click="submit"
+                      >
+                        新規作成
+                      </button>
                     </div>
                   </div>
                 </div>

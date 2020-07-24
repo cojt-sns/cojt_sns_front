@@ -67,6 +67,7 @@ export default {
   width: 4em !important;
   height: 100vh;
   padding: 0;
+  border-right: 1px solid #dbdbdb;
   .menu {
     height: 100%;
     display: flex;
@@ -86,13 +87,22 @@ export default {
         align-items: center;
         justify-content: center;
 
-        a.is-active {
-          color: $main-color;
-          background-color: transparent;
-        }
-
-        a figure img {
-          border-radius: 50%;
+        a {
+          padding: 0;
+          transition: all 0.3s;
+          &.is-active {
+            color: $main-color;
+            background-color: transparent;
+          }
+          &.is-active figure img {
+            border: 2px solid $main-color;
+          }
+          &:hover {
+            opacity: 0.7;
+          }
+          figure img {
+            border-radius: 50%;
+          }
         }
       }
     }

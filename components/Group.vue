@@ -1,17 +1,17 @@
 <template>
-  <div class="column is-2 is-fullheight">
+  <div class="column is-2 is-fullheight group-menu-wrapper">
     <GroupCreateModal :open="create" @close="SwitchGroupCreateModal" />
-    <div class="header has-background-primary">
+    <div class="header">
       <nav class="level is-mobile">
         <div class="level-left">
-          <div class="level-item title is-5 has-text-white">
+          <div class="level-item title is-5">
             Groups
           </div>
         </div>
         <div class="level-right">
           <div class="level-item">
             <span
-              class="icon is-large has-text-white"
+              class="icon is-large has-text-primary"
               @click="SwitchGroupCreateModal"
               ><font-awesome-icon :icon="['fas', 'plus']" size="lg" />
             </span>
@@ -73,35 +73,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/_variables';
 .column {
+  border-right: 1px solid #dbdbdb;
   padding: 0;
   width: 300px !important;
   max-width: calc(80vw - 3rem);
   .header {
+    border-bottom: 1px solid #dbdbdb;
     .level .level-left .level-item {
       margin-left: 10px;
     }
   }
   .menu {
     margin: 5px;
-    position: relative;
     .menu-label {
       color: inherit;
       font-size: inherit;
       display: inline-block;
     }
-    .icon {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      font-size: 1.5em;
-    }
     .menu-list {
       li {
         a {
           transition: all 0.3s;
+          &.is-active {
+            color: $main-color;
+            background-color: transparent;
+            font-weight: bolder;
+          }
         }
       }
+    }
+  }
+  .icon {
+    font-size: 1.5em;
+    transition: all 0.3s;
+    &:hover {
+      background-color: #dbdbdb;
     }
   }
 }

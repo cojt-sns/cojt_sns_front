@@ -2,11 +2,11 @@
   <article class="media">
     <figure class="media-left">
       <nuxt-link v-if="post.user.user_id" :to="`/users/${post.user.user_id}`">
-        <figure class="image is-64x64">
+        <figure class="image is-64x64 post-icon">
           <img :src="serverUrl + post.user.image" @click="openModal()" />
         </figure>
       </nuxt-link>
-      <figure v-else class="image is-64x64">
+      <figure v-else class="image is-64x64 post-icon">
         <img :src="serverUrl + post.user.image" @click="openModal()" />
       </figure>
     </figure>
@@ -134,7 +134,12 @@
             :group-user="groupUser"
             @deletePost="(id) => $emit('deletePost', id)"
           />
-          <CreatePost v-if="groupUser" :group-user="groupUser" :thread="post" />
+          <CreatePost
+            v-if="groupUser"
+            :group-user="groupUser"
+            :group="group"
+            :thread="post"
+          />
         </div>
       </transition>
     </div>
@@ -272,6 +277,12 @@ export default {
 .media-left img {
   border-radius: 50%;
 }
+.post-icon img {
+  transition: all 0.3s;
+  &:hover {
+    opacity: 0.7;
+  }
+}
 .post-content {
   white-space: pre-line;
 }
@@ -314,5 +325,11 @@ textarea {
 .thread-enter,
 .thread-leave-to {
   height: 0;
+}
+.icon {
+  transition: all 0.2s;
+  &:hover {
+    color: #b5b5b5;
+  }
 }
 </style>

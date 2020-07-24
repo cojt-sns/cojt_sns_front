@@ -18,7 +18,7 @@
             ref="adjustTextarea"
             v-model="content"
             class="textarea"
-            placeholder="Input Text"
+            :placeholder="'#' + group.name + 'で投稿'"
             :rows="row"
             @keydown="keyDowntextarea"
           ></textarea>
@@ -51,6 +51,10 @@
 import Post from '@/plugins/axios/modules/post';
 export default {
   props: {
+    group: {
+      type: Object,
+      required: true,
+    },
     groupUser: {
       type: Object,
       required: true,
@@ -140,6 +144,12 @@ export default {
       max-height: 40vh;
       width: auto;
       border-radius: 10px;
+    }
+  }
+  .icon {
+    transition: all 0.3s;
+    &:hover {
+      color: hsl(0, 0%, 48%);
     }
   }
 }
