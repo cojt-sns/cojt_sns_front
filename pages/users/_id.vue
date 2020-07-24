@@ -1,5 +1,10 @@
 <template>
-  <Main :user="user" :groups="groups" :notifications="notifications" />
+  <Main
+    :user="user"
+    :groups="groups"
+    :assigned-group="assignedGroup"
+    :notifications="notifications"
+  />
 </template>
 
 <script>
@@ -16,6 +21,7 @@ export default {
     const groups = await User.getUserGroup($auth.user.id);
     const notifications = (await Notification.getNotifications()).reverse();
 
+    const assignedGroup = await User.getUserGroup(params.id);
     // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
     //   this.userTwitter=res;
     // });
@@ -23,6 +29,7 @@ export default {
       user,
       groups,
       notifications,
+      assignedGroup,
     };
   },
   validate({ params }) {

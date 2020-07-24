@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-fullheight has-background-white	">
+  <div class="column is-fullheight has-background-white">
     <MainHeader
       v-if="$device.isMobile"
       title="Profile"
@@ -72,7 +72,7 @@
       </div>
       <div class="level is-mobile">
         <div class="level-item edit-ctlr is-centered">
-          <button class="button is-medium is-primary " @click="save">
+          <button class="button is-medium is-primary" @click="save">
             保存
           </button>
           <button class="button is-medium" @click="switchEditMode()">
@@ -94,7 +94,7 @@
         <div class="level-right">
           <div class="level-item">
             <button
-              class="button is-medium is-primary is-outlined "
+              class="button is-medium is-primary is-outlined"
               @click="switchEditMode()"
             >
               編集
@@ -106,10 +106,7 @@
         <div class="level-item"></div>
         <div class="level-right">
           <div class="level-item">
-            <button
-              class="button is-primary is-outlined "
-              @click="openLogout()"
-            >
+            <button class="button is-primary is-outlined" @click="openLogout()">
               ログアウト
             </button>
           </div>
@@ -121,7 +118,7 @@
       参加グループ
     </div>
     <div class="groups">
-      <GroupPanelList :groups="groups" />
+      <GroupPanelList :groups="assignedGroup" />
     </div>
   </div>
 </template>
@@ -144,7 +141,7 @@ export default {
       required: false,
       default: null,
     },
-    groups: {
+    assignedGroup: {
       type: Array,
       required: true,
     },
