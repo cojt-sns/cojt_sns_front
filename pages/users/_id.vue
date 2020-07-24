@@ -1,5 +1,5 @@
 <template>
-  <Main :user="user" :groups="groups" />
+  <Main :user="user" :groups="groups" :assigned-group="assignedGroup" />
 </template>
 
 <script>
@@ -13,12 +13,15 @@ export default {
   async asyncData({ params, $auth }) {
     const user = await User.getUser(params.id);
     const groups = await User.getUserGroup($auth.user.id);
+    const assignedGroup = await User.getUserGroup(params.id);
+    console.log(assignedGroup);
     // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
     //   this.userTwitter=res;
     // });
     return {
       user,
       groups,
+      assignedGroup,
     };
   },
   validate({ params }) {
