@@ -108,6 +108,7 @@ export default {
       this.$router.push('/search?type=list');
     },
     chart() {
+      const MOBILE_VIEWPORT_WIDTH = 400;
       const d3 = require('d3');
       const pack = (data, w, h) =>
         d3
@@ -131,6 +132,12 @@ export default {
         .scaleLinear()
         .domain([0, root.height])
         .range(['hsl(20,100%,99.9%)', 'hsl(20,100%,50%)'])
+        .interpolate(d3.interpolateHcl);
+
+      const outColor = d3
+        .scaleLinear()
+        .domain([0, root.height])
+        .range(['hsl(0,0%,98%)', 'hsl(0,0%,70%)'])
         .interpolate(d3.interpolateHcl);
 
       let focus = root;
@@ -204,21 +211,13 @@ export default {
             ? 'inline'
             : 'none'
         )
-        .style('font-size', (d, i, texts) => {
-          if (d === focus) {
-            return `180%`;
-          } else if (
-            d.parent.parent?.depth === focus.depth ||
-            d.parent.parent?.parent?.depth === focus.depth
-          ) {
-            return '60%';
-          } else {
-            return '100%';
-          }
-        })
         .text((d) => d.data.name)
+        .style('font-size', (d, i, texts) => {
+          return SetFontSizeOffset(d, focus);
+        })
         .attr('pointer-events', (d) => 'auto')
         .attr('dominant-baseline', 'middle')
+        .attr('class', 'graph-text')
         .on('mouseover', function() {
           d3.select(this).text((d) => `Go to ${d.data.name}!!`);
         })
@@ -269,6 +268,9 @@ export default {
               )
               .attr('fill', '#4a4a4a')
           )
+          .style('font-size', (d, i, texts) => {
+            return SetFontSizeOffset(d, root);
+          })
           .attr('y', (d, i, nodes) => {
             if (!d.children || d.parent?.parent === root) {
               return `${0}`;
@@ -315,6 +317,16 @@ export default {
             return (t) => zoomTo(i(t));
           });
 
+        node.transition(transition).attr('fill', (d) => {
+          if (focus.depth >= d.depth) {
+            return outColor(d.depth);
+          } else if (!d.children) {
+            return '#fd5600';
+          } else {
+            return color(d.depth);
+          }
+        });
+
         label
           .filter(function(d) {
             return (
@@ -333,17 +345,8 @@ export default {
               return 0;
             }
           })
-          .style('font-size', (d) => {
-            if (d === focus) {
-              return '180%';
-            } else if (
-              d.parent.parent?.depth === focus.depth ||
-              d.parent.parent?.parent?.depth === focus.depth
-            ) {
-              return '50%';
-            } else {
-              return '100%';
-            }
+          .style('font-size', (d, i, texts) => {
+            return SetFontSizeOffset(d, focus);
           })
           .attr('y', (d, i, nodes) => {
             if (!d.children || d.parent?.parent === focus) {
@@ -369,6 +372,46 @@ export default {
               this.style.display = 'none';
             }
           });
+      }
+
+      function calcFontSizeOffset(radius) {
+        if (graph.offsetWidth <= MOBILE_VIEWPORT_WIDTH) {
+          return Math.min(60, 100 - radius);
+        }
+        return Math.min(1.0, 1 - radius / 100);
+        // return Math.min(1, (6 / 1000) * textLength * textLength);
+      }
+
+      function SetFontSizeOffset(d, focus) {
+        console.log(d.data.name);
+        console.log(d.r);
+        if (graph.offsetWidth <= MOBILE_VIEWPORT_WIDTH) {
+          if (d === focus) {
+            return '160%';
+          } else if (
+            d.parent.parent?.depth === focus.depth ||
+            d.parent.parent?.parent?.depth === focus.depth
+          ) {
+            return '40%';
+          } else if (d.r <= 100) {
+            return `${100 - calcFontSizeOffset(d.r)}%`;
+          } else {
+            return `${100}%`;
+          }
+        }
+
+        if (d === focus) {
+          return '2vw';
+        } else if (
+          d.parent.parent?.depth === focus.depth ||
+          d.parent.parent?.parent?.depth === focus.depth
+        ) {
+          return '1.1vw';
+        } else if (d.r <= 100) {
+          return `${1.7 - calcFontSizeOffset(d.r)}vw`;
+        } else {
+          return `${1.7}vw`;
+        }
       }
 
       return svg.node();
@@ -401,6 +444,11 @@ export default {
   .graph {
     flex: 1;
     overflow: hidden;
+  }
+}
+@media (max-width: 709px) {
+  .graph-text {
+    font-size: 16px;
   }
 }
 </style>
