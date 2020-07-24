@@ -51,9 +51,7 @@ export default {
         posts,
         groups,
       };
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     return {
       groupUser: null,

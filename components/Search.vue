@@ -1,7 +1,8 @@
 <template>
   <div class="column is-fullheight">
+    <MainHeader v-if="$device.isMobile" title="Search" :groups="groups" />
     <div class="top">
-      <div class="level search-type">
+      <div class="level search-type is-mobile">
         <div class="level-item">
           <h1
             v-if="$route.query.type != 'graph'"
@@ -59,15 +60,22 @@
 </template>
 
 <script>
+import MainHeader from '~/components/MainHeader';
 import GroupPanelList from '@/components/GroupPanelList';
 export default {
   components: {
+    MainHeader,
     GroupPanelList,
   },
   props: {
     search: {
       type: Array,
       required: true,
+    },
+    groups: {
+      type: Array,
+      required: false,
+      default: null,
     },
   },
   data() {

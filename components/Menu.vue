@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile menu-container"
-  >
+  <div class="column is-2 is-fullheight menu-container">
     <aside class="menu">
       <ul class="menu-list top">
         <li>
@@ -24,8 +22,6 @@
             </span>
           </nuxt-link>
         </li>
-      </ul>
-      <ul class="menu-list bottom">
         <li>
           <nuxt-link
             v-if="$auth.loggedIn"
@@ -82,27 +78,20 @@ export default {
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-
+      margin-top: 15px;
       li {
-        margin-bottom: 5px;
+        display: flex;
+        width: 56px;
+        height: 56px;
+        align-items: center;
+        justify-content: center;
+
         a.is-active {
           color: $main-color;
           background-color: transparent;
         }
-      }
-    }
 
-    .menu-list.top {
-      margin-top: 15px;
-    }
-
-    .menu-list.bottom {
-      flex: 1;
-      justify-content: flex-end;
-      margin-bottom: 15px;
-      li a {
-        padding: 0;
-        figure img {
+        a figure img {
           border-radius: 50%;
         }
       }

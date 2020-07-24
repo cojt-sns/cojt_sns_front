@@ -24,7 +24,7 @@
           ></textarea>
         </p>
       </div>
-      <div class="level">
+      <div class="level is-mobile">
         <div class="level-left">
           <div class="level-item">
             <span class="icon" @click="$refs.image.click()">

@@ -55,6 +55,7 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/auth',
     '@nuxtjs/style-resources',
+    '@nuxtjs/device',
   ],
 
   styleResources: {

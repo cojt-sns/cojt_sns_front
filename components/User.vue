@@ -1,13 +1,19 @@
 <template>
   <div class="column is-fullheight has-background-white	">
+    <MainHeader
+      v-if="$device.isMobile"
+      title="Profile"
+      :groups="groups"
+      class="main-header"
+    />
     <!-- <UserEditModal v-model="user_" :edit="edit" @close="closeEdit()" /> -->
     <LogoutModal :open="open" @close="closeLogout()" />
     <!-- show profile -->
-    <div v-if="edit">
+    <div v-if="edit" class="section">
       <div v-if="error" class="notification is-danger is-light">
         {{ error }}
       </div>
-      <div class="level">
+      <div class="level is-mobile">
         <div class="level-item kkk has-text-centered">
           <input
             ref="icon"
@@ -64,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div class="level">
+      <div class="level is-mobile">
         <div class="level-item edit-ctlr is-centered">
           <button class="button is-medium is-primary " @click="save">
             保存
@@ -75,8 +81,8 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <div class="level user-info">
+    <div v-else class="section">
+      <div class="level is-mobile user-info">
         <div class="level-item kkk has-text-centered">
           <div class="image img_size has-text-centered heading">
             <img :src="serverUrl + user_.image" alt srcset />
@@ -96,7 +102,7 @@
           </div>
         </div>
       </div>
-      <div class="level">
+      <div class="level is-mobile">
         <div class="level-item"></div>
         <div class="level-right">
           <div class="level-item">
@@ -114,7 +120,6 @@
     <div class="subtitle has-text-centered is-size-4">
       参加グループ
     </div>
-    <hr />
     <div class="groups">
       <GroupPanelList :groups="groups" />
     </div>
@@ -122,12 +127,14 @@
 </template>
 
 <script>
+import MainHeader from '~/components/MainHeader';
 import GroupPanelList from '@/components/GroupPanelList';
 import LogoutModal from '~/components/LogoutModal';
 import User from '@/plugins/axios/modules/user';
 
 export default {
   components: {
+    MainHeader,
     GroupPanelList,
     LogoutModal,
   },
@@ -263,6 +270,17 @@ export default {
   display: flex;
   flex-direction: column;
   /* max-height: 100vh; */
+  padding: 0;
+
+  .section {
+    padding: 20px;
+  }
+
+  .main-header {
+    z-index: 3000;
+    position: fixed;
+    width: 100vw;
+  }
 
   .image {
     position: relative;
@@ -342,6 +360,12 @@ export default {
     display: none;
   }
 
+  .subtitle {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #dbdbdb;
+  }
+
   .user-info {
     position: relative;
 
@@ -354,6 +378,18 @@ export default {
 
   .translucent {
     opacity: 0.5;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .column {
+    overflow-y: scroll;
+    .section {
+      margin-top: 48px;
+    }
+    .groups {
+      overflow-y: visible;
+    }
   }
 }
 </style>

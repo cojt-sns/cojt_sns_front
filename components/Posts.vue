@@ -27,65 +27,70 @@
       :group="group_"
       @close="SwitchGroupUserModal"
     />
-    <div class="header has-background-primary">
-      <nav class="level">
-        <div class="level-left">
-          <div class="level-item title is-5 has-text-white">
-            #{{ group_.fullname }}
+    <MainHeader :title="'#' + group_.fullname" :groups="groups">
+      <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
+        <div class="dropdown-trigger">
+          <span
+            class="icon is-large has-text-white"
+            @click="dropDown = !dropDown"
+          >
+            <font-awesome-icon :icon="['fa', 'info-circle']" size="lg" />
+          </span>
+        </div>
+        <div id="dropdown-menu" class="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a
+              v-if="groupUser"
+              class="dropdown-item"
+              @click="SwitchGroupUserModal"
+              >{{ groupUser.name }}を編集</a
+            >
+            <a
+              v-if="groupUser && groupUser.admin"
+              class="dropdown-item"
+              @click="SwitchGroupEditModal"
+              >グループを編集</a
+            >
+            <a
+              v-if="groupUser && groupUser.admin"
+              class="dropdown-item"
+              @click="SwitchParentSelectModal"
+              >親グループを選択</a
+            >
+            <a
+              v-if="groupUser && groupUser.admin"
+              class="dropdown-item"
+              @click="unauthorization"
+              >管理者権限を破棄する</a
+            >
+            <a class="dropdown-item">他の人を招待する</a>
+            <a class="dropdown-item">Twitterで共有</a>
+            <hr class="dropdown-divider" />
+            <a
+              class="dropdown-item has-text-danger"
+              @click="SwitchGroupExitModal"
+              >グループから退出する</a
+            >
           </div>
         </div>
-        <div :class="{ 'is-active': dropDown }" class="dropdown is-right">
-          <div class="dropdown-trigger">
-            <div class="level-right">
-              <span
-                class="icon is-large has-text-white"
-                @click="dropDown = !dropDown"
-                @blur="dropDown = !dropDown"
-              >
-                <font-awesome-icon :icon="['fa', 'bars']" size="lg" />
-              </span>
-            </div>
-          </div>
-          <div id="dropdown-menu" class="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a
-                v-if="groupUser"
-                class="dropdown-item"
-                @click="SwitchGroupUserModal"
-                >{{ groupUser.name }}を編集</a
-              >
-              <a
-                v-if="groupUser && groupUser.admin"
-                class="dropdown-item"
-                @click="SwitchGroupEditModal"
-                >グループを編集</a
-              >
-              <a
-                v-if="groupUser && groupUser.admin"
-                class="dropdown-item"
-                @click="SwitchParentSelectModal"
-                >親グループを選択</a
-              >
-              <a
-                v-if="groupUser && groupUser.admin"
-                class="dropdown-item"
-                @click="unauthorization"
-                >管理者権限を破棄する</a
-              >
-              <a class="dropdown-item">他の人を招待する</a>
-              <a class="dropdown-item">Twitterで共有</a>
-              <hr class="dropdown-divider" />
-              <a
-                class="dropdown-item has-text-danger"
-                @click="SwitchGroupExitModal"
-                >グループから退出する</a
-              >
-            </div>
-          </div>
-        </div>
-      </nav>
-    </div>
+      </div>
+    </MainHeader>
     <div ref="posts" class="posts">
+      <template v-if="$device.isMobile">
+        <div v-if="!groupUser" class="has-background-grey-lighter footer join">
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <button class="button is-primary" @click="SwitchGroupJoinModal()">
+                グループに参加する
+              </button>
+            </div>
+            <div class="control">
+              <button class="button" @click="$router.go(-1)">戻る</button>
+            </div>
+          </div>
+        </div>
+      </template>
+
       <Post
         v-for="post in posts"
         :key="post.id"
@@ -94,28 +99,36 @@
         :group-user="groupUser"
         @deletePost="deletePost"
       />
+      <CreatePost
+        v-if="$device.isMobile && groupUser"
+        :group-user="groupUser"
+        class="has-background-grey-lighter"
+      />
     </div>
-    <CreatePost
-      v-if="groupUser"
-      :group-user="groupUser"
-      class="has-background-grey-lighter"
-    />
-    <div v-else class="has-background-grey-lighter footer join">
-      <div class="field is-grouped is-grouped-centered">
-        <div class="control">
-          <button class="button is-primary" @click="SwitchGroupJoinModal()">
-            グループに参加する
-          </button>
-        </div>
-        <div class="control">
-          <button class="button" @click="$router.go(-1)">戻る</button>
+    <template v-if="!$device.isMobile">
+      <CreatePost
+        v-if="groupUser"
+        :group-user="groupUser"
+        class="has-background-grey-lighter"
+      />
+      <div v-else class="has-background-grey-lighter footer join">
+        <div class="field is-grouped is-grouped-centered">
+          <div class="control">
+            <button class="button is-primary" @click="SwitchGroupJoinModal()">
+              グループに参加する
+            </button>
+          </div>
+          <div class="control">
+            <button class="button" @click="$router.go(-1)">戻る</button>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
+import MainHeader from '~/components/MainHeader';
 import PostComponent from '~/components/Post';
 import GroupExitModal from '~/components/GroupExitModal';
 import GroupEditModal from '~/components/GroupEditModal';
@@ -127,6 +140,7 @@ import Post from '@/plugins/axios/modules/post';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 export default {
   components: {
+    MainHeader,
     Post: PostComponent,
     GroupExitModal,
     GroupEditModal,
@@ -269,11 +283,19 @@ export default {
 <style lang="scss" scoped>
 .column {
   padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   .header .level {
-    .level-left .level-item {
-      margin-left: 10px;
+    .level-left {
+      max-width: calc(100% - 48px);
+      .level-item {
+        max-width: 100%;
+        margin-left: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
   }
   .posts {

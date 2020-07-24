@@ -4,6 +4,30 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    window.addEventListener('resize', this.resize);
+    window.addEventListener('orientationchange', this.resize);
+
+    this.resize();
+  },
+  methods: {
+    resize() {
+      let hullHeight = document.getElementsByClassName('is-fullheight');
+      for (const element of hullHeight) {
+        element.style.height = window.innerHeight + 'px';
+      }
+
+      hullHeight = document.getElementsByClassName('wrapper');
+      for (const element of hullHeight) {
+        element.style.height = window.innerHeight + 'px';
+      }
+    },
+  },
+};
+</script>
+
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -54,6 +78,10 @@ html {
 }
 
 html {
+  overflow: hidden;
+}
+
+.wrapper {
   overflow: hidden;
 }
 </style>

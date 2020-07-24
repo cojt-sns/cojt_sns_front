@@ -1,8 +1,8 @@
 <template>
-  <div class="column is-2 is-narrow-mobile is-fullheight">
+  <div class="column is-2 is-fullheight">
     <GroupCreateModal :open="create" @close="SwitchGroupCreateModal" />
     <div class="header has-background-primary">
-      <nav class="level">
+      <nav class="level is-mobile">
         <div class="level-left">
           <div class="level-item title is-5 has-text-white">
             Groups
@@ -76,6 +76,7 @@ export default {
 .column {
   padding: 0;
   width: 300px !important;
+  max-width: calc(80vw - 3rem);
   .header {
     .level .level-left .level-item {
       margin-left: 10px;

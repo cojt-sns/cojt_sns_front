@@ -50,7 +50,7 @@
       <nav class="level is-mobile">
         <div class="level-left">
           <div
-            v-if="post.thread"
+            v-if="post.thread && (post.thread.length > 0 || groupUser)"
             class="level-item re"
             @click="thread = !thread"
           >
@@ -61,7 +61,15 @@
               <font-awesome-icon :icon="['fas', 'comment']" />
             </span>
           </div>
-          <div v-if="post.user.id && groupUser" class="level-item">
+          <div
+            v-if="
+              post.user.id &&
+                groupUser &&
+                (post.user.id === groupUser.id ||
+                  (groupUser.admin && post.user.id))
+            "
+            class="level-item"
+          >
             <div :class="{ 'is-active': dropDown }" class="dropdown">
               <div class="dropdown-trigger">
                 <span
@@ -117,7 +125,7 @@
         @before-leave="beforeLeave"
         @leave="leave"
       >
-        <div v-if="thread" class="thread">
+        <div v-show="thread" class="thread" ref="thread">
           <Post
             v-for="child in post.thread"
             :key="child.id"
@@ -126,7 +134,7 @@
             :group-user="groupUser"
             @deletePost="(id) => $emit('deletePost', id)"
           />
-          <CreatePost :group-user="groupUser" :thread="post" />
+          <CreatePost v-if="groupUser" :group-user="groupUser" :thread="post" />
         </div>
       </transition>
     </div>
@@ -155,7 +163,8 @@ export default {
     },
     groupUser: {
       type: Object,
-      required: true,
+      required: false,
+      default: null,
     },
   },
   data() {
@@ -175,6 +184,15 @@ export default {
   watch: {
     row() {
       this.adjustHeight(this.$refs?.adjustTextarea);
+    },
+    post: {
+      handler() {
+        this.$nextTick(() => {
+          const thread = this.$refs.thread;
+          thread.style.height = thread.scrollHeight + 'px';
+        });
+      },
+      deep: true,
     },
   },
   methods: {
@@ -285,6 +303,7 @@ textarea {
 
 .thread {
   overflow: hidden;
+  height: auto;
 }
 
 .thread-enter-active,
@@ -294,6 +313,6 @@ textarea {
 
 .thread-enter,
 .thread-leave-to {
-  height: -10px;
+  height: 0;
 }
 </style>
