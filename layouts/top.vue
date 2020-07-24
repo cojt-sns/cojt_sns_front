@@ -55,4 +55,7 @@ html {
 html {
   overflow: visible;
 }
+.wrapper {
+  overflow: visible;
+}
 </style>
