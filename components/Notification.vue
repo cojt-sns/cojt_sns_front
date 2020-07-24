@@ -2,9 +2,7 @@
   <div
     class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile"
   >
-    <div
-      class="header has-background-primary has-text-white has-text-centered title is-5"
-    >
+    <div class="header has-text-centered title is-5">
       Notification
     </div>
     <div class="cards">
@@ -107,6 +105,7 @@ export default {
     align-items: center;
     margin-bottom: 0;
     padding-left: 1rem;
+    border-bottom: 1px solid #dbdbdb;
   }
 
   .cards {

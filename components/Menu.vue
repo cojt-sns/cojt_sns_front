@@ -71,6 +71,7 @@ export default {
   width: 4em !important;
   height: 100vh;
   padding: 0;
+  border-right: 1px solid #dbdbdb;
   .menu {
     height: 100%;
     display: flex;
@@ -104,6 +105,16 @@ export default {
         padding: 0;
         figure img {
           border-radius: 50%;
+        }
+        &.is-active {
+          border: 2px solid $main-color;
+          border-radius: 50%;
+        }
+        &:not(.is-active) img {
+          transition: all 0.3s;
+          &:hover {
+            opacity: 0.7;
+          }
         }
       }
     }

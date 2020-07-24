@@ -10,10 +10,10 @@
             <img :src="serverUrl + user_.image" alt srcset />
           </div> -->
           <input
+            ref="icon"
             class="file-input"
             type="file"
             name="resume"
-            ref="icon"
             @change="selectIcon"
           />
           <div class="image has-text-centered heading">

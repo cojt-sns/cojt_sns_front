@@ -2,11 +2,11 @@
   <article class="media">
     <figure class="media-left">
       <nuxt-link v-if="post.user.user_id" :to="`/users/${post.user.user_id}`">
-        <figure class="image is-64x64">
+        <figure class="image is-64x64 post-icon">
           <img :src="serverUrl + post.user.image" @click="openModal()" />
         </figure>
       </nuxt-link>
-      <figure v-else class="image is-64x64">
+      <figure v-else class="image is-64x64 post-icon">
         <img :src="serverUrl + post.user.image" @click="openModal()" />
       </figure>
     </figure>
@@ -225,6 +225,12 @@ export default {
 .media-left img {
   border-radius: 50%;
 }
+.post-icon img {
+  transition: all 0.3s;
+  &:hover {
+    opacity: 0.7;
+  }
+}
 .post-content {
   white-space: pre-line;
 }
@@ -266,5 +272,11 @@ textarea {
 .thread-enter,
 .thread-leave-to {
   height: -10px;
+}
+.icon {
+  transition: all 0.2s;
+  &:hover {
+    color: #b5b5b5;
+  }
 }
 </style>
