@@ -12,16 +12,20 @@ export default {
   },
   async asyncData({ params, $auth }) {
     const user = await User.getUser(params.id);
-    const groups = await User.getUserGroup($auth.user.id);
-    const assignedGroup = await User.getUserGroup(params.id);
-    console.log(assignedGroup);
+    try {
+      const groups = await User.getUserGroup($auth.user.id);
+      const assignedGroup = await User.getUserGroup(params.id);
+      return {
+        user,
+        groups,
+        assignedGroup,
+      };
+    } catch (e) {}
     // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
     //   this.userTwitter=res;
     // });
     return {
       user,
-      groups,
-      assignedGroup,
     };
   },
   validate({ params }) {
