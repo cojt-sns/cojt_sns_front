@@ -74,7 +74,7 @@ export default {
         this.$emit('change-group', editGroup);
         this.$emit('close');
       } catch (error) {
-        this.error = error.data.message.name[0];
+        this.error = error.data.message;
       }
     },
   },

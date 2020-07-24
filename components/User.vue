@@ -198,7 +198,7 @@ export default {
         console.log(this.user_);
         this.switchEditMode();
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message;
       }
     },
     crop() {

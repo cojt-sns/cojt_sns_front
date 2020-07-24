@@ -47,7 +47,9 @@ export default {
       try {
         await this.$auth.logout();
         location.href = '/';
-      } catch {}
+      } catch (error) {
+        this.error = error.date.message;
+      }
     },
   },
 };

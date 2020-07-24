@@ -132,7 +132,7 @@ export default {
         }
         location.href = '/groups/' + this.group.id;
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message;
       }
     },
     crop() {

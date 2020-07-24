@@ -58,7 +58,7 @@ export default {
         // window.location.href =
       } catch (error) {
         // this.error = error.data.message.name[0];
-        this.error = 'エラー';
+        this.error = error.data.message;
       }
     },
   },

@@ -62,7 +62,7 @@ export default {
         const createdGroup = await Group.postGroup(this.name);
         window.location.href = '/groups/' + createdGroup.id;
       } catch (error) {
-        this.error = error.data.message.name[0];
+        this.error = error.data.message;
       }
     },
   },

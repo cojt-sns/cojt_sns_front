@@ -53,7 +53,7 @@ export default {
         await this.$auth.logout();
         window.location.href = '/first';
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message;
       }
     },
   },
