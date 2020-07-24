@@ -1,9 +1,5 @@
 <template>
-  <Modal
-    :class="{ 'is-active': open }"
-    :title="'グループを脱退'"
-    @close="$emit('close')"
-  >
+  <Modal :open="open" :title="'グループを脱退'" @close="$emit('close')">
     <div v-if="error" class="notification is-danger is-light">
       {{ error }}
     </div>

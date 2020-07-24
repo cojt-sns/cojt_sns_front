@@ -1,9 +1,5 @@
 <template>
-  <Modal
-    :class="{ 'is-active': open }"
-    :title="'親グループを選択'"
-    @close="$emit('close')"
-  >
+  <Modal :open="open" :title="'親グループを選択'" @close="$emit('close')">
     <div class="wr">
       <div class="field has-addons">
         <div class="control is-expanded">

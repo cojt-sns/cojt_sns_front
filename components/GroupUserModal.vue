@@ -1,6 +1,6 @@
 <template>
   <Modal
-    :class="{ 'is-active': open }"
+    :open="open"
     :title="'#' + group.fullname + 'へのユーザ情報を編集'"
     @close="$emit('close')"
   >

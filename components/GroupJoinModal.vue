@@ -1,9 +1,5 @@
 <template>
-  <Modal
-    :class="{ 'is-active': open }"
-    :title="'グループに参加'"
-    @close="$emit('close')"
-  >
+  <Modal :open="open" :title="'グループに参加'" @close="$emit('close')">
     <input
       ref="icon"
       class="file-input"
