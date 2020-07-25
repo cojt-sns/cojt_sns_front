@@ -107,7 +107,7 @@
                   <div class="field is-centered">
                     <div class="control">
                       <button
-                        class="button is-size-4 is-primary"
+                        class="button is-size-5 is-primary"
                         @click="submit"
                       >
                         新規作成
@@ -152,6 +152,7 @@
 <script>
 import User from '@/plugins/axios/modules/user';
 export default {
+  layout: 'top',
   data() {
     return {
       username: '',
