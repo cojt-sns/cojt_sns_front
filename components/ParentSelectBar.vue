@@ -6,9 +6,10 @@
           ? 'level'
           : 'level un-available',
       ]"
+      :style="'padding-left: ' + depth * 15 + 'px'"
       @click="GroupClicked(group)"
     >
-      <div class="level-right">
+      <div class="level-left">
         <font-awesome-icon
           v-if="group.children.length >= 1"
           v-show="open"
@@ -23,24 +24,34 @@
         />
         #{{ group.name }}
       </div>
-      <li class="level-left">
-        <button class="button" @click="UpdateParent(group.id)">選択</button>
+      <li class="level-right">
+        <button
+          class="button is-primary is-outlined"
+          @click="UpdateParent(group.id)"
+        >
+          選択
+        </button>
       </li>
     </div>
-    <div
-      v-if="group.children.length >= 1"
-      v-show="open"
-      class="children"
-      style="width: 97%;"
+    <transition
+      name="group"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @before-leave="beforeLeave"
+      @leave="leave"
     >
-      <ParentSelectBar
-        v-for="child in group.children"
-        :key="child.id"
-        :group="child"
-        :target-group-id="targetGroupId"
-        :available="targetGroupId !== group.id && available"
-      />
-    </div>
+      <div v-if="group.children.length >= 1" v-show="open" class="children">
+        <ParentSelectBar
+          v-for="child in group.children"
+          :key="child.id"
+          :group="child"
+          :target-group-id="targetGroupId"
+          :available="targetGroupId !== group.id && available"
+          :depth="depth + 1"
+        />
+      </div>
+    </transition>
   </ul>
 </template>
 
@@ -66,15 +77,16 @@ export default {
       type: Boolean,
       required: true,
     },
+    depth: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       name: '',
       open: false,
     };
-  },
-  mounted() {
-    // this.getGroups();
   },
   methods: {
     async UpdateParent(id) {
@@ -84,6 +96,27 @@ export default {
 
     GroupClicked() {
       this.open = !this.open;
+    },
+
+    beforeEnter(el) {
+      el.style.height = '0';
+    },
+    enter(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    afterEnter(el) {
+      el.style.height = 'auto';
+    },
+    beforeLeave(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    leave(el, done) {
+      this.$velocity(
+        el,
+        { height: '0px' },
+        { duration: 500 },
+        { complete: done }
+      );
     },
   },
 };
@@ -99,7 +132,6 @@ export default {
 
 .menu-list {
   .level {
-    border: 1px solid #dddddd;
     padding: 5px 10px;
     margin: 0;
 
@@ -112,7 +144,7 @@ export default {
       margin-right: 5px;
     }
 
-    .level-left {
+    .level-right {
       visibility: hidden;
     }
 
@@ -120,15 +152,14 @@ export default {
       background-color: #eee;
     }
 
-    &:hover > .level-left {
+    &:hover > .level-right {
       visibility: visible;
     }
   }
 
   .un-available {
-    background-color: #eee;
-
-    &:hover > .level-left {
+    color: #ccc;
+    &:hover > .level-right {
       visibility: hidden;
     }
   }
@@ -136,5 +167,15 @@ export default {
 
 .children {
   margin-left: auto;
+  overflow: hidden;
+}
+
+.group-enter-active {
+  transition: height 0.8s;
+}
+
+.group-enter,
+.group-leave-to {
+  height: 0;
 }
 </style>

@@ -24,6 +24,7 @@
           :group="group"
           :target-group-id="group_id"
           :available="true"
+          :depth="1"
         />
       </aside>
     </div>
@@ -99,9 +100,9 @@ export default {
 .wr {
   max-height: 60vh;
   overflow: auto;
+
   .menu-list {
     .level {
-      border: 1px solid #dddddd;
       padding: 5px 10px;
       margin: 0;
 
