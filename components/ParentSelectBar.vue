@@ -6,9 +6,10 @@
           ? 'level'
           : 'level un-available',
       ]"
+      :style="'padding-left: ' + depth * 15 + 'px'"
       @click="GroupClicked(group)"
     >
-      <div class="level-right">
+      <div class="level-left">
         <font-awesome-icon
           v-if="group.children.length >= 1"
           v-show="open"
@@ -23,15 +24,20 @@
         />
         #{{ group.name }}
       </div>
-      <li class="level-left">
-        <button class="button" @click="UpdateParent(group.id)">選択</button>
+      <li class="level-right">
+        <button
+          class="button is-primary is-outlined"
+          @click="UpdateParent(group.id)"
+        >
+          選択
+        </button>
       </li>
     </div>
     <div
       v-if="group.children.length >= 1"
       v-show="open"
+      ref="children"
       class="children"
-      style="width: 97%;"
     >
       <ParentSelectBar
         v-for="child in group.children"
@@ -39,6 +45,7 @@
         :group="child"
         :target-group-id="targetGroupId"
         :available="targetGroupId !== group.id && available"
+        :depth="depth + 1"
       />
     </div>
   </ul>
@@ -66,15 +73,16 @@ export default {
       type: Boolean,
       required: true,
     },
+    depth: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       name: '',
       open: false,
     };
-  },
-  mounted() {
-    // this.getGroups();
   },
   methods: {
     async UpdateParent(id) {
@@ -99,7 +107,6 @@ export default {
 
 .menu-list {
   .level {
-    border: 1px solid #dddddd;
     padding: 5px 10px;
     margin: 0;
 
@@ -112,7 +119,7 @@ export default {
       margin-right: 5px;
     }
 
-    .level-left {
+    .level-right {
       visibility: hidden;
     }
 
@@ -120,16 +127,8 @@ export default {
       background-color: #eee;
     }
 
-    &:hover > .level-left {
+    &:hover > .level-right {
       visibility: visible;
-    }
-  }
-
-  .un-available {
-    background-color: #eee;
-
-    &:hover > .level-left {
-      visibility: hidden;
     }
   }
 }
