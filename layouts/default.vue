@@ -76,12 +76,4 @@ html {
   color: #fff;
   background-color: #35495e;
 }
-
-html {
-  overflow: hidden;
-}
-
-.wrapper {
-  overflow: hidden;
-}
 </style>

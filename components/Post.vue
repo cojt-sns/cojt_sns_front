@@ -16,7 +16,7 @@
           <strong>{{ post.user.name }}</strong>
         </nuxt-link>
         <strong v-else>{{ post.user.name }}</strong>
-        <small>{{ new Date(post.created_at) }}</small>
+        <small>{{ $dayjs(post.created_at).format('YYYY/MM/DD HH:mm') }}</small>
         <br />
         <div v-if="post.image" class="image post-image">
           <img :src="serverUrl + post.image" />

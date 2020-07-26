@@ -14,12 +14,15 @@
         <div class="card-content">
           <nav class="level">
             <div class="level-left">
-              <figure v-if="notification.image" class="image">
+              <figure v-if="notification.image" class="level-item image">
                 <img :src="serverUrl + notification.image" />
               </figure>
               <div v-else class="level-item title is-5 has-text-black">
                 <font-awesome-icon :icon="['fas', 'users']" size="lg" />
               </div>
+              <p class="level-item">
+                {{ $dayjs(notification.created_at).format('YYYY/MM/DD HH:mm') }}
+              </p>
             </div>
             <div class="level-right">
               <div class="level-item">
@@ -36,7 +39,6 @@
               v-if="notification.url"
               :to="notification.url"
               :class="{ 'is-active': notification.url }"
-              @click.native="CloseCard(notification.id)"
             >
               {{ notification.content }}
             </nuxt-link>
@@ -116,7 +118,7 @@ export default {
         console.log('n connect!!');
       },
       received(data) {
-        this.notifications.push(data);
+        this.notifications.unshift(data);
       },
     },
   },
@@ -141,6 +143,7 @@ export default {
   }
 
   .cards {
+    overflow-y: auto;
     .card {
       box-shadow: none;
 
@@ -157,8 +160,8 @@ export default {
           border-radius: 50%;
         }
 
-        .content {
-          text-align: center;
+        .level-right {
+          align-self: start;
         }
       }
     }

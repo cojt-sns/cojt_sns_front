@@ -49,7 +49,7 @@ export default {
       posts.push(post);
     }
 
-    const notifications = await Notification.getNotifications();
+    const notifications = (await Notification.getNotifications()).reverse();
 
     try {
       const groupUser = await Group.getGroupLoginMember(1);

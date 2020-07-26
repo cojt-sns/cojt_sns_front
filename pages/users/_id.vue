@@ -14,7 +14,7 @@ export default {
   async asyncData({ params, $auth }) {
     const user = await User.getUser(params.id);
     const groups = await User.getUserGroup($auth.user.id);
-    const notifications = await Notification.getNotifications();
+    const notifications = (await Notification.getNotifications()).reverse();
 
     // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
     //   this.userTwitter=res;

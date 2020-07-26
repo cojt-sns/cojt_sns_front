@@ -34,6 +34,7 @@ export default {
     { src: '@/plugins/actioncable', ssr: false },
     { src: '~/plugins/croppie.js', ssr: false },
     '@/plugins/vue-scrollto',
+    '@/plugins/dayjs',
   ],
   /*
    ** Nuxt.js dev-modules

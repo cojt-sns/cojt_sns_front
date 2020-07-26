@@ -15,7 +15,7 @@ export default {
   },
   async asyncData({ query, params, $auth }) {
     const groups = await User.getUserGroup($auth.user.id);
-    const notifications = await Notification.getNotifications();
+    const notifications = (await Notification.getNotifications()).reverse();
 
     let search = [];
 
