@@ -1,10 +1,6 @@
 ﻿<template>
-  <div
-    class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile"
-  >
-    <div class="header has-text-centered title is-5">
-      Notification
-    </div>
+  <div class="column is-2 is-fullheight">
+    <MainHeader title="Notification" />
     <div class="cards">
       <div
         v-for="notification in notifications_"
@@ -12,7 +8,7 @@
         class="card notification"
       >
         <div class="card-content">
-          <nav class="level">
+          <nav class="level is-mobile">
             <div class="level-left">
               <figure v-if="notification.image" class="level-item image">
                 <img :src="serverUrl + notification.image" />
@@ -54,8 +50,9 @@
 
 <script>
 import Notification from '@/plugins/axios/modules/notification';
+import MainHeader from '~/components/MainHeader';
 export default {
-  components: {},
+  components: { MainHeader },
   props: {
     notifications: {
       type: Array,

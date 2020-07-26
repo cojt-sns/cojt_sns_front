@@ -85,6 +85,7 @@ export default {
       overflow: hidden;
     }
   }
+  height: 49px;
   border-bottom: 1px solid #dbdbdb;
 }
 
