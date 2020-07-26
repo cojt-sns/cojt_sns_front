@@ -122,6 +122,7 @@
         name="thread"
         @before-enter="beforeEnter"
         @enter="enter"
+        @after-enter="afterEnter"
         @before-leave="beforeLeave"
         @leave="leave"
       >
@@ -190,15 +191,6 @@ export default {
     row() {
       this.adjustHeight(this.$refs?.adjustTextarea);
     },
-    post: {
-      handler() {
-        this.$nextTick(() => {
-          const thread = this.$refs.thread;
-          thread.style.height = thread.scrollHeight + 'px';
-        });
-      },
-      deep: true,
-    },
   },
   methods: {
     async send() {
@@ -247,11 +239,19 @@ export default {
     enter(el) {
       el.style.height = el.scrollHeight + 'px';
     },
+    afterEnter(el) {
+      el.style.height = 'auto';
+    },
     beforeLeave(el) {
       el.style.height = el.scrollHeight + 'px';
     },
-    leave(el) {
-      el.style.height = '0';
+    leave(el, done) {
+      this.$velocity(
+        el,
+        { height: '0px' },
+        { duration: 500 },
+        { complete: done }
+      );
     },
     async authorization() {
       try {
@@ -317,8 +317,7 @@ textarea {
   height: auto;
 }
 
-.thread-enter-active,
-.thread-leave-active {
+.thread-enter-active {
   transition: height 0.5s;
 }
 

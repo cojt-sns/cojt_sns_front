@@ -33,16 +33,25 @@
         </button>
       </li>
     </div>
-    <div v-if="group.children.length >= 1" v-show="open" class="children">
-      <ParentSelectBar
-        v-for="child in group.children"
-        :key="child.id"
-        :group="child"
-        :target-group-id="targetGroupId"
-        :available="targetGroupId !== group.id && available"
-        :depth="depth + 1"
-      />
-    </div>
+    <transition
+      name="group"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @before-leave="beforeLeave"
+      @leave="leave"
+    >
+      <div v-if="group.children.length >= 1" v-show="open" class="children">
+        <ParentSelectBar
+          v-for="child in group.children"
+          :key="child.id"
+          :group="child"
+          :target-group-id="targetGroupId"
+          :available="targetGroupId !== group.id && available"
+          :depth="depth + 1"
+        />
+      </div>
+    </transition>
   </ul>
 </template>
 
@@ -87,6 +96,27 @@ export default {
 
     GroupClicked() {
       this.open = !this.open;
+    },
+
+    beforeEnter(el) {
+      el.style.height = '0';
+    },
+    enter(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    afterEnter(el) {
+      el.style.height = 'auto';
+    },
+    beforeLeave(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    leave(el, done) {
+      this.$velocity(
+        el,
+        { height: '0px' },
+        { duration: 500 },
+        { complete: done }
+      );
     },
   },
 };
@@ -137,5 +167,15 @@ export default {
 
 .children {
   margin-left: auto;
+  overflow: hidden;
+}
+
+.group-enter-active {
+  transition: height 0.8s;
+}
+
+.group-enter,
+.group-leave-to {
+  height: 0;
 }
 </style>
