@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-fullheight has-background-white	">
+  <div class="column is-fullheight has-background-white">
     <MainHeader
       v-if="$device.isMobile"
       title="Profile"
@@ -58,7 +58,7 @@
               <font-awesome-icon :icon="['fas', 'undo']" size="lg" />
             </span>
           </div>
-          <div class="title has-text-centered is-bold username">
+          <div class="title has-text-centered is-bold">
             <div class="control">
               <input
                 v-model="username"
@@ -68,11 +68,22 @@
               />
             </div>
           </div>
+          <div class="title has-text-centered is-bold fluid">
+            <div class="control">
+              <textarea
+                v-model="bio"
+                class="textarea"
+                type="text"
+                rows="5"
+                placeholder="bio情報を入力"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div class="level is-mobile">
         <div class="level-item edit-ctlr is-centered">
-          <button class="button is-medium is-primary " @click="save">
+          <button class="button is-medium is-primary" @click="save">
             保存
           </button>
           <button class="button is-medium" @click="switchEditMode()">
@@ -87,14 +98,21 @@
           <div class="image img_size has-text-centered heading">
             <img :src="serverUrl + user_.image" alt srcset />
           </div>
-          <div class="title has-text-centered is-bold username">
-            {{ user_.name }}
+          <div>
+            <span v-if="user.private" class="icon is-large">
+              <font-awesome-icon :icon="['fas', 'lock']" size="2x" />
+            </span>
+            <span class="title has-text-centered is-bold">
+              {{ user_.name }}
+            </span>
           </div>
+          <div class="is-size-5 user-bio">{{ user_.bio }}</div>
         </div>
         <div class="level-right">
           <div class="level-item">
             <button
-              class="button is-medium is-primary is-outlined "
+              v-if="$route.params.id == $auth.user.id"
+              class="button is-medium is-primary is-outlined"
               @click="switchEditMode()"
             >
               編集
@@ -107,7 +125,8 @@
         <div class="level-right">
           <div class="level-item">
             <button
-              class="button is-primary is-outlined "
+              v-if="$route.params.id == $auth.user.id"
+              class="button is-primary is-outlined"
               @click="openLogout()"
             >
               ログアウト
@@ -121,7 +140,7 @@
       参加グループ
     </div>
     <div class="groups">
-      <GroupPanelList :groups="groups" />
+      <GroupPanelList :groups="assignedGroup" />
     </div>
   </div>
 </template>
@@ -144,9 +163,10 @@ export default {
       required: false,
       default: null,
     },
-    groups: {
+    assignedGroup: {
       type: Array,
-      required: true,
+      required: false,
+      default: null,
     },
   },
   data() {
@@ -155,6 +175,7 @@ export default {
       open: false,
       user_: this.user,
       username: this.user.name,
+      bio: this.user.bio,
       serverUrl: process.env.SERVER_URL,
       image: process.env.SERVER_URL + this.user.image,
       imageEdit: false,
@@ -202,7 +223,6 @@ export default {
 
         this.user_ = res;
         this.image = process.env.SERVER_URL + res.image;
-        console.log(this.user_);
         this.switchEditMode();
       } catch (error) {
         this.error = error.data.message;
@@ -282,6 +302,11 @@ export default {
     width: 100vw;
   }
 
+  .user-bio {
+    white-space: pre-line;
+    margin-top: 1rem;
+  }
+
   .image {
     position: relative;
     width: 200px;
@@ -338,8 +363,8 @@ export default {
     align-self: flex-start;
   }
   .kkk {
+    width: 100%;
     display: flex;
-    /* margin-left: 82px; */
     flex-direction: column;
     justify-self: center;
   }
@@ -375,9 +400,12 @@ export default {
       top: 0;
     }
   }
-
   .translucent {
     opacity: 0.5;
+  }
+
+  .fluid {
+    width: 75%;
   }
 }
 

@@ -8,7 +8,12 @@
       :groups="groups"
       :group-user="groupUser"
     />
-    <User v-if="$route.name.includes('users')" :user="user" :groups="groups" />
+    <User
+      v-if="$route.name.includes('users')"
+      :user="user"
+      :assigned-group="assignedGroup"
+      :groups="groups"
+    />
     <Search v-if="$route.name == 'search'" :search="search" :groups="groups" />
     <slot />
     <Notification :notifications="notifications" class="is-hidden-mobile" />
@@ -58,6 +63,11 @@ export default {
       default: null,
     },
     search: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    assignedGroup: {
       type: Array,
       required: false,
       default: null,

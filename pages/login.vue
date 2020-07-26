@@ -50,13 +50,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: '',
-    };
-  },
   async fetch({ query, $auth, redirect }) {
     try {
       if (query.token) {
@@ -64,6 +57,13 @@ export default {
         redirect('/search');
       }
     } catch (error) {}
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: '',
+    };
   },
   methods: {
     async login() {

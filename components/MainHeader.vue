@@ -16,7 +16,7 @@
         <Group :groups="groups" />
       </div>
     </transition>
-    <div class="header">
+    <div class="header has-background-white">
       <nav class="level is-mobile">
         <div class="level-left">
           <div v-if="$device.isMobile" class="level-item">
@@ -87,6 +87,7 @@ export default {
   }
   height: 49px;
   border-bottom: 1px solid #dbdbdb;
+  z-index: 500;
 }
 
 .side-background {
