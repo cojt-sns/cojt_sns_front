@@ -1,38 +1,46 @@
 ﻿<template>
-  <div
-    class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile"
-  >
-    <div class="header has-text-centered title is-5">
-      Notification
-    </div>
+  <div class="column is-2 is-fullheight">
+    <MainHeader title="Notification" />
     <div class="cards">
       <div
-        v-for="content in contents"
-        :key="content.id"
+        v-for="notification in notifications_"
+        :key="notification.id"
         class="card notification"
       >
         <div class="card-content">
-          <nav class="level">
+          <nav class="level is-mobile">
             <div class="level-left">
-              <figure v-if="content.image" class="image">
-                <img :src="serverUrl + content.image" />
+              <figure v-if="notification.image" class="level-item image">
+                <img :src="serverUrl + notification.image" />
               </figure>
               <div v-else class="level-item title is-5 has-text-black">
                 <font-awesome-icon :icon="['fas', 'users']" size="lg" />
               </div>
+              <p class="level-item">
+                {{ $dayjs(notification.created_at).format('YYYY/MM/DD HH:mm') }}
+              </p>
             </div>
             <div class="level-right">
               <div class="level-item">
                 <button
                   class="delete"
                   aria-label="close"
-                  @click="CloseCard(content.id)"
+                  @click="CloseCard(notification.id)"
                 ></button>
               </div>
             </div>
           </nav>
           <div class="content">
-            {{ content.description }}
+            <nuxt-link
+              v-if="notification.url"
+              :to="notification.url"
+              :class="{ 'is-active': notification.url }"
+            >
+              {{ notification.content }}
+            </nuxt-link>
+            <span v-else>
+              {{ notification.content }}
+            </span>
           </div>
         </div>
       </div>
@@ -41,18 +49,28 @@
 </template>
 
 <script>
+import Notification from '@/plugins/axios/modules/notification';
+import MainHeader from '~/components/MainHeader';
 export default {
-  components: {},
+  components: { MainHeader },
+  props: {
+    notifications: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+  },
   data() {
     return {
       serverUrl: process.env.SERVER_URL,
-      contents: [],
+      notifications_: this.notifications,
       dropDown: false,
       WhichModal: 0,
     };
   },
   mounted() {
     if (process.browser) {
+      // this.GetNotification();
       this.$cable.subscribe({
         channel: 'NotificationChannel',
         token: this.$auth.getToken('local').replace('Bearer ', ''),
@@ -66,25 +84,38 @@ export default {
     });
   },
   methods: {
-    CloseCard(id) {
-      this.contents = this.contents.filter((content) => content.id !== id);
+    async CloseCard(id) {
+      try {
+        const res = await Notification.destroyNotification(id);
+        console.log(res);
+
+        if (res.code === 200) {
+          this.notifications_ = this.notifications_.filter(
+            (notification) => notification.id !== id
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async GetNotification() {
+      const res = await Notification.getNotifications();
+      this.notifications_ = res;
+      console.log(this.notifications_);
     },
   },
+
   channels: {
     NotificationChannel: {
       disconnected(data) {
         console.log('d!!');
       },
       connected(data) {
-        console.log('connect!!');
+        console.log('n connect!!');
       },
       received(data) {
-        console.log(data);
-        data.id =
-          this.contents.length <= 0
-            ? 1
-            : this.contents[this.contents.length - 1].id + 1;
-        this.contents.push(data);
+        this.notifications.unshift(data);
       },
     },
   },
@@ -100,7 +131,7 @@ export default {
   border-left: 1px solid #dbdbdb;
 
   .header {
-    height: 3rem;
+    height: 57px;
     display: flex;
     align-items: center;
     margin-bottom: 0;
@@ -109,15 +140,26 @@ export default {
   }
 
   .cards {
-    .card-content {
-      margin: 1rem 0;
-      padding: 0.5rem 1rem;
-      padding-bottom: 1.3rem;
-      background-color: #f5f5f5;
+    overflow-y: auto;
+    .card {
+      box-shadow: none;
 
-      .level-left img {
-        width: 50px;
-        border-radius: 50%;
+      .card-content {
+        border: 1px solid #dbdbdb;
+        border-radius: 5px;
+        margin: 1rem 0;
+        padding: 0.5rem 1rem;
+        padding-bottom: 1.3rem;
+        /* background-color: #f5f5f5; */
+
+        .level-left img {
+          width: 50px;
+          border-radius: 50%;
+        }
+
+        .level-right {
+          align-self: start;
+        }
       }
     }
   }

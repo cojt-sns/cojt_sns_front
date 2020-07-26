@@ -1,11 +1,12 @@
 <template>
-  <Main :groups="groups" :search="search" />
+  <Main :groups="groups" :search="search" :notifications="notifications" />
 </template>
 
 <script>
 import Main from '~/components/Main';
 import User from '@/plugins/axios/modules/user';
 import Group from '@/plugins/axios/modules/group';
+import Notification from '@/plugins/axios/modules/notification';
 
 export default {
   watchQuery: true,
@@ -14,6 +15,8 @@ export default {
   },
   async asyncData({ query, params, $auth }) {
     const groups = await User.getUserGroup($auth.user.id);
+    const notifications = (await Notification.getNotifications()).reverse();
+
     let search = [];
 
     if (query.type === 'graph') {
@@ -26,6 +29,7 @@ export default {
     return {
       groups,
       search,
+      notifications,
     };
   },
 };

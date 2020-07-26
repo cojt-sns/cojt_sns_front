@@ -1,5 +1,10 @@
 <template>
-  <Main :posts="posts" :groups="groups" :group-user="groupUser" />
+  <Main
+    :posts="posts"
+    :groups="groups"
+    :group-user="groupUser"
+    :notifications="notifications"
+  />
 </template>
 
 <script>
@@ -8,6 +13,7 @@ import User from '@/plugins/axios/modules/user';
 import GroupUser from '@/plugins/axios/modules/groupUser';
 import Post from '@/plugins/axios/modules/post';
 import Group from '@/plugins/axios/modules/group';
+import Notification from '@/plugins/axios/modules/notification';
 
 export default {
   components: {
@@ -43,6 +49,8 @@ export default {
       posts.push(post);
     }
 
+    const notifications = (await Notification.getNotifications()).reverse();
+
     try {
       const groupUser = await Group.getGroupLoginMember(1);
 
@@ -50,6 +58,7 @@ export default {
         groupUser,
         posts,
         groups,
+        notifications,
       };
     } catch (error) {}
 
@@ -57,6 +66,7 @@ export default {
       groupUser: null,
       posts,
       groups,
+      notifications,
     };
   },
 };

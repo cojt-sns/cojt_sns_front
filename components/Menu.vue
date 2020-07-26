@@ -22,6 +22,16 @@
             </span>
           </nuxt-link>
         </li>
+        <li v-if="$device.isMobile">
+          <nuxt-link
+            to="/notification"
+            :class="{ 'is-active': $route.name == 'notification' }"
+          >
+            <span class="icon is-medium">
+              <font-awesome-icon :icon="['fas', 'bolt']" size="2x" />
+            </span>
+          </nuxt-link>
+        </li>
         <li>
           <nuxt-link
             v-if="$auth.loggedIn"

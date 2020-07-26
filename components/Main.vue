@@ -1,7 +1,7 @@
 <template>
   <div class="columns is-mobile">
-    <Menu class=" is-hidden-mobile" />
-    <Group :groups="groups" class=" is-hidden-mobile" />
+    <Menu class="is-hidden-mobile" />
+    <Group :groups="groups" class="is-hidden-mobile" />
     <Posts
       v-if="$route.name.includes('groups')"
       :posts="posts"
@@ -11,7 +11,7 @@
     <User v-if="$route.name.includes('users')" :user="user" :groups="groups" />
     <Search v-if="$route.name == 'search'" :search="search" :groups="groups" />
     <slot />
-    <Notification />
+    <Notification :notifications="notifications" class="is-hidden-mobile" />
   </div>
 </template>
 
@@ -47,6 +47,10 @@ export default {
       type: Array,
       required: false,
       default: null,
+    },
+    notifications: {
+      type: Array,
+      required: true,
     },
     groupUser: {
       type: Object,
