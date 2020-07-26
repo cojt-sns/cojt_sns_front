@@ -99,17 +99,14 @@
             <img :src="serverUrl + user_.image" alt srcset />
           </div>
           <div>
-            <span
-              v-if="$route.params.id != $auth.user.id"
-              class="icon is-large"
-            >
+            <span v-if="user.private" class="icon is-large">
               <font-awesome-icon :icon="['fas', 'lock']" size="2x" />
             </span>
             <span class="title has-text-centered is-bold">
               {{ user_.name }}
             </span>
           </div>
-          <div class="has-text-left is-size-5 user-bio">{{ user_.bio }}</div>
+          <div class="is-size-5 user-bio">{{ user_.bio }}</div>
         </div>
         <div class="level-right">
           <div class="level-item">
@@ -307,6 +304,7 @@ export default {
 
   .user-bio {
     white-space: pre-line;
+    margin-top: 1rem;
   }
 
   .image {
@@ -365,8 +363,8 @@ export default {
     align-self: flex-start;
   }
   .kkk {
+    width: 100%;
     display: flex;
-    /* margin-left: 82px; */
     flex-direction: column;
     justify-self: center;
   }
