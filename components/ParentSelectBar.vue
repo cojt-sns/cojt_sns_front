@@ -33,12 +33,7 @@
         </button>
       </li>
     </div>
-    <div
-      v-if="group.children.length >= 1"
-      v-show="open"
-      ref="children"
-      class="children"
-    >
+    <div v-if="group.children.length >= 1" v-show="open" class="children">
       <ParentSelectBar
         v-for="child in group.children"
         :key="child.id"
@@ -129,6 +124,13 @@ export default {
 
     &:hover > .level-right {
       visibility: visible;
+    }
+  }
+
+  .un-available {
+    color: #ccc;
+    &:hover > .level-right {
+      visibility: hidden;
     }
   }
 }
