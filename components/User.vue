@@ -58,13 +58,24 @@
               <font-awesome-icon :icon="['fas', 'undo']" size="lg" />
             </span>
           </div>
-          <div class="title has-text-centered is-bold username">
+          <div class="title has-text-centered is-bold">
             <div class="control">
               <input
                 v-model="username"
                 class="input"
                 type="text"
                 placeholder="名前を入力"
+              />
+            </div>
+          </div>
+          <div class="title has-text-centered is-bold fluid">
+            <div class="control">
+              <textarea
+                v-model="bio"
+                class="textarea"
+                type="text"
+                rows="5"
+                placeholder="bio情報を入力"
               />
             </div>
           </div>
@@ -88,20 +99,17 @@
             <img :src="serverUrl + user_.image" alt srcset />
           </div>
           <div>
-            <span class="icon is-large">
-              <font-awesome-icon
-                v-if="$route.params.id != $auth.user.id"
-                :icon="['fas', 'lock']"
-                size="2x"
-              />
+            <span
+              v-if="$route.params.id != $auth.user.id"
+              class="icon is-large"
+            >
+              <font-awesome-icon :icon="['fas', 'lock']" size="2x" />
             </span>
-            <span class="title has-text-centered is-bold username">{{
-              user_.name
-            }}</span>
+            <span class="title has-text-centered is-bold">
+              {{ user_.name }}
+            </span>
           </div>
-          <div class="has-text-centered is-size-5 user-bio">
-            {{ user_.bio }}
-          </div>
+          <div class="has-text-left is-size-5 user-bio">{{ user_.bio }}</div>
         </div>
         <div class="level-right">
           <div class="level-item">
@@ -161,7 +169,7 @@ export default {
     assignedGroup: {
       type: Array,
       required: false,
-      defaulut: null,
+      default: null,
     },
   },
   data() {
@@ -170,6 +178,7 @@ export default {
       open: false,
       user_: this.user,
       username: this.user.name,
+      bio: this.user.bio,
       serverUrl: process.env.SERVER_URL,
       image: process.env.SERVER_URL + this.user.image,
       imageEdit: false,
@@ -217,7 +226,6 @@ export default {
 
         this.user_ = res;
         this.image = process.env.SERVER_URL + res.image;
-        console.log(this.user_);
         this.switchEditMode();
       } catch (error) {
         this.error = error.data.message;
@@ -396,6 +404,10 @@ export default {
   }
   .translucent {
     opacity: 0.5;
+  }
+
+  .fluid {
+    width: 75%;
   }
 }
 
