@@ -134,7 +134,7 @@ export default {
   border-left: 1px solid #dbdbdb;
 
   .header {
-    height: 3rem;
+    height: 57px;
     display: flex;
     align-items: center;
     margin-bottom: 0;
