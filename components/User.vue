@@ -14,7 +14,7 @@
         {{ error }}
       </div>
       <div class="level is-mobile">
-        <div class="level-item kkk has-text-centered">
+        <div class="level-item kkk has-text-centered edit">
           <input
             ref="icon"
             class="file-input"
@@ -327,7 +327,6 @@ export default {
     .icon {
       z-index: 1000;
       &.edit {
-        /* font-size: 4em; */
         right: 0;
         bottom: 0;
       }
@@ -342,6 +341,10 @@ export default {
         color: #d8d8d8 !important;
       }
     }
+  }
+
+  .edit .title {
+    margin-top: 60px;
   }
 
   .image-edit-enter-active,
