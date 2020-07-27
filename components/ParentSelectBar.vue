@@ -27,7 +27,7 @@
       <li class="level-right">
         <SingleSubmitButton
           class="button is-primary is-outlined"
-          :onclick="UpdateParent()"
+          :onclick="UpdateParent"
         >
           選択
         </SingleSubmitButton>
