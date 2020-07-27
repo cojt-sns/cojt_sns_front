@@ -1,5 +1,10 @@
 <template>
-  <Main :groups="groups" :search="search" :notifications="notifications" />
+  <Main
+    :groups="groups"
+    :all="all"
+    :search="search"
+    :notifications="notifications"
+  />
 </template>
 
 <script>
@@ -16,17 +21,18 @@ export default {
   async asyncData({ query, params, $auth }) {
     const groups = await User.getUserGroup($auth.user.id);
     const notifications = (await Notification.getNotifications()).reverse();
+    const all = await Group.searchGroup(null, null, -1);
 
     let search = [];
 
-    if (query.type === 'graph') {
-      search = await Group.searchGroup(null, null, -1);
-    } else if (query.keywords) {
+    if (query.keywords) {
       search = await Group.searchGroup(query.keywords);
     } else {
       search = await Group.searchGroup();
     }
+
     return {
+      all,
       groups,
       search,
       notifications,
