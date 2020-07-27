@@ -64,7 +64,9 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-primary" @click="edit()">決定</button>
+          <SingleSubmitButton class="button is-primary" :onclick="edit"
+            >決定</SingleSubmitButton
+          >
         </div>
         <div class="control">
           <button class="button" @click="$emit('close')">戻る</button>
@@ -77,9 +79,11 @@
 <script>
 import GroupUser from '@/plugins/axios/modules/groupUser';
 import Modal from '@/components/Modal';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   components: {
     Modal,
+    SingleSubmitButton,
   },
   props: {
     group: {
@@ -131,6 +135,7 @@ export default {
           await GroupUser.putGroupUser(this.groupUser.id, this.name);
         }
         location.href = '/groups/' + this.group.id;
+        return true;
       } catch (error) {
         this.error = error.data.message;
       }

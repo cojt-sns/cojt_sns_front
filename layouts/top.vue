@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'top',
   mounted() {
     window.addEventListener('resize', this.resize);
     window.addEventListener('orientationchange', this.resize);

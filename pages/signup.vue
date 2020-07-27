@@ -106,12 +106,12 @@
                 <div class="level-item has-centerd">
                   <div class="field is-centered">
                     <div class="control">
-                      <button
+                      <SingleSubmitButton
                         class="button is-size-5 is-primary"
-                        @click="submit"
+                        :onclick="submit"
                       >
                         新規作成
-                      </button>
+                      </SingleSubmitButton>
                     </div>
                   </div>
                 </div>
@@ -151,8 +151,12 @@
 
 <script>
 import User from '@/plugins/axios/modules/user';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   layout: 'top',
+  components: {
+    SingleSubmitButton,
+  },
   data() {
     return {
       username: '',
@@ -165,7 +169,6 @@ export default {
       flag1: true,
       flag2: true,
       emailValid: false,
-      buttonPushed: false,
       serverUrl: process.env.SERVER_URL,
     };
   },
@@ -211,10 +214,6 @@ export default {
       }
     },
     async submit() {
-      if (this.buttonPushed) {
-        return;
-      }
-      this.buttonPushed = true;
       if (
         this.email === '' ||
         this.reemail === '' ||
@@ -223,25 +222,19 @@ export default {
         this.username === ''
       ) {
         this.error = '空欄が存在します';
-        this.buttonPushed = false;
         return;
       }
       if (!this.emailValid) {
         this.error = 'メールアドレスの形式が正しくありません 修正してください';
-        this.buttonPushed = false;
         return;
       }
       if (this.email !== this.reemail) {
         this.error = 'メールアドレスが一致しません';
-        this.buttonPushed = false;
-
         return;
       }
 
       if (this.password !== this.repassword) {
         this.error = 'パスワードが一致しません';
-        this.buttonPushed = false;
-
         return;
       }
       try {
@@ -249,8 +242,10 @@ export default {
         await this.$auth.loginWith('local', {
           data: { email: this.email, password: this.password },
         });
+        window.location.href = '/search';
+        return true;
       } catch (error) {
-        this.error = error;
+        this.error = error.data.message;
       }
     },
   },

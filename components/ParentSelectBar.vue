@@ -25,12 +25,12 @@
         #{{ group.name }}
       </div>
       <li class="level-right">
-        <button
+        <SingleSubmitButton
           class="button is-primary is-outlined"
-          @click="UpdateParent(group.id)"
+          :onclick="UpdateParent()"
         >
           選択
-        </button>
+        </SingleSubmitButton>
       </li>
     </div>
     <transition
@@ -58,11 +58,13 @@
 <script>
 import Group from '@/plugins/axios/modules/group';
 import ParentSelectBar from '@/components/ParentSelectBar';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 
 export default {
   name: 'ParentSelectBar',
   components: {
     ParentSelectBar,
+    SingleSubmitButton,
   },
   props: {
     group: {
@@ -89,9 +91,12 @@ export default {
     };
   },
   methods: {
-    async UpdateParent(id) {
-      await Group.putGroup(this.targetGroupId, null, id);
-      window.location.href = '/groups/' + this.targetGroupId;
+    async UpdateParent() {
+      try {
+        await Group.putGroup(this.targetGroupId, null, this.group.id);
+        window.location.href = '/groups/' + this.targetGroupId;
+        return true;
+      } catch {}
     },
 
     GroupClicked() {

@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'default',
   middleware: 'auth',
   mounted() {
     window.addEventListener('resize', this.resize);

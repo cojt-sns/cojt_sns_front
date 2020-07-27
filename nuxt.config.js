@@ -87,10 +87,10 @@ export default {
   },
   auth: {
     redirect: {
-      login: '/login',
+      login: false,
       logout: false,
       callback: false,
-      home: '/search',
+      home: false,
     },
     strategies: {
       local: {

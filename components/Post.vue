@@ -37,7 +37,7 @@
           </div>
           <div class="field is-grouped is-grouped-right">
             <div class="control">
-              <button class="button is-success" @click="saveEdit()">
+              <button class="button is-primary" @click="saveEdit()">
                 Save
               </button>
             </div>

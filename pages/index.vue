@@ -46,12 +46,12 @@
                 </div>
                 <div class="field">
                   <p class="control has-text-centered">
-                    <button
+                    <SingleSubmitButton
                       class="button is-primary is-medium"
-                      @click="login()"
+                      :onclick="login"
                     >
                       ログイン
-                    </button>
+                    </SingleSubmitButton>
                   </p>
                 </div>
                 <h2 class="title is-6 has-text-centered has-text-grey bar">
@@ -117,8 +117,12 @@
 </template>
 
 <script>
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   layout: 'top',
+  components: {
+    SingleSubmitButton,
+  },
   data() {
     return {
       email: '',
@@ -133,6 +137,8 @@ export default {
         await this.$auth.loginWith('local', {
           data: { email: this.email, password: this.password },
         });
+        window.location.href = '/groups';
+        return true;
       } catch (error) {
         this.error = error.data.message;
       }

@@ -36,9 +36,12 @@
             </div>
             <div class="field">
               <p class="control has-text-centered">
-                <button class="button is-success is-medium" @click="login">
+                <SingleSubmitButton
+                  class="button is-success is-medium"
+                  :onclick="login"
+                >
                   Login
-                </button>
+                </SingleSubmitButton>
               </p>
             </div>
           </div>
@@ -49,7 +52,11 @@
 </template>
 
 <script>
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
+  components: {
+    SingleSubmitButton,
+  },
   async fetch({ query, $auth, redirect }) {
     try {
       if (query.token) {

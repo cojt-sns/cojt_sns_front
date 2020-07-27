@@ -16,7 +16,9 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
-        <button class="button is-primary" @click="update()">変更</button>
+        <SingleSubmitButton class="button is-primary" :onclick="update"
+          >変更</SingleSubmitButton
+        >
       </div>
       <div class="control">
         <button class="button" @click="$emit('close')">戻る</button>
@@ -27,9 +29,11 @@
 <script>
 import Group from '@/plugins/axios/modules/group';
 import Modal from '@/components/Modal';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   components: {
     Modal,
+    SingleSubmitButton,
   },
   model: {
     prop: 'group',
@@ -62,13 +66,9 @@ export default {
   methods: {
     async update() {
       try {
-        const editGroup = await Group.putGroup(
-          this.group.id,
-          this.name,
-          this.group.parent_id
-        );
-        this.$emit('change-group', editGroup);
-        this.$emit('close');
+        await Group.putGroup(this.group.id, this.name, this.group.parent_id);
+        window.location.href = '/groups/' + this.group.id;
+        return true;
       } catch (error) {
         this.error = error.data.message;
       }

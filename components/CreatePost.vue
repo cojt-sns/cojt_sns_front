@@ -39,7 +39,12 @@
         </div>
         <div class="level-right">
           <div class="level-item">
-            <button class="button is-primary" @click="send()">Send</button>
+            <SingleSubmitButton
+              class="button is-primary"
+              :onclick="send"
+              :disabled="sending"
+              >Send</SingleSubmitButton
+            >
           </div>
         </div>
       </div>
@@ -49,7 +54,11 @@
 
 <script>
 import Post from '@/plugins/axios/modules/post';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
+  components: {
+    SingleSubmitButton,
+  },
   props: {
     group: {
       type: Object,
@@ -72,21 +81,25 @@ export default {
       row: 1,
       image: null,
       file: null,
+      sending: false,
     };
   },
   methods: {
     async send() {
-      await Post.postGroupPost(
-        this.groupUser.group_id,
-        this.content,
-        this.file,
-        this.thread?.id
-      );
-      this.content = '';
-      this.adjustHeight();
-      this.row = 1;
-      this.file = null;
-      this.image = null;
+      try {
+        await Post.postGroupPost(
+          this.groupUser.group_id,
+          this.content,
+          this.file,
+          this.thread?.id
+        );
+        this.content = '';
+        this.adjustHeight();
+        this.row = 1;
+        this.file = null;
+        this.image = null;
+      } catch {}
+      return false;
     },
     adjustHeight() {
       const textarea = this.$refs?.adjustTextarea;
@@ -102,7 +115,8 @@ export default {
     keyDowntextarea(event) {
       this.adjustHeight();
       if (event.ctrlKey && event.keyCode === 13) {
-        this.send();
+        this.sending = true;
+        this.send().then(() => (this.sending = false));
       }
     },
     selectImage(e) {

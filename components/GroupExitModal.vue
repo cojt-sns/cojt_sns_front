@@ -8,7 +8,9 @@
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
-        <button class="button is-primary" @click="exit()">脱退</button>
+        <SingleSubmitButton class="button is-primary" :onclick="exit"
+          >脱退</SingleSubmitButton
+        >
       </div>
       <div class="control">
         <button class="button" @click="$emit('close')">戻る</button>
@@ -20,9 +22,11 @@
 <script>
 import Group from '@/plugins/axios/modules/group';
 import Modal from '@/components/Modal';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   components: {
     Modal,
+    SingleSubmitButton,
   },
   props: {
     group: {
@@ -50,10 +54,9 @@ export default {
     async exit() {
       try {
         await Group.leaveGroup(this.group.id);
-        this.$emit('close');
-        // window.location.href =
+        window.location.href = '/groups';
+        return true;
       } catch (error) {
-        // this.error = error.data.message.name[0];
         this.error = error.data.message;
       }
     },

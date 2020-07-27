@@ -79,7 +79,8 @@ export default {
     },
     all: {
       type: Array,
-      required: true,
+      required: false,
+      default: null,
     },
   },
 };

@@ -24,16 +24,16 @@ export default {
     };
   },
   mounted() {
-    console.log(process);
-    console.log(this.groups);
     this.$refs.graph.appendChild(this.chart());
   },
   methods: {
     chart() {
       const MOBILE_VIEWPORT_WIDTH = 450;
       const d3 = require('d3');
-      const pack = (data, w, h) =>
-        d3
+      const pack = (data, w, h) => {
+        w = w < 10 ? 10 : w;
+        h = h < 10 ? 10 : h;
+        return d3
           .pack()
           .size([w, h])
           .padding(w * 0.02)(
@@ -42,6 +42,7 @@ export default {
             .sum((d) => d.score)
             .sort((a, b) => b.score - a.score)
         );
+      };
       const data = {
         id: -1,
         children: this.groups,
@@ -308,8 +309,6 @@ export default {
       }
 
       function SetFontSizeOffset(d, focus) {
-        console.log(d.data.name);
-        console.log(d.r);
         if (graph.offsetWidth <= MOBILE_VIEWPORT_WIDTH) {
           if (d === focus) {
             return '160%';

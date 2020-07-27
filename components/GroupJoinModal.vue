@@ -61,7 +61,9 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-primary" @click="join()">参加</button>
+          <SingleSubmitButton class="button is-primary" :onclick="join"
+            >参加</SingleSubmitButton
+          >
         </div>
         <div class="control">
           <button class="button" @click="$emit('close')">戻る</button>
@@ -74,9 +76,11 @@
 <script>
 import Group from '@/plugins/axios/modules/group';
 import Modal from '@/components/Modal';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   components: {
     Modal,
+    SingleSubmitButton,
   },
   props: {
     group: {
@@ -124,6 +128,7 @@ export default {
           await Group.joinGroup(this.group.id, this.name);
         }
         location.href = '/groups/' + this.group.id;
+        return true;
       } catch (error) {
         this.error = error;
       }

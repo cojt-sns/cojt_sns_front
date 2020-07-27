@@ -6,7 +6,9 @@
     <div class="title is-4 has-text-centered">ログアウト</div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
-        <button class="button is-primary" @click="logout()">ログアウト</button>
+        <SingleSubmitButton class="button is-primary" :onclick="logout"
+          >ログアウト</SingleSubmitButton
+        >
       </div>
       <div class="control">
         <button class="button" @click="$emit('close')">戻る</button>
@@ -16,9 +18,11 @@
 </template>
 <script>
 import Modal from '@/components/Modal';
+import SingleSubmitButton from '@/components/SingleSubmitButton';
 export default {
   components: {
     Modal,
+    SingleSubmitButton,
   },
   props: {
     open: {
@@ -43,6 +47,7 @@ export default {
       try {
         await this.$auth.logout();
         location.href = '/';
+        return true;
       } catch (error) {
         this.error = error.date.message;
       }

@@ -76,6 +76,14 @@
       </div>
     </MainHeader>
     <div ref="posts" class="posts">
+      <Post
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        :group="group_"
+        :group-user="groupUser"
+        @deletePost="deletePost"
+      />
       <template v-if="$device.isMobile">
         <div v-if="!groupUser" class="has-background-grey-lighter footer join">
           <div class="field is-grouped is-grouped-centered">
@@ -90,15 +98,6 @@
           </div>
         </div>
       </template>
-
-      <Post
-        v-for="post in posts"
-        :key="post.id"
-        :post="post"
-        :group="group_"
-        :group-user="groupUser"
-        @deletePost="deletePost"
-      />
       <CreatePost
         v-if="$device.isMobile && groupUser"
         :group-user="groupUser"
@@ -234,6 +233,7 @@ export default {
       try {
         await GroupUser.unauthorization(this.groupUser.id);
         location.href = `/groups/${this.group_.id}`;
+        return true;
       } catch (error) {
         console.log(error);
       }
