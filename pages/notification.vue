@@ -1,12 +1,17 @@
 <template>
   <div class="columns is-mobile">
-    <Notification :notifications="notifications" class="notif" />
+    <Notification
+      :groups="groups"
+      :notifications="notifications"
+      class="notif"
+    />
   </div>
 </template>
 
 <script>
 import Notification from '@/plugins/axios/modules/notification';
 import NotificationComponent from '@/components/Notification';
+import User from '@/plugins/axios/modules/user';
 
 export default {
   watchQuery: true,
@@ -16,9 +21,11 @@ export default {
   async asyncData({ query, params, $auth, isMobile, redirect }) {
     if (!isMobile) redirect('/groups');
 
+    const groups = await User.getUserGroup($auth.user.id);
     const notifications = (await Notification.getNotifications()).reverse();
 
     return {
+      groups,
       notifications,
     };
   },
@@ -26,7 +33,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notif {
-  width: 100vw !important;
+.columns {
+  margin: 0;
+  .notif {
+    width: 100vw !important;
+  }
 }
 </style>

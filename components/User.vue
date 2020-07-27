@@ -168,6 +168,11 @@ export default {
       required: false,
       default: null,
     },
+    groups: {
+      type: Array,
+      required: false,
+      default: null,
+    },
   },
   data() {
     return {

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="column is-2 is-fullheight">
-    <MainHeader title="Notification" />
+    <MainHeader :groups="groups" title="Notification" />
     <div class="cards">
       <div
         v-for="notification in notifications_"
@@ -55,6 +55,11 @@ export default {
   components: { MainHeader },
   props: {
     notifications: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    groups: {
       type: Array,
       required: false,
       default: null,
@@ -141,6 +146,7 @@ export default {
 
   .cards {
     overflow-y: auto;
+    height: calc(100vh - 49px);
     .card {
       box-shadow: none;
 
