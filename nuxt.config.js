@@ -34,6 +34,7 @@ export default {
     { src: '@/plugins/actioncable', ssr: false },
     { src: '~/plugins/croppie.js', ssr: false },
     { src: '~/plugins/velocity-animate.js', ssr: false },
+    { src: '~/plugins/localStorage.js', ssr: false },
     '@/plugins/vue-scrollto',
     '@/plugins/dayjs',
   ],

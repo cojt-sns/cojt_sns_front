@@ -19,7 +19,7 @@ export default {
   components: {
     Main,
   },
-  async asyncData({ params, $auth }) {
+  async asyncData({ params, $auth, store }) {
     const groups = await User.getUserGroup($auth.user.id);
     if (!groups.some((g) => g.id === Number(params.id)))
       groups.push(await Group.getGroup(params.id));
@@ -54,6 +54,8 @@ export default {
 
     try {
       const groupUser = await Group.getGroupLoginMember(params.id);
+
+      store.commit('changeLastAccessGroupId', Number(params.id));
 
       return {
         groupUser,

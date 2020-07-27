@@ -3,7 +3,7 @@
     <Menu class="is-hidden-mobile" />
     <Group :groups="groups" class="is-hidden-mobile" />
     <Posts
-      v-if="$route.name.includes('groups')"
+      v-if="$route.name.includes('groups') && $route.params.id"
       :posts="posts"
       :groups="groups"
       :group-user="groupUser"
@@ -14,7 +14,12 @@
       :assigned-group="assignedGroup"
       :groups="groups"
     />
-    <Search v-if="$route.name == 'search'" :search="search" :groups="groups" />
+    <Search
+      v-if="$route.name == 'search'"
+      :search="search"
+      :groups="groups"
+      :all="all"
+    />
     <slot />
     <Notification :notifications="notifications" class="is-hidden-mobile" />
   </div>
@@ -71,6 +76,10 @@ export default {
       type: Array,
       required: false,
       default: null,
+    },
+    all: {
+      type: Array,
+      required: true,
     },
   },
 };
