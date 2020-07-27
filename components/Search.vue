@@ -108,17 +108,17 @@ export default {
       this.$router.push('/search?type=list');
     },
     chart() {
-      const MOBILE_VIEWPORT_WIDTH = 400;
+      const MOBILE_VIEWPORT_WIDTH = 450;
       const d3 = require('d3');
       const pack = (data, w, h) =>
         d3
           .pack()
           .size([w, h])
-          .padding(50)(
+          .padding(w * 0.02)(
           d3
             .hierarchy(data)
-            .sum((d) => d.member + 1)
-            .sort((a, b) => b.member - a.member)
+            .sum((d) => d.score)
+            .sort((a, b) => b.score - a.score)
         );
       const data = {
         id: -1,

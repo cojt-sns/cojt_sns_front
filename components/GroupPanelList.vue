@@ -1,13 +1,11 @@
 <template>
   <div class="tile is-parent is-vertical">
-    <div v-for="array in groupChunks" :key="array.id" class="tile is-parent">
-      <GroupPanel
-        v-for="group in array"
-        :key="group.id"
-        class="panels"
-        :group="group"
-      />
-    </div>
+    <GroupPanel
+      v-for="group in groups"
+      :key="group.id"
+      class="panels"
+      :group="group"
+    />
   </div>
 </template>
 
@@ -25,20 +23,8 @@ export default {
       default: null,
     },
   },
-  computed: {
-    groupChunks() {
-      return this.arrayChunk(this.groups, 3);
-    },
-  },
-  methods: {
-    arrayChunk([...array], size = 1) {
-      return array.reduce(
-        (acc, value, index) =>
-          index % size ? acc : [...acc, array.slice(index, index + size)],
-        []
-      );
-    },
-  },
+  computed: {},
+  methods: {},
 };
 </script>
 
