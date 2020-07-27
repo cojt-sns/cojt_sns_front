@@ -36,6 +36,11 @@ html {
   box-shadow: 0 0 0 0.125em rgba($main-color, 0.25);
 }
 
+.button.is-primary:active {
+  border-color: $main-color;
+  background-color: $main-color;
+}
+
 .button.is-primary.is-outlined {
   border-color: $main-color;
   color: $main-color;
