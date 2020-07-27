@@ -289,7 +289,10 @@ export default {
       zoomTo([root.x, root.y, root.r * 2]);
 
       function zoomTo(v) {
-        const w = graph.offsetWidth;
+        const w =
+          graph.offsetWidth > graph.offsetHeight
+            ? graph.offsetHeight
+            : graph.offsetWidth;
         const k = w / v[2];
 
         view = v;
