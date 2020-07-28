@@ -1,7 +1,7 @@
 <template>
   <div class="column is-2 is-fullheight group-menu-wrapper">
     <GroupCreateModal :open="create" @close="SwitchGroupCreateModal" />
-    <div class="header">
+    <div ref="header" class="header">
       <nav class="level is-mobile">
         <div class="level-left">
           <div class="level-item title is-5">
@@ -20,7 +20,7 @@
       </nav>
     </div>
 
-    <aside class="menu">
+    <aside ref="menu" class="menu">
       <ul class="menu-list">
         <li v-for="group in groups" :key="group.id">
           <nuxt-link
@@ -55,7 +55,9 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.SetMaxHeight();
+  },
 
   methods: {
     isActive(id) {
@@ -63,6 +65,10 @@ export default {
         this.$route.name.includes('groups') &&
         id === Number(this.$route.params.id ?? 1)
       );
+    },
+
+    SetMaxHeight() {
+      this.$refs.menu.style.maxHeight = `calc(100% - ${this.$refs.header.offsetHeight}px)`;
     },
 
     SwitchGroupCreateModal() {
@@ -87,6 +93,9 @@ export default {
   }
   .menu {
     margin: 5px;
+    overflow-y: auto;
+    padding-bottom: 30px;
+
     .menu-label {
       color: inherit;
       font-size: inherit;
