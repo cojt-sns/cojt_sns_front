@@ -15,6 +15,7 @@ import Notification from '@/plugins/axios/modules/notification';
 import GroupGraph from '@/components/GroupGraph';
 
 export default {
+  middleware: 'auth',
   components: {
     Main,
     GroupGraph,

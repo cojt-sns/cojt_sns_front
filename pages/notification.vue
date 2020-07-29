@@ -14,6 +14,7 @@ import NotificationComponent from '@/components/Notification';
 import User from '@/plugins/axios/modules/user';
 
 export default {
+  middleware: 'auth',
   watchQuery: true,
   components: {
     Notification: NotificationComponent,

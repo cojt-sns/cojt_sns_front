@@ -11,7 +11,7 @@
           <nav class="level is-mobile">
             <div class="level-left">
               <figure v-if="notification.image" class="level-item image">
-                <img :src="serverUrl + notification.image" />
+                <img :src="serverUrl + notification.image" @error="altSrc" />
               </figure>
               <div v-else class="level-item title is-5 has-text-black">
                 <font-awesome-icon :icon="['fas', 'users']" size="lg" />
@@ -108,6 +108,10 @@ export default {
       const res = await Notification.getNotifications();
       this.notifications_ = res;
       console.log(this.notifications_);
+    },
+
+    altSrc() {
+      this.notification.image = undefined;
     },
   },
 

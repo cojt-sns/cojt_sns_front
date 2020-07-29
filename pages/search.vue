@@ -14,6 +14,7 @@ import Group from '@/plugins/axios/modules/group';
 import Notification from '@/plugins/axios/modules/notification';
 
 export default {
+  middleware: 'auth',
   watchQuery: true,
   components: {
     Main,

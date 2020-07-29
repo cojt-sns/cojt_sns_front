@@ -13,32 +13,39 @@ import User from '@/plugins/axios/modules/user';
 import Notification from '@/plugins/axios/modules/notification';
 
 export default {
+  middleware: 'auth',
   components: {
     Main,
   },
-  async asyncData({ params, $auth }) {
-    const user = await User.getUser(params.id);
-    const groups = await User.getUserGroup($auth.user.id);
-    const notifications = (await Notification.getNotifications()).reverse();
-
+  async asyncData({ params, $auth, error }) {
     try {
-      const assignedGroup = await User.getUserGroup(params.id);
+      const user = await User.getUser(params.id);
+      const groups = await User.getUserGroup($auth.user.id);
+      const notifications = (await Notification.getNotifications()).reverse();
+
+      try {
+        const assignedGroup = await User.getUserGroup(params.id);
+        return {
+          user,
+          groups,
+          assignedGroup,
+          notifications,
+        };
+      } catch (e) {}
+      // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
+      //   this.userTwitter=res;
+      // });
       return {
         user,
         groups,
-        assignedGroup,
         notifications,
+        assignedGroup: null,
       };
-    } catch (e) {}
-    // User.getUserTwitterProfile(this.$route.params.id).then((res)=>{
-    //   this.userTwitter=res;
-    // });
-    return {
-      user,
-      groups,
-      notifications,
-      assignedGroup: null,
-    };
+    } catch {
+      error({
+        statusCode: 404,
+      });
+    }
   },
   validate({ params }) {
     // 数値でなければならない
