@@ -111,7 +111,7 @@ export default {
     },
 
     altSrc() {
-      this.notification.image = undefined;
+      this.notification.image = false;
     },
   },
 
